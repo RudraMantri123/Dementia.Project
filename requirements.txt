@@ -1,23 +1,74 @@
+# Core LLM and AI frameworks
 langchain>=0.1.0
 langchain-community>=0.0.10
 langchain-huggingface>=0.0.1
 llama-index>=0.9.0
 transformers>=4.35.0
 torch>=2.1.0
-faiss-cpu>=1.7.4
-streamlit>=1.28.0
 openai>=1.3.0
-python-dotenv>=1.0.0
+
+# Vector databases and embeddings
+faiss-cpu>=1.7.4
 sentence-transformers>=2.2.2
 chromadb>=0.4.18
-tiktoken>=0.5.1
-beautifulsoup4>=4.12.0
-requests>=2.31.0
-lxml>=4.9.0
+
+# Database and ORM
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0  # PostgreSQL support
+alembic>=1.12.0  # Database migrations
+
+# Machine learning and analytics
 scikit-learn>=1.3.0
 pandas>=2.0.0
-nltk>=3.8.0
-plotly>=5.18.0
+numpy>=1.24.0
+xgboost>=2.0.0  # For gradient boosting
+networkx>=3.0  # For graph-based knowledge representation
+
+# Image processing for multimodal support
+Pillow>=10.0.0
+opencv-python>=4.8.0
+imageio>=2.31.0
+
+# Web framework and API
 fastapi>=0.104.0
 uvicorn[standard]>=0.24.0
 pydantic>=2.0.0
+python-multipart>=0.0.6  # For file uploads
+
+# Frontend and visualization
+streamlit>=1.28.0
+plotly>=5.18.0
+altair>=5.0.0
+
+# Text processing and NLP
+nltk>=3.8.0
+tiktoken>=0.5.1
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# HTTP and API clients
+requests>=2.31.0
+httpx>=0.25.0  # Async HTTP client
+
+# Utilities
+python-dotenv>=1.0.0
+python-dateutil>=2.8.0
+
+# Clinical and healthcare
+fhir.resources>=7.0.0  # FHIR resource models
+fhirclient>=4.1.0  # FHIR client
+
+# Additional analytics and visualization
+seaborn>=0.12.0  # Statistical data visualization
+matplotlib>=3.7.0  # Plotting library
+
+# Advanced ML and optimization
+scipy>=1.11.0  # Scientific computing
+statsmodels>=0.14.0  # Statistical modeling
+
+# Development and testing (optional)
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+black>=23.0.0
+flake8>=6.1.0
+mypy>=1.5.0  # Type checking
