@@ -110,6 +110,11 @@ export const useVoice = () => {
     }
   };
 
+  // Clear transcript
+  const clearTranscript = () => {
+    setTranscript('');
+  };
+
   return {
     isListening,
     isSpeaking,
@@ -121,5 +126,6 @@ export const useVoice = () => {
     speak,
     stopSpeaking,
     toggleVoice,
+    clearTranscript,
   };
 };

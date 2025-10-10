@@ -33,6 +33,7 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
     speak,
     stopSpeaking,
     toggleVoice,
+    clearTranscript,
   } = useVoice();
 
   const scrollToBottom = () => {
@@ -72,49 +73,74 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
     if (input.trim() && !isLoading) {
       onSendMessage(input);
       setInput('');
+      clearTranscript(); // Clear transcript after sending message
     }
   };
 
   const handleResetConfirm = () => {
     onReset();
     setShowResetConfirm(false);
+    clearTranscript(); // Clear transcript when starting new conversation
   };
 
   if (!isInitialized) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center p-8">
-        <Brain className="w-16 h-16 text-primary-500 mb-4" />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Welcome to Dementia Support Chatbot
-        </h2>
-        <p className="text-gray-600 mb-8 max-w-md">
-          Please configure your API key in the sidebar to get started
-        </p>
+      <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <div className="mb-8">
+          <div className="relative">
+            <Brain className="w-20 h-20 text-blue-600 mb-6 mx-auto animate-pulse" />
+            <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full animate-bounce"></div>
+          </div>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4 text-xl-large">
+            Welcome to Dementia Support
+          </h1>
+          <p className="text-gray-600 mb-8 max-w-lg text-large">
+            Your compassionate AI companion for dementia care and support
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl w-full">
-          <div className="card">
-            <BookOpen className="w-8 h-8 text-blue-500 mb-3" />
-            <h3 className="font-semibold mb-2">Knowledge Agent</h3>
-            <p className="text-sm text-gray-600">
-              Ask factual questions about dementia, symptoms, and caregiving
-            </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl w-full">
+          <div className="card-interactive group">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <BookOpen className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Knowledge Agent</h3>
+              <p className="text-gray-600 text-large">
+                Ask factual questions about dementia, symptoms, and caregiving
+              </p>
+            </div>
           </div>
 
-          <div className="card">
-            <Heart className="w-8 h-8 text-pink-500 mb-3" />
-            <h3 className="font-semibold mb-2">Empathy Agent</h3>
-            <p className="text-sm text-gray-600">
-              Share your feelings and receive emotional support
-            </p>
+          <div className="card-interactive group">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <Heart className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Empathy Agent</h3>
+              <p className="text-gray-600 text-large">
+                Share your feelings and receive emotional support
+              </p>
+            </div>
           </div>
 
-          <div className="card">
-            <Brain className="w-8 h-8 text-purple-500 mb-3" />
-            <h3 className="font-semibold mb-2">Cognitive Agent</h3>
-            <p className="text-sm text-gray-600">
-              Practice memory exercises and brain training activities
-            </p>
+          <div className="card-interactive group">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <Brain className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Cognitive Agent</h3>
+              <p className="text-gray-600 text-large">
+                Practice memory exercises and brain training activities
+              </p>
+            </div>
           </div>
+        </div>
+
+        <div className="mt-12 p-6 bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl border-2 border-blue-200">
+          <p className="text-gray-700 text-large font-medium">
+            💡 <strong>Getting Started:</strong> Configure your API key in the sidebar to begin your journey
+          </p>
         </div>
       </div>
     );
@@ -178,61 +204,89 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
       {/* Messages Container */}
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <Brain className="w-12 h-12 text-primary-500 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              Welcome to Dementia Support
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Ask a question or explore suggested topics below
-            </p>
+          <div className="flex flex-col items-center justify-center h-full text-center p-6">
+            <div className="mb-8">
+              <div className="relative mb-6">
+                <Brain className="w-16 h-16 text-blue-600 mx-auto animate-pulse" />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-bounce"></div>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3 text-xl-large">
+                Welcome to Dementia Support
+              </h3>
+              <p className="text-gray-600 mb-8 text-large">
+                Ask a question or explore suggested topics below
+              </p>
+            </div>
 
-            <div className="space-y-3 text-left max-w-lg w-full">
+            <div className="space-y-4 text-left max-w-2xl w-full">
               <div
                 onClick={() => setInput("What are the early signs and symptoms of dementia?")}
-                className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl cursor-pointer hover:shadow-md hover:from-blue-100 hover:to-blue-200 transition-all duration-200 border border-blue-200"
+                className="suggested-topic bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 border-blue-200 group"
               >
-                <div className="flex items-start gap-3">
-                  <BookOpen className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium text-blue-900 mb-1">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+                    <BookOpen className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-lg font-bold text-blue-900 mb-2">
                       Learn About Dementia
+                    </h4>
+                    <p className="text-blue-700 text-large">
+                      Understand early signs, symptoms, and care strategies
                     </p>
-                    <p className="text-xs text-blue-700">
-                      Understand early signs and symptoms
-                    </p>
+                  </div>
+                  <div className="text-blue-400 group-hover:text-blue-600 transition-colors duration-300">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </div>
                 </div>
               </div>
+
               <div
                 onClick={() => setInput("I need support with caregiving challenges")}
-                className="p-4 bg-gradient-to-r from-pink-50 to-pink-100 rounded-xl cursor-pointer hover:shadow-md hover:from-pink-100 hover:to-pink-200 transition-all duration-200 border border-pink-200"
+                className="suggested-topic bg-gradient-to-r from-pink-50 to-pink-100 hover:from-pink-100 hover:to-pink-200 border-pink-200 group"
               >
-                <div className="flex items-start gap-3">
-                  <Heart className="w-5 h-5 text-pink-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium text-pink-900 mb-1">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+                    <Heart className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-lg font-bold text-pink-900 mb-2">
                       Caregiver Support
+                    </h4>
+                    <p className="text-pink-700 text-large">
+                      Get emotional support and practical guidance
                     </p>
-                    <p className="text-xs text-pink-700">
-                      Get emotional support and guidance
-                    </p>
+                  </div>
+                  <div className="text-pink-400 group-hover:text-pink-600 transition-colors duration-300">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </div>
                 </div>
               </div>
+
               <div
                 onClick={() => setInput("Please provide a cognitive exercise")}
-                className="p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl cursor-pointer hover:shadow-md hover:from-purple-100 hover:to-purple-200 transition-all duration-200 border border-purple-200"
+                className="suggested-topic bg-gradient-to-r from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 border-purple-200 group"
               >
-                <div className="flex items-start gap-3">
-                  <Brain className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium text-purple-900 mb-1">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+                    <Brain className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-lg font-bold text-purple-900 mb-2">
                       Cognitive Exercises
-                    </p>
-                    <p className="text-xs text-purple-700">
+                    </h4>
+                    <p className="text-purple-700 text-large">
                       Practice memory and brain training activities
                     </p>
+                  </div>
+                  <div className="text-purple-400 group-hover:text-purple-600 transition-colors duration-300">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </div>
                 </div>
               </div>
@@ -248,22 +302,22 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
                 } message-enter`}
               >
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                  className={`message-bubble ${
                     message.role === 'user'
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-white border border-gray-200 text-gray-900'
+                      ? 'message-user'
+                      : 'message-assistant'
                   }`}
                 >
-                  <p className="whitespace-pre-wrap">{message.content}</p>
+                  <p className="whitespace-pre-wrap text-large">{message.content}</p>
                   {message.agent && (
-                    <div className="flex items-center gap-2 mt-2 pt-2 border-t border-gray-200">
+                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-200">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                        className={`agent-badge ${
                           agentColors[message.agent]
                         }`}
                       >
                         {agentIcons[message.agent]}
-                        <span className="capitalize">{message.agent}</span>
+                        <span className="capitalize font-semibold">{message.agent}</span>
                       </span>
                     </div>
                   )}
@@ -272,8 +326,15 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-white border border-gray-200 rounded-2xl px-4 py-3">
-                  <Loader2 className="w-5 h-5 animate-spin text-primary-600" />
+                <div className="message-bubble message-assistant">
+                  <div className="flex items-center gap-3">
+                    <div className="loading-dots">
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                    </div>
+                    <span className="text-gray-600 font-medium">Thinking...</span>
+                  </div>
                 </div>
               </div>
             )}
@@ -283,41 +344,49 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
       </div>
 
       {/* Input Form with Voice Controls */}
-      <div className="border-t border-gray-200 bg-white p-4">
+      <div className="border-t border-gray-200 bg-gradient-to-r from-white to-gray-50 p-6">
         {/* Analytics Progress Indicator */}
         {messages.length > 0 && messages.filter(msg => msg.role === 'user').length < 5 && (
-          <div className="mb-3 p-2 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-xs text-blue-700 flex items-center justify-between">
-              <span>
-                📊 Analytics available after {5 - messages.filter(msg => msg.role === 'user').length} more message(s)
-              </span>
-              <span className="text-blue-600 font-medium">
-                {messages.filter(msg => msg.role === 'user').length}/5
-              </span>
-            </p>
+          <div className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">📊</span>
+                </div>
+                <div>
+                  <p className="text-blue-800 font-medium text-large">
+                    Analytics available after {5 - messages.filter(msg => msg.role === 'user').length} more message(s)
+                  </p>
+                </div>
+              </div>
+              <div className="bg-blue-200 rounded-full px-3 py-1">
+                <span className="text-blue-800 font-bold text-lg">
+                  {messages.filter(msg => msg.role === 'user').length}/5
+                </span>
+              </div>
+            </div>
           </div>
         )}
 
         {/* Voice Status */}
         {isListening && (
-          <div className="mb-2 p-2 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-sm text-red-800 flex items-center gap-2">
-              <span className="animate-pulse">🎤</span>
-              Listening... {transcript && `"${transcript}"`}
-            </p>
+          <div className="mb-4 status-indicator bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-200 text-red-800">
+            <div className="w-6 h-6 bg-red-500 rounded-full animate-pulse"></div>
+            <span className="font-semibold">Listening...</span>
+            {transcript && (
+              <span className="text-red-600 italic">"{transcript}"</span>
+            )}
           </div>
         )}
 
         {isSpeaking && (
-          <div className="mb-2 p-2 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800 flex items-center gap-2">
-              <span className="animate-pulse">🔊</span>
-              Speaking...
-            </p>
+          <div className="mb-4 status-indicator bg-gradient-to-r from-blue-50 to-blue-100 border-2 border-blue-200 text-blue-800">
+            <div className="w-6 h-6 bg-blue-500 rounded-full animate-pulse"></div>
+            <span className="font-semibold">Speaking...</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="flex gap-3 items-center">
+        <form onSubmit={handleSubmit} className="flex gap-4 items-end">
           {/* Voice Controls */}
           <VoiceControls
             isListening={isListening}
@@ -330,27 +399,39 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
           />
 
           {/* Text Input */}
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder={isListening ? "Listening..." : "Type or speak your message..."}
-            disabled={isLoading || isListening}
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
-          />
+          <div className="flex-1 relative">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={isListening ? "Listening..." : "Type or speak your message..."}
+              disabled={isLoading || isListening}
+              className="input-field"
+            />
+            {input && (
+              <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              </div>
+            )}
+          </div>
 
           {/* Send Button */}
           <button
             type="submit"
             disabled={isLoading || !input.trim() || isListening}
-            className="btn-primary px-6 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 min-w-[120px]"
           >
             {isLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>Sending</span>
+              </>
             ) : (
-              <Send className="w-5 h-5" />
+              <>
+                <Send className="w-5 h-5" />
+                <span>Send</span>
+              </>
             )}
-            Send
           </button>
         </form>
       </div>

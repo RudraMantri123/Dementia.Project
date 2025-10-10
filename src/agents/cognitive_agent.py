@@ -176,72 +176,124 @@ This exercise helps strengthen neural connections and can be a pleasant way to r
         }
 
     def _story_recall_exercise(self) -> Dict[str, Any]:
-        """Create an enhanced story recall exercise with varied themes."""
+        """Create an enhanced story recall exercise with detailed narrative incidents."""
         stories = [
             {
-                'title': 'The Garden Visit',
-                'story': "Every Saturday morning, Margaret visited the community garden on Elm Street. She wore her favorite yellow hat and brought her red watering can. Her neighbor Tom was already there, tending to his tomato plants. They picked three ripe tomatoes and shared them over tea at 10 o'clock.",
-                'questions': [
-                    "What day did Margaret visit the garden?",
-                    "What color was her hat?",
-                    "What was her neighbor's name?",
-                    "What vegetables did they pick?",
-                    "What time did they have tea?"
+                'title': 'The Unexpected Visitor',
+                'story': """It was a rainy Tuesday afternoon when Eleanor heard a knock at her front door. She had been reading her favorite mystery novel in the living room, sipping chamomile tea from her blue china cup. When she opened the door, she found a young woman in a bright red raincoat standing on the porch, holding a basket covered with a checkered cloth.
+
+"Hello, Mrs. Patterson," the woman said with a warm smile. "I'm Jennifer, your new neighbor from number 47. I just moved in last week and wanted to introduce myself."
+
+Eleanor invited her in and learned that Jennifer was a baker who had just opened a small shop on Main Street called 'Sweet Memories Bakery'. The basket contained fresh blueberry muffins, still warm from the oven, and a small jar of homemade strawberry jam. They sat at the kitchen table for nearly an hour, chatting about the neighborhood. Jennifer mentioned she had a golden retriever named Charlie who loved to play in the nearby park every morning at 7 AM.
+
+Before leaving, Jennifer wrote her phone number on a yellow sticky note and placed it on Eleanor's refrigerator. "Call me anytime," she said. "I'd love to have you visit the bakery. We open at 6 AM every day except Sundays."
+
+As Jennifer left, Eleanor noticed the rain had stopped and a rainbow stretched across the sky.""",
+                'summary_prompt': "Please summarize this story in 3-4 sentences. Include the main characters, what happened, and the key details.",
+                'key_points': [
+                    "Eleanor received an unexpected visitor on a rainy Tuesday",
+                    "Jennifer, a new neighbor from number 47, introduced herself",
+                    "Jennifer is a baker who owns Sweet Memories Bakery on Main Street",
+                    "She brought blueberry muffins and strawberry jam",
+                    "Jennifer has a golden retriever named Charlie",
+                    "She left her phone number on a yellow sticky note"
                 ],
-                'answers': ['Saturday', 'yellow', 'Tom', 'tomatoes', '10 o\'clock'],
-                'difficulty': 'medium'
-            },
-            {
-                'title': 'The Birthday Surprise',
-                'story': "Sarah decided to surprise her grandmother Helen on her 80th birthday. She baked a chocolate cake and decorated it with purple flowers. Her brother James arrived at 3 PM with a photo album. Together they sang Happy Birthday and gave Helen a silver locket.",
-                'questions': [
-                    "Whose birthday was it?",
-                    "How old was she turning?",
-                    "What flavor was the cake?",
-                    "What did James bring?",
-                    "What gift did they give Helen?"
-                ],
-                'answers': ['Helen', '80', 'chocolate', 'photo album', 'silver locket'],
                 'difficulty': 'hard'
             },
             {
-                'title': 'Morning Walk',
-                'story': "Robert took his golden retriever Buddy for a walk in the park. They passed by the pond where ducks were swimming. Buddy played with a tennis ball near the fountain. They rested on a green bench before heading home.",
-                'questions': [
-                    "What was the dog's name?",
-                    "What kind of dog was Buddy?",
-                    "What were the ducks doing?",
-                    "What toy did Buddy play with?",
-                    "What color was the bench?"
+                'title': 'The Lost Keys Adventure',
+                'story': """On a bright Saturday morning at 9:30 AM, David realized he couldn't find his car keys. He had an important doctor's appointment at 11 o'clock and was starting to panic. He checked his brown leather jacket hanging by the door - no keys. He looked on the kitchen counter where he usually kept them - nothing there either.
+
+His daughter Lisa, who was visiting for the weekend, suggested they retrace his steps from the previous evening. "Dad, you went to the grocery store yesterday around 5 PM, right?" she asked. David remembered stopping at Thompson's Market to buy milk, eggs, and his favorite coffee beans.
+
+They called the store, and the manager, Mr. Garcia, said he'd check the lost and found. While waiting, David checked the front porch and found them right there, sitting on the white wicker chair next to his gardening gloves! He must have set them down when he brought in the groceries yesterday evening.
+
+Relieved, David called the doctor's office to confirm he would make it on time. Lisa laughed and suggested they celebrate with pancakes at the Corner Diner, their favorite breakfast spot. They arrived at the diner at 10 AM, ordered chocolate chip pancakes with maple syrup, and David even had time to read the morning newspaper before his appointment.
+
+The waitress, Mary, who had served them for years, brought extra whipped cream and wished David good luck at his appointment.""",
+                'summary_prompt': "Please summarize this story in your own words. What was the main problem and how was it resolved?",
+                'key_points': [
+                    "David lost his car keys on Saturday morning before an 11 AM appointment",
+                    "His daughter Lisa helped him search",
+                    "He had been to Thompson's Market the previous evening",
+                    "Keys were found on the front porch white wicker chair",
+                    "They celebrated at Corner Diner with chocolate chip pancakes",
+                    "They arrived at the diner at 10 AM"
                 ],
-                'answers': ['Buddy', 'golden retriever', 'swimming', 'tennis ball', 'green'],
                 'difficulty': 'medium'
             },
             {
-                'title': 'The Library Book',
-                'story': "Emma visited the downtown library on Tuesday to return a mystery novel. The librarian, Ms. Chen, recommended a book about gardening. Emma checked out two books and stopped at the coffee shop next door for a cappuccino.",
-                'questions': [
-                    "When did Emma visit the library?",
-                    "What type of book did she return?",
-                    "What was the librarian's name?",
-                    "How many books did Emma check out?",
-                    "What drink did she order?"
+                'title': 'The Community Picnic',
+                'story': """The annual Oak Street Community Picnic was scheduled for the first Sunday in June at Riverside Park. Maria had volunteered to organize the event, which would start at noon and run until 5 PM.
+
+On the day of the picnic, Maria arrived early at 10:30 AM with her husband Roberto. They set up six large blue picnic tables under the oak trees near the playground. Roberto brought his portable grill to make his famous turkey burgers, while Maria prepared her special potato salad with the recipe she inherited from her grandmother.
+
+By 12:30 PM, over forty neighbors had gathered. The Johnson family brought a watermelon and homemade lemonade. Mrs. Chen, the retired teacher from number 28, organized activities for the children, including a three-legged race and a scavenger hunt. The prize for the scavenger hunt was a colorful kite from the local toy store.
+
+Around 2 PM, someone suggested a softball game. They divided into two teams: the "Oak Street Oaks" wearing red bandanas and the "Riverside Runners" wearing blue caps. The game lasted an hour, with the Riverside Runners winning 12 to 9.
+
+As the sun began to set around 4:30 PM, everyone gathered for a group photo by the fountain. Maria's son Tommy, who was 8 years old, had brought his camera and took several pictures. Before leaving, they all agreed to meet again the following month for a movie night in the park, scheduled for the third Friday in July.""",
+                'summary_prompt': "Describe what happened at the community picnic. Include who organized it, what activities took place, and any important details.",
+                'key_points': [
+                    "Oak Street Community Picnic at Riverside Park, first Sunday in June",
+                    "Maria organized it with her husband Roberto",
+                    "Event from noon to 5 PM, they arrived at 10:30 AM",
+                    "Roberto made turkey burgers, Maria made potato salad",
+                    "Over forty neighbors attended by 12:30 PM",
+                    "Activities included three-legged race and scavenger hunt",
+                    "Softball game at 2 PM - Riverside Runners won 12 to 9",
+                    "Group photo at fountain around 4:30 PM"
                 ],
-                'answers': ['Tuesday', 'mystery', 'Ms. Chen', 'two', 'cappuccino'],
                 'difficulty': 'hard'
             },
             {
-                'title': 'Family Dinner',
-                'story': "On Sunday evening, the Lopez family gathered for dinner. Grandpa Carlos made his famous chicken soup. The table was set with blue napkins, and fresh bread was served warm. Everyone enjoyed the meal and shared stories from their week.",
-                'questions': [
-                    "What day was the family dinner?",
-                    "Who made the soup?",
-                    "What kind of soup was it?",
-                    "What color were the napkins?",
-                    "What was served with the soup?"
+                'title': 'The Helpful Neighbor',
+                'story': """It was a snowy Wednesday morning in January when 78-year-old Mr. Peterson looked out his window and saw about six inches of fresh snow covering his driveway. He knew shoveling would be difficult with his back pain, but he needed to get to the pharmacy by 2 PM to pick up his prescription.
+
+Just as he was putting on his thick winter coat and wool scarf, the doorbell rang. It was Kevin, the 16-year-old from next door, standing there with a snow shovel in his hand and a friendly smile on his face.
+
+"Good morning, Mr. Peterson! I'm going around offering to shovel driveways for $15. I'm saving up for a new bicycle," Kevin explained, his breath forming little clouds in the cold air.
+
+Mr. Peterson gladly accepted and invited Kevin in for hot chocolate when he finished. Twenty minutes later, Kevin had cleared both the driveway and the front walkway. Mr. Peterson not only paid him $20 (five dollars more than asked), but also gave him a plate of his wife's homemade oatmeal cookies wrapped in aluminum foil.
+
+"My wife Martha used to make these every winter," Mr. Peterson said with a warm smile. "She passed away two years ago, but I still have her recipes."
+
+Kevin thanked him and mentioned he'd be happy to help with snow removal anytime. Before leaving, he also cleared Mr. Peterson's mailbox and sprinkled salt on the front steps to prevent ice from forming. Mr. Peterson made it to the pharmacy on time and felt grateful for such thoughtful neighbors.""",
+                'summary_prompt': "Tell me what happened in this story. Who were the main characters and what kind deed took place?",
+                'key_points': [
+                    "Snowy Wednesday morning in January with six inches of snow",
+                    "Mr. Peterson, 78 years old, needed to get to pharmacy by 2 PM",
+                    "Kevin, 16-year-old neighbor, offered to shovel for $15",
+                    "Kevin cleared driveway and walkway in twenty minutes",
+                    "Mr. Peterson paid $20 and gave oatmeal cookies",
+                    "Kevin also cleared mailbox and salted front steps"
                 ],
-                'answers': ['Sunday', 'Grandpa Carlos', 'chicken', 'blue', 'bread'],
-                'difficulty': 'easy'
+                'difficulty': 'medium'
+            },
+            {
+                'title': 'The Farmers Market Discovery',
+                'story': """Every Saturday morning, the downtown farmers market opened at 8 AM in the town square. Linda had been walking past it for months but never stopped to browse. This particular Saturday in late September, the smell of fresh apples and cinnamon pulled her in.
+
+The market had twelve vendors set up in two rows. The first booth she visited belonged to a farmer named Jack who grew organic vegetables. He was offering a special deal: three bunches of carrots for five dollars. Linda bought them and also picked up a pound of green beans and two red bell peppers.
+
+At the next booth, a woman named Sophia was selling honey from her backyard beehives. She had five different varieties: wildflower, clover, orange blossom, lavender, and buckwheat. Sophia explained that the lavender honey was perfect for evening tea because it helped with relaxation. Linda purchased a small jar of the lavender honey for eight dollars.
+
+As she continued walking, Linda noticed a musician playing guitar near the fountain at the center of the square. He was performing folk songs, and a small crowd had gathered. A young girl, maybe seven years old, was dancing to the music while wearing a yellow sundress.
+
+Linda's final stop was at a bakery booth run by the Martinez family. They had fresh-baked sourdough bread, chocolate croissants, and peach cobbler. Linda bought two croissants for tomorrow's breakfast and added them to her canvas shopping bag.
+
+By 9:30 AM, Linda had spent a total of twenty-eight dollars but felt it was worth every penny. She made a mental note to return next Saturday and maybe bring her friend Carol along. As she walked home, she thought about how she'd been missing out on this wonderful community tradition all these months.""",
+                'summary_prompt': "Summarize Linda's experience at the farmers market. What did she buy and who did she meet?",
+                'key_points': [
+                    "Linda visited the downtown farmers market on Saturday morning in late September",
+                    "Market opened at 8 AM with twelve vendors in two rows",
+                    "Bought carrots, green beans, and red bell peppers from Jack",
+                    "Purchased lavender honey from Sophia for eight dollars",
+                    "Saw a musician playing guitar and a young girl in yellow sundress dancing",
+                    "Bought two chocolate croissants from Martinez family bakery",
+                    "Spent twenty-eight dollars total and left at 9:30 AM"
+                ],
+                'difficulty': 'hard'
             }
         ]
 
@@ -250,23 +302,32 @@ This exercise helps strengthen neural connections and can be a pleasant way to r
             'type': 'story_recall',
             'story': story_data['story'],
             'title': story_data['title'],
-            'questions': story_data['questions'],
-            'answers': story_data['answers'],
+            'summary_prompt': story_data['summary_prompt'],
+            'key_points': story_data['key_points'],
             'difficulty': story_data['difficulty']
         }
 
         difficulty_emoji = {'easy': '⭐', 'medium': '⭐⭐', 'hard': '⭐⭐⭐'}
 
-        response = f"""📖 Story Recall Exercise: "{story_data['title']}"
+        response = f"""📖 Detailed Story Recall Exercise: "{story_data['title']}"
 Difficulty: {difficulty_emoji[story_data['difficulty']]}
 
-I'll tell you a short story with specific details. Pay attention to names, numbers, colors, and actions!
+I'm going to share a detailed narrative with you. This story contains specific details about people, places, times, and events. Read it carefully and try to remember as much as you can.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 {story_data['story']}
 
-💡 Memory Tip: As you read, try to visualize the scene like a movie in your mind. Picture the people, colors, and actions!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Take your time to read it carefully. When you feel ready to answer questions, type 'ready'."""
+💡 Memory Tips:
+• Visualize the scene like a movie in your mind
+• Pay attention to specific details (names, times, colors, numbers)
+• Notice the sequence of events
+• Picture the characters and their actions
+• Connect with the emotions in the story
+
+Take your time to read and absorb the story (1-2 minutes recommended). When you feel ready to summarize what you remember, type 'ready'."""
 
         return {
             'response': response,
@@ -411,26 +472,215 @@ Please answer these questions:
         Returns:
             Next step or evaluation
         """
+        # Handle "ready" state - user is ready to be tested
         if exercise_state == 'waiting_for_ready' and 'ready' in user_input.lower():
             if self.exercise_data.get('type') == 'memory_list':
                 return self._ask_memory_recall()
             elif self.exercise_data.get('type') == 'story_recall':
                 return self._ask_story_questions()
 
+        # Handle "evaluating" state - user has provided their answer
+        elif exercise_state == 'evaluating':
+            return self._evaluate_response(user_input)
+
         return {
             'response': "I'm here to help with the exercise. Type 'ready' when you'd like to continue, or ask for a different exercise!",
             'agent': 'cognitive'
+        }
+
+    def _evaluate_response(self, user_response: str) -> Dict[str, Any]:
+        """
+        Evaluate user's response to the exercise.
+
+        Args:
+            user_response: User's answer
+
+        Returns:
+            Encouraging feedback and next steps
+        """
+        # DEFENSIVE: Check if exercise_data exists
+        if not self.exercise_data:
+            return {
+                'response': """I apologize, but I seem to have lost track of the exercise. This can happen if the connection was interrupted.
+
+Let's start fresh! Would you like to try:
+• A memory exercise
+• A story recall exercise
+• A pattern recognition exercise
+
+Just let me know what you'd like to try!""",
+                'agent': 'cognitive',
+                'exercise_complete': True
+            }
+
+        exercise_type = self.exercise_data.get('type', 'unknown')
+
+        # Build response based on exercise type
+        if exercise_type == 'memory_list':
+            items = self.exercise_data.get('items', [])
+            category = self.exercise_data.get('category', 'items')
+
+            # Show the original list
+            items_list = '\n'.join([f"  {i+1}. {item.title()}" for i, item in enumerate(items)])
+
+            response = f"""Thank you for trying! 🌟
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 The Original List ({category.replace('_', ' ').title()}):
+
+{items_list}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💭 Reflection:
+Great effort working through this exercise! Memory recall can be challenging, and that's completely normal. The important thing is that you engaged with the exercise.
+
+Remember:
+• Regular mental exercises support brain health
+• Memory can vary from day to day - that's expected
+• The practice itself is beneficial, regardless of results
+• Even attempting to recall strengthens neural pathways
+
+Would you like to:
+• Try another memory exercise
+• Ask questions about memory or dementia
+• Continue our conversation about something else
+
+What would you like to do next?"""
+
+        elif exercise_type == 'story_recall':
+            story = self.exercise_data.get('story', '')
+            title = self.exercise_data.get('title', 'The Story')
+
+            response = f"""Thank you for trying! 🌟
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 Original Story: "{title}"
+
+{story}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💭 Reflection:
+I appreciate you working through this exercise. Story recall can be quite challenging, especially with all the specific details. It's completely normal to find this difficult.
+
+Remember:
+• Memory exercises help keep your mind active
+• Don't worry about getting every detail - the effort matters
+• Some days are better than others for memory
+• Consistent practice is what makes a difference
+
+Would you like to:
+• Try a different type of exercise
+• Ask me about memory strategies
+• Continue our conversation
+
+What would you like to do next?"""
+
+        elif exercise_type == 'pattern_recognition':
+            correct_answer = self.exercise_data.get('answer', '').lower().strip()
+            user_answer = user_response.lower().strip()
+            pattern_type = self.exercise_data.get('pattern_type', '')
+
+            # Check if answer is correct (flexible matching)
+            is_correct = (user_answer == correct_answer or
+                         correct_answer in user_answer or
+                         user_answer in correct_answer)
+
+            if is_correct:
+                response = f"""🎉 Excellent work! That's correct!
+
+The answer was: {correct_answer}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💭 Reflection:
+Great job recognizing the pattern! Pattern recognition helps strengthen cognitive skills and mental flexibility.
+
+Would you like to:
+• Try another pattern exercise
+• Try a different type of exercise
+• Continue our conversation
+
+What would you like to do next?"""
+            else:
+                response = f"""Thank you for trying! 🌟
+
+The correct answer was: {correct_answer}
+
+Pattern type: {pattern_type}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💭 Reflection:
+Pattern recognition can be tricky! The important thing is that you engaged with the exercise.
+
+Remember:
+• Every attempt helps strengthen your brain
+• Pattern recognition improves with practice
+• It's okay if some patterns are harder than others
+
+Would you like to:
+• Try another pattern exercise
+• Try a different type of exercise
+• Continue our conversation
+
+What would you like to do next?"""
+
+        else:
+            # Generic response for other exercise types
+            response = f"""Thank you for participating! 🌟
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💭 Reflection:
+Great job engaging with this exercise! Every cognitive activity is valuable for brain health.
+
+Would you like to:
+• Try another exercise
+• Continue our conversation
+• Ask me any questions
+
+What would you like to do next?"""
+
+        return {
+            'response': response,
+            'agent': 'cognitive',
+            'exercise_complete': True
         }
 
     def _ask_memory_recall(self) -> Dict[str, Any]:
         """Ask user to recall the memory list."""
         items = self.exercise_data.get('items', [])
         category = self.exercise_data.get('category', 'items')
+        num_items = len(items)
 
-        response = f"""Excellent! Now, try to recall as many {category} from the list as you can.
-Don't worry if you can't remember them all - just do your best!
+        category_display = category.replace('_', ' ')
 
-Type the {category} you remember, separated by commas."""
+        response = f"""Perfect! Time to test your memory! 🧠
+
+⚠️ Important: Don't scroll up to look at the original list - that would be cheating! Try to recall from memory alone.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 Memory Recall Test
+
+You were shown {num_items} {category_display}. The original list is now hidden.
+
+1. ▓▓▓▓▓▓▓ [HIDDEN]
+2. ▓▓▓▓▓▓▓ [HIDDEN]
+3. ▓▓▓▓▓▓▓ [HIDDEN]
+{chr(10).join([f"{i+4}. ▓▓▓▓▓▓▓ [HIDDEN]" for i in range(num_items - 3)])}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💭 Now, without looking back, type the {category_display} you remember, separated by commas.
+
+Example: apple, banana, orange
+
+Don't worry about the exact order - just write what you can recall!"""
 
         return {
             'response': response,
@@ -440,14 +690,31 @@ Type the {category} you remember, separated by commas."""
         }
 
     def _ask_story_questions(self) -> Dict[str, Any]:
-        """Ask questions about the story."""
-        questions = self.exercise_data.get('questions', [])
+        """Ask user to summarize the story."""
+        summary_prompt = self.exercise_data.get('summary_prompt', 'Please summarize the story.')
+        title = self.exercise_data.get('title', 'The Story')
+        key_points = self.exercise_data.get('key_points', [])
 
-        response = f"""Great! Now let me ask you some questions about the story:
+        response = f"""Excellent! You've had time to read the story carefully.
 
-{chr(10).join([f"{i+1}. {q}" for i, q in enumerate(questions)])}
+📝 Story: "{title}"
 
-Take your time and answer as many as you can remember!"""
+Now, without looking back at the story, I'd like you to recall what happened.
+
+{summary_prompt}
+
+Try to include:
+• The main characters and their names
+• When and where the story took place
+• The key events that happened
+• Specific details you remember (times, colors, numbers, etc.)
+• How the story ended
+
+Don't worry about getting every detail perfect - just tell me what you remember in your own words. Take your time and be as detailed as you can!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 Tip: Start with what you remember most clearly, then add other details as they come to mind."""
 
         return {
             'response': response,

@@ -154,17 +154,44 @@ async def chat(request: ChatRequest):
         chatbot = get_chatbot(request.session_id)
         result = chatbot.chat(request.message)
 
+        # DEFENSIVE: Ensure result is valid
+        if not result or not isinstance(result, dict):
+            return ChatResponse(
+                response="I apologize, but I encountered an issue processing your message. Please try rephrasing or ask me something else.",
+                agent='system',
+                intent='error',
+                sources=None
+            )
+
         return ChatResponse(
-            response=result.get('response', 'No response'),
+            response=result.get('response', 'I apologize, but I had trouble generating a response. Please try again.'),
             agent=result.get('agent', 'system'),
             intent=result.get('intent', 'unknown'),
             sources=result.get('num_sources')
         )
 
-    except HTTPException:
+    except HTTPException as he:
+        # Handle "not initialized" errors with helpful message
+        if he.status_code == 400 and "not initialized" in str(he.detail):
+            return ChatResponse(
+                response="Please refresh the page and configure the chatbot in the sidebar to begin our conversation.",
+                agent='system',
+                intent='initialization_required',
+                sources=None
+            )
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # Log error but return graceful message
+        import traceback
+        print(f"ERROR in chat endpoint: {str(e)}")
+        print(traceback.format_exc())
+
+        return ChatResponse(
+            response="I apologize, but I encountered an unexpected error. Please try asking your question again, or start a new conversation.",
+            agent='system',
+            intent='error',
+            sources=None
+        )
 
 
 @app.get("/stats", response_model=StatsResponse)

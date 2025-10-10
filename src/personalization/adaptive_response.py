@@ -1,6 +1,6 @@
 """Adaptive response generation based on user profiles."""
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from src.personalization.user_profile_manager import UserProfileManager
 
 
@@ -131,7 +131,7 @@ class AdaptiveResponseGenerator:
             'cognitive decline': 'memory changes',
             'neurological': 'brain-related',
             'pharmaceutical': 'medicine',
-            'diagnosis': 'finding out what's wrong',
+            'diagnosis': 'finding out what is wrong',
             'symptoms': 'signs',
             'progression': 'changes over time',
             'dementia': 'memory problems',

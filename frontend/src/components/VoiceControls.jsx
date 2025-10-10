@@ -11,18 +11,18 @@ const VoiceControls = ({
   onStopSpeaking
 }) => {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-3">
       {/* Voice Mode Toggle */}
       <button
         onClick={onToggleVoice}
-        className={`p-2 rounded-lg transition-colors ${
+        className={`btn-voice transition-all duration-300 ${
           voiceEnabled
-            ? 'bg-green-100 text-green-700 hover:bg-green-200'
-            : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+            ? 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-lg'
+            : 'bg-gradient-to-r from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600'
         }`}
         title={voiceEnabled ? 'Voice Mode: ON' : 'Voice Mode: OFF'}
       >
-        {voiceEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+        {voiceEnabled ? <Volume2 className="w-6 h-6" /> : <VolumeX className="w-6 h-6" />}
       </button>
 
       {/* Microphone Button */}
@@ -30,19 +30,19 @@ const VoiceControls = ({
         <button
           onClick={isListening ? onStopListening : onStartListening}
           disabled={isSpeaking}
-          className={`p-2 rounded-lg transition-all ${
+          className={`btn-voice transition-all duration-300 ${
             isListening
-              ? 'bg-red-500 text-white animate-pulse'
+              ? 'bg-gradient-to-r from-red-500 to-red-600 animate-pulse shadow-xl scale-105'
               : isSpeaking
-              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              : 'bg-primary-600 text-white hover:bg-primary-700'
+              ? 'bg-gradient-to-r from-gray-400 to-gray-500 cursor-not-allowed'
+              : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl'
           }`}
           title={isListening ? 'Stop listening' : 'Start voice input'}
         >
           {isListening ? (
-            <Radio className="w-5 h-5" />
+            <Radio className="w-6 h-6" />
           ) : (
-            <Mic className="w-5 h-5" />
+            <Mic className="w-6 h-6" />
           )}
         </button>
       )}
@@ -51,10 +51,10 @@ const VoiceControls = ({
       {isSpeaking && (
         <button
           onClick={onStopSpeaking}
-          className="p-2 rounded-lg bg-orange-100 text-orange-700 hover:bg-orange-200 transition-colors"
+          className="btn-voice bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-lg"
           title="Stop speaking"
         >
-          <MicOff className="w-5 h-5" />
+          <MicOff className="w-6 h-6" />
         </button>
       )}
     </div>

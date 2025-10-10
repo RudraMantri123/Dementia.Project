@@ -102,7 +102,7 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Sidebar */}
       <Sidebar
         onInitialize={handleInitialize}
@@ -124,7 +124,7 @@ function App() {
 
       {/* Analytics Panel */}
       {isInitialized && showAnalytics && (
-        <div className="w-80 bg-white border-l border-gray-200">
+        <div className="w-80 bg-white border-l-2 border-gray-200 shadow-xl">
           <AnalyticsDashboard stats={stats} analytics={analytics} />
         </div>
       )}
@@ -133,12 +133,12 @@ function App() {
       {isInitialized && canShowAnalytics && !showAnalytics && (
         <button
           onClick={handleShowAnalytics}
-          className="fixed bottom-6 right-6 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-200 flex items-center gap-2 z-10 font-semibold"
+          className="fixed bottom-8 right-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-2xl shadow-2xl transition-all duration-300 flex items-center gap-3 z-10 font-bold text-lg hover:scale-105 transform"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
-          View Conversation Analytics
+          View Analytics
         </button>
       )}
 
@@ -146,9 +146,9 @@ function App() {
       {isInitialized && showAnalytics && (
         <button
           onClick={() => setShowAnalytics(false)}
-          className="fixed bottom-6 right-6 bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-200 flex items-center gap-2 z-10 font-semibold"
+          className="fixed bottom-8 right-8 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-8 py-4 rounded-2xl shadow-2xl transition-all duration-300 flex items-center gap-3 z-10 font-bold text-lg hover:scale-105 transform"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
           Hide Analytics

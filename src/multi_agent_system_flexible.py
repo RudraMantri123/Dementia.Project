@@ -136,10 +136,33 @@ class MultiAgentChatbotFlexible:
         Returns:
             Exercise continuation or completion
         """
-        cognitive_agent = self.agents['cognitive']
+        # DEFENSIVE: Validate exercise state exists
+        if not self.conversation_state.get('exercise_state'):
+            return {
+                'response': """I apologize, but it seems the exercise state was lost. This can happen if the connection was interrupted.
+
+Let's start fresh! You can ask me for:
+• A memory exercise
+• A story recall exercise
+• Help with dementia-related questions
+• Emotional support
+
+What would you like to try?""",
+                'agent': 'cognitive',
+                'intent': 'COGNITIVE'
+            }
+
+        cognitive_agent = self.agents.get('cognitive')
+        if not cognitive_agent:
+            return {
+                'response': "I apologize, but the cognitive agent is not available right now. Please try asking a different question.",
+                'agent': 'system',
+                'intent': 'ERROR'
+            }
+
         context = {
             'exercise_state': self.conversation_state['exercise_state'],
-            'exercise_data': self.conversation_state['exercise_data']
+            'exercise_data': self.conversation_state.get('exercise_data', {})
         }
 
         result = cognitive_agent.process(user_input, context)
