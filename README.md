@@ -35,8 +35,6 @@ This project presents an innovative multi-agent conversational AI system designe
 
 ### Frontend Interface
 
-![Frontend Interface](docs/frontend-screenshot.png)
-
 *The user-friendly interface provides an intuitive chat experience with voice support, analytics dashboard, and cognitive exercise integration.*
 
 **Key Interface Features:**
