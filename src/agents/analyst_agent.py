@@ -432,19 +432,22 @@ class AnalystAgent:
 
     def analyze_conversation(self, messages: List[Dict[str, str]]) -> Dict[str, Any]:
         """
-        Analyze entire conversation.
+        Analyze entire conversation with enhanced detailed analytics.
 
         Args:
             messages: List of message dictionaries with 'role' and 'content'
 
         Returns:
-            Conversation analytics
+            Comprehensive conversation analytics
         """
         if not messages:
             return {
                 'overall_sentiment': 'neutral',
                 'sentiment_trend': [],
-                'total_messages': 0
+                'total_messages': 0,
+                'detailed_metrics': {},
+                'emotional_intensity': 0.0,
+                'sentiment_confidence': 0.0
             }
 
         user_messages = [msg['content'] for msg in messages if msg.get('role') == 'user']
@@ -453,31 +456,178 @@ class AnalystAgent:
             return {
                 'overall_sentiment': 'neutral',
                 'sentiment_trend': [],
-                'total_messages': 0
+                'total_messages': 0,
+                'detailed_metrics': {},
+                'emotional_intensity': 0.0,
+                'sentiment_confidence': 0.0
             }
 
-        # Analyze each message
+        # Analyze each message with detailed metrics
+        detailed_analyses = []
         sentiments = []
-        for msg in user_messages:
+        confidences = []
+        emotional_intensities = []
+        
+        for i, msg in enumerate(user_messages):
             analysis = self.analyze_sentiment(msg)
+            detailed_analyses.append({
+                'message_index': i,
+                'text': msg[:100] + "..." if len(msg) > 100 else msg,
+                'sentiment': analysis['sentiment'],
+                'confidence': analysis['confidence'],
+                'probabilities': analysis.get('probabilities', {}),
+                'emotional_intensity': self._calculate_emotional_intensity(msg, analysis['sentiment'])
+            })
             sentiments.append(analysis['sentiment'])
+            confidences.append(analysis['confidence'])
+            emotional_intensities.append(self._calculate_emotional_intensity(msg, analysis['sentiment']))
 
-        # Calculate statistics
+        # Calculate comprehensive statistics
         sentiment_counts = pd.Series(sentiments).value_counts().to_dict()
+        avg_confidence = np.mean(confidences) if confidences else 0.0
+        avg_emotional_intensity = np.mean(emotional_intensities) if emotional_intensities else 0.0
 
-        # Determine overall sentiment
+        # Determine overall sentiment with confidence weighting
         if sentiment_counts:
-            overall_sentiment = max(sentiment_counts, key=sentiment_counts.get)
+            # Weight by confidence scores
+            weighted_sentiments = {}
+            for i, sentiment in enumerate(sentiments):
+                if sentiment not in weighted_sentiments:
+                    weighted_sentiments[sentiment] = 0
+                weighted_sentiments[sentiment] += confidences[i]
+            
+            overall_sentiment = max(weighted_sentiments, key=weighted_sentiments.get)
         else:
             overall_sentiment = 'neutral'
+
+        # Calculate sentiment stability (how consistent emotions are)
+        sentiment_stability = self._calculate_sentiment_stability(sentiments)
+        
+        # Calculate emotional volatility
+        emotional_volatility = np.std(emotional_intensities) if len(emotional_intensities) > 1 else 0.0
+
+        # Detailed metrics breakdown
+        detailed_metrics = {
+            'sentiment_breakdown': {
+                sentiment: {
+                    'count': count,
+                    'percentage': (count / len(sentiments)) * 100,
+                    'avg_confidence': np.mean([confidences[i] for i, s in enumerate(sentiments) if s == sentiment]) if count > 0 else 0.0,
+                    'avg_intensity': np.mean([emotional_intensities[i] for i, s in enumerate(sentiments) if s == sentiment]) if count > 0 else 0.0
+                }
+                for sentiment, count in sentiment_counts.items()
+            },
+            'confidence_metrics': {
+                'average': avg_confidence,
+                'min': min(confidences) if confidences else 0.0,
+                'max': max(confidences) if confidences else 0.0,
+                'std': np.std(confidences) if len(confidences) > 1 else 0.0
+            },
+            'intensity_metrics': {
+                'average': avg_emotional_intensity,
+                'min': min(emotional_intensities) if emotional_intensities else 0.0,
+                'max': max(emotional_intensities) if emotional_intensities else 0.0,
+                'volatility': emotional_volatility
+            },
+            'stability_metrics': {
+                'sentiment_stability': sentiment_stability,
+                'emotional_consistency': 1.0 - (emotional_volatility / 10.0) if emotional_volatility > 0 else 1.0
+            }
+        }
 
         return {
             'overall_sentiment': overall_sentiment,
             'sentiment_distribution': sentiment_counts,
             'sentiment_trend': sentiments,
             'total_messages': len(user_messages),
-            'needs_support': self._assess_support_needs(sentiments)
+            'needs_support': self._assess_support_needs(sentiments),
+            'detailed_metrics': detailed_metrics,
+            'emotional_intensity': avg_emotional_intensity,
+            'sentiment_confidence': avg_confidence,
+            'message_analyses': detailed_analyses,
+            'sentiment_stability': sentiment_stability,
+            'emotional_volatility': emotional_volatility
         }
+
+    def _calculate_emotional_intensity(self, text: str, sentiment: str) -> float:
+        """
+        Calculate emotional intensity based on text content and sentiment.
+        
+        Args:
+            text: Input text
+            sentiment: Detected sentiment
+            
+        Returns:
+            Emotional intensity score (0-10)
+        """
+        # Base intensity by sentiment
+        base_intensities = {
+            'positive': 3.0,
+            'neutral': 1.0,
+            'stressed': 8.0,
+            'sad': 7.0,
+            'anxious': 6.0,
+            'frustrated': 7.5
+        }
+        
+        base_intensity = base_intensities.get(sentiment, 1.0)
+        
+        # Intensity modifiers based on text content
+        intensity_modifiers = 0.0
+        
+        # Exclamation marks increase intensity
+        intensity_modifiers += text.count('!') * 0.5
+        
+        # Question marks increase anxiety
+        if sentiment == 'anxious':
+            intensity_modifiers += text.count('?') * 0.3
+        
+        # Caps lock increases intensity
+        caps_ratio = sum(1 for c in text if c.isupper()) / len(text) if text else 0
+        intensity_modifiers += caps_ratio * 2.0
+        
+        # Emotional words intensity
+        high_intensity_words = ['overwhelmed', 'exhausted', 'devastated', 'terrified', 'crushing', 'unbearable', 'drowning', 'suffocating']
+        medium_intensity_words = ['worried', 'scared', 'frustrated', 'sad', 'anxious', 'stressed']
+        
+        for word in high_intensity_words:
+            if word in text.lower():
+                intensity_modifiers += 1.5
+                
+        for word in medium_intensity_words:
+            if word in text.lower():
+                intensity_modifiers += 0.8
+        
+        # Text length affects intensity (longer = more emotional)
+        length_modifier = min(len(text) / 100, 2.0)  # Cap at 2.0
+        
+        final_intensity = min(base_intensity + intensity_modifiers + length_modifier, 10.0)
+        return round(final_intensity, 2)
+    
+    def _calculate_sentiment_stability(self, sentiments: List[str]) -> float:
+        """
+        Calculate how stable/consistent the sentiments are over time.
+        
+        Args:
+            sentiments: List of sentiment labels
+            
+        Returns:
+            Stability score (0-1, where 1 is most stable)
+        """
+        if len(sentiments) <= 1:
+            return 1.0
+            
+        # Count sentiment changes
+        changes = 0
+        for i in range(1, len(sentiments)):
+            if sentiments[i] != sentiments[i-1]:
+                changes += 1
+        
+        # Calculate stability (fewer changes = more stable)
+        max_possible_changes = len(sentiments) - 1
+        stability = 1.0 - (changes / max_possible_changes)
+        
+        return round(stability, 3)
 
     def _assess_support_needs(self, sentiments: List[str]) -> Dict[str, Any]:
         """
@@ -516,37 +666,275 @@ class AnalystAgent:
 
     def get_insights(self, conversation_analytics: Dict[str, Any]) -> List[str]:
         """
-        Generate human-readable insights from analytics.
+        Generate comprehensive human-readable insights from enhanced analytics.
 
         Args:
             conversation_analytics: Results from analyze_conversation
 
         Returns:
-            List of insight strings
+            List of detailed insight strings
         """
         insights = []
 
         overall = conversation_analytics.get('overall_sentiment', 'neutral')
         total = conversation_analytics.get('total_messages', 0)
-
-        if total > 0:
-            insights.append(f"Analyzed {total} user messages")
-            insights.append(f"Overall sentiment: {overall.title()}")
-
         distribution = conversation_analytics.get('sentiment_distribution', {})
-        if distribution:
-            top_emotions = sorted(distribution.items(), key=lambda x: x[1], reverse=True)[:3]
-            insights.append(
-                f"Top emotions: {', '.join([f'{emotion} ({count})' for emotion, count in top_emotions])}"
-            )
-
+        sentiment_trend = conversation_analytics.get('sentiment_trend', [])
         support = conversation_analytics.get('needs_support', {})
-        if support.get('level') == 'high':
-            insights.append("[Important] User may benefit from additional support")
-        elif support.get('level') == 'moderate':
-            insights.append("[Note] User showing signs of stress - extra empathy recommended")
+        detailed_metrics = conversation_analytics.get('detailed_metrics', {})
+        emotional_intensity = conversation_analytics.get('emotional_intensity', 0.0)
+        sentiment_confidence = conversation_analytics.get('sentiment_confidence', 0.0)
+        sentiment_stability = conversation_analytics.get('sentiment_stability', 0.0)
+        emotional_volatility = conversation_analytics.get('emotional_volatility', 0.0)
+
+        # Analysis header
+        insights.append("=== ADVANCED CONVERSATION ANALYSIS ===")
+        insights.append("")
+
+        # Basic metrics with enhanced details
+        if total > 0:
+            insights.append(f"[Data Analyzed] {total} user messages processed using advanced ML sentiment analysis")
+            insights.append(f"[Overall Emotional State] {overall.title()} (Confidence: {sentiment_confidence:.1%})")
+            insights.append(f"[Emotional Intensity] {emotional_intensity:.1f}/10.0")
+            insights.append(f"[Sentiment Stability] {sentiment_stability:.1%}")
+            insights.append(f"[Emotional Volatility] {emotional_volatility:.2f}")
+            insights.append("")
+
+        # Detailed emotional breakdown with confidence and intensity
+        if distribution and detailed_metrics.get('sentiment_breakdown'):
+            insights.append("[DETAILED EMOTIONAL BREAKDOWN]")
+            total_sentiment = sum(distribution.values())
+            breakdown = detailed_metrics['sentiment_breakdown']
+            
+            for emotion, count in sorted(distribution.items(), key=lambda x: x[1], reverse=True):
+                if emotion in breakdown:
+                    data = breakdown[emotion]
+                    percentage = data['percentage']
+                    avg_confidence = data['avg_confidence']
+                    avg_intensity = data['avg_intensity']
+                    
+                    # Create visual bar
+                    bar = "█" * int(percentage / 5)
+                    
+                    # Intensity indicator
+                    intensity_indicator = ""
+                    if avg_intensity >= 7:
+                        intensity_indicator = " 🔥"
+                    elif avg_intensity >= 5:
+                        intensity_indicator = " ⚡"
+                    elif avg_intensity >= 3:
+                        intensity_indicator = " 💫"
+                    
+                    insights.append(f"  • {emotion.title()}: {count} messages ({percentage:.1f}%) {bar}")
+                    insights.append(f"    └─ Confidence: {avg_confidence:.1%} | Intensity: {avg_intensity:.1f}/10{intensity_indicator}")
+            insights.append("")
+
+        # Advanced trend analysis
+        if len(sentiment_trend) >= 3:
+            insights.append("[ADVANCED TREND ANALYSIS]")
+            recent_sentiments = sentiment_trend[-3:]
+            concerning = sum(1 for s in recent_sentiments if s in ['stressed', 'sad', 'anxious', 'frustrated'])
+            
+            # Calculate trend direction
+            if len(sentiment_trend) >= 5:
+                first_half = sentiment_trend[:len(sentiment_trend)//2]
+                second_half = sentiment_trend[len(sentiment_trend)//2:]
+                
+                first_concerning = sum(1 for s in first_half if s in ['stressed', 'sad', 'anxious', 'frustrated'])
+                second_concerning = sum(1 for s in second_half if s in ['stressed', 'sad', 'anxious', 'frustrated'])
+                
+                if second_concerning > first_concerning:
+                    trend_direction = "📈 Escalating emotional distress"
+                elif second_concerning < first_concerning:
+                    trend_direction = "📉 Improving emotional state"
+                else:
+                    trend_direction = "➡️ Stable emotional pattern"
+            else:
+                trend_direction = "📊 Insufficient data for trend analysis"
+            
+            if concerning >= 2:
+                insights.append(f"  ⚠️ Recent Pattern: Last 3 messages show concerning emotional patterns")
+            elif all(s == 'positive' for s in recent_sentiments):
+                insights.append(f"  ✓ Recent Pattern: Last 3 messages show positive emotional state")
+            else:
+                insights.append(f"  🔄 Recent Pattern: Mixed emotions in recent messages - normal variation")
+            
+            insights.append(f"  {trend_direction}")
+            insights.append("")
+
+        # Confidence and reliability analysis
+        if detailed_metrics.get('confidence_metrics'):
+            conf_metrics = detailed_metrics['confidence_metrics']
+            insights.append("[ANALYSIS RELIABILITY]")
+            insights.append(f"  • Average Confidence: {conf_metrics['average']:.1%}")
+            insights.append(f"  • Confidence Range: {conf_metrics['min']:.1%} - {conf_metrics['max']:.1%}")
+            insights.append(f"  • Confidence Stability: {1-conf_metrics['std']:.1%}")
+            
+            if conf_metrics['average'] >= 0.8:
+                insights.append("  ✓ High confidence in sentiment analysis")
+            elif conf_metrics['average'] >= 0.6:
+                insights.append("  ⚠️ Moderate confidence in sentiment analysis")
+            else:
+                insights.append("  ❌ Low confidence - analysis may be unreliable")
+            insights.append("")
+
+        # Emotional intensity analysis
+        if detailed_metrics.get('intensity_metrics'):
+            intensity_metrics = detailed_metrics['intensity_metrics']
+            insights.append("[EMOTIONAL INTENSITY ANALYSIS]")
+            insights.append(f"  • Average Intensity: {intensity_metrics['average']:.1f}/10")
+            insights.append(f"  • Intensity Range: {intensity_metrics['min']:.1f} - {intensity_metrics['max']:.1f}")
+            insights.append(f"  • Volatility: {intensity_metrics['volatility']:.2f}")
+            
+            if intensity_metrics['average'] >= 7:
+                insights.append("  🔥 High emotional intensity - strong feelings detected")
+            elif intensity_metrics['average'] >= 5:
+                insights.append("  ⚡ Moderate emotional intensity - noticeable feelings")
+            elif intensity_metrics['average'] >= 3:
+                insights.append("  💫 Low-moderate emotional intensity - mild feelings")
+            else:
+                insights.append("  😌 Low emotional intensity - calm emotional state")
+            insights.append("")
+
+        # Support level assessment with enhanced details
+        support_level = support.get('level', 'low')
+        if support_level == 'high':
+            insights.append("[🚨 PRIORITY ALERT - IMMEDIATE ATTENTION NEEDED]")
+            insights.append("• High stress/emotional distress detected (>70% concerning sentiments)")
+            insights.append("• Emotional intensity levels are concerning")
+            insights.append("• Immediate attention and support recommended")
+            insights.append("• Consider professional counseling referral")
+            insights.append("• Emergency support resources should be provided")
+        elif support_level == 'moderate':
+            insights.append("[⚠️ ATTENTION NEEDED - MONITOR CLOSELY]")
+            insights.append("• Moderate stress levels detected (>40% concerning sentiments)")
+            insights.append("• Additional empathy and support resources recommended")
+            insights.append("• Monitor for escalation patterns")
+            insights.append("• Proactive support strategies needed")
+        else:
+            insights.append("[✅ SUPPORT LEVEL: LOW - MANAGING WELL]")
+            insights.append("• User is managing emotional challenges effectively")
+            insights.append("• Continue current support strategies")
+            insights.append("• Monitor for any changes in emotional patterns")
+        insights.append("")
+
+        # Add enhanced recommendations
+        recommendations = self.get_recommendations(conversation_analytics)
+        if recommendations:
+            insights.append("=== PERSONALIZED RECOMMENDATIONS ===")
+            insights.append("")
+            for rec in recommendations:
+                insights.append(rec)
 
         return insights
+
+    def get_recommendations(self, conversation_analytics: Dict[str, Any]) -> List[str]:
+        """
+        Generate personalized recommendations based on conversation analysis.
+
+        Args:
+            conversation_analytics: Results from analyze_conversation
+
+        Returns:
+            List of actionable recommendations
+        """
+        recommendations = []
+
+        overall = conversation_analytics.get('overall_sentiment', 'neutral')
+        distribution = conversation_analytics.get('sentiment_distribution', {})
+        support = conversation_analytics.get('needs_support', {})
+
+        # Get emotion counts
+        stressed_count = distribution.get('stressed', 0)
+        sad_count = distribution.get('sad', 0)
+        anxious_count = distribution.get('anxious', 0)
+        frustrated_count = distribution.get('frustrated', 0)
+        positive_count = distribution.get('positive', 0)
+
+        total = sum(distribution.values()) if distribution else 0
+
+        # Stress-specific recommendations
+        if stressed_count > 0 and total > 0:
+            stress_ratio = stressed_count / total
+            if stress_ratio > 0.3:
+                recommendations.append("[For Stress Management]")
+                recommendations.append("• Practice deep breathing exercises (5 minutes, 3x daily)")
+                recommendations.append("• Schedule 15-minute breaks between caregiving tasks")
+                recommendations.append("• Consider respite care options (adult day programs, in-home care)")
+                recommendations.append("• Join a caregiver support group (online or in-person)")
+                recommendations.append("")
+
+        # Sadness/grief recommendations
+        if sad_count > 0 and total > 0:
+            sad_ratio = sad_count / total
+            if sad_ratio > 0.3:
+                recommendations.append("[For Grief & Sadness]")
+                recommendations.append("• Allow yourself to grieve - your feelings are valid")
+                recommendations.append("• Connect with others who understand (support groups)")
+                recommendations.append("• Keep a gratitude journal - note 3 positive moments daily")
+                recommendations.append("• Consider grief counseling or therapy")
+                recommendations.append("• Engage in activities you enjoy (even briefly)")
+                recommendations.append("")
+
+        # Anxiety recommendations
+        if anxious_count > 0 and total > 0:
+            anxiety_ratio = anxious_count / total
+            if anxiety_ratio > 0.3:
+                recommendations.append("[For Anxiety Management]")
+                recommendations.append("• Use grounding techniques: 5-4-3-2-1 method (5 things you see, 4 you hear, etc.)")
+                recommendations.append("• Create a care plan/emergency protocol to reduce uncertainty")
+                recommendations.append("• Limit 'what if' thinking - focus on present moment")
+                recommendations.append("• Practice progressive muscle relaxation before bed")
+                recommendations.append("• Consult doctor about anxiety management strategies")
+                recommendations.append("")
+
+        # Frustration recommendations
+        if frustrated_count > 0 and total > 0:
+            frustration_ratio = frustrated_count / total
+            if frustration_ratio > 0.3:
+                recommendations.append("[For Frustration Management]")
+                recommendations.append("• Take a 'time-out' when feeling overwhelmed (5-10 minutes)")
+                recommendations.append("• Learn about dementia behaviors - understanding reduces frustration")
+                recommendations.append("• Set realistic expectations - you're doing your best")
+                recommendations.append("• Express feelings through journaling or talking to a friend")
+                recommendations.append("• Consider family meetings to distribute caregiving tasks")
+                recommendations.append("")
+
+        # High support need recommendations
+        if support.get('level') == 'high':
+            recommendations.append("[IMMEDIATE ACTIONS RECOMMENDED]")
+            recommendations.append("• Contact your doctor to discuss caregiver burnout")
+            recommendations.append("• Call caregiver helpline: 1-800-677-1116 (Eldercare Locator)")
+            recommendations.append("• Arrange emergency respite care this week")
+            recommendations.append("• Talk to a mental health professional")
+            recommendations.append("• Delegate tasks - ask family/friends for specific help")
+            recommendations.append("")
+
+        # General wellness recommendations
+        recommendations.append("[Daily Wellness Practices]")
+        recommendations.append("• Sleep: Aim for 7-8 hours (use respite care if needed)")
+        recommendations.append("• Nutrition: Eat regular, balanced meals - don't skip!")
+        recommendations.append("• Exercise: 20-30 minutes daily (walk, yoga, stretching)")
+        recommendations.append("• Social: Connect with 1 friend/family member daily")
+        recommendations.append("• Self-care: Do 1 thing you enjoy every day (no guilt!)")
+        recommendations.append("")
+
+        # Positive reinforcement
+        if positive_count > 0:
+            recommendations.append("[Positive Note]")
+            recommendations.append(f"• You've had {positive_count} positive moments - celebrate these!")
+            recommendations.append("• You're showing resilience and strength")
+            recommendations.append("• Continue the strategies that are working for you")
+            recommendations.append("")
+
+        # Resource recommendations
+        recommendations.append("[Helpful Resources]")
+        recommendations.append("• Alzheimer's Association 24/7 Helpline: 1-800-272-3900")
+        recommendations.append("• National Institute on Aging: nia.nih.gov")
+        recommendations.append("• Family Caregiver Alliance: caregiver.org")
+        recommendations.append("• Local Area Agency on Aging: eldercare.acl.gov")
+
+        return recommendations
 
     def save_model(self):
         """Save the trained model to disk."""

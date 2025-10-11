@@ -71,7 +71,7 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
   const handleSubmit = (e) => {
     if (e) e.preventDefault();
     if (input.trim() && !isLoading) {
-      onSendMessage(input);
+      onSendMessage(input, voiceEnabled && isListening); // Pass voice mode flag
       setInput('');
       clearTranscript(); // Clear transcript after sending message
     }
@@ -292,36 +292,43 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
           </div>
         ) : (
           <>
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex ${
-                  message.role === 'user' ? 'justify-end' : 'justify-start'
-                } message-enter`}
-              >
+            {messages.map((message, index) => {
+              // Hide assistant messages if they are voice-only responses
+              if (message.role === 'assistant' && message.isVoiceOnly) {
+                return null;
+              }
+
+              return (
                 <div
-                  className={`message-bubble ${
-                    message.role === 'user'
-                      ? 'message-user'
-                      : 'message-assistant'
-                  }`}
+                  key={index}
+                  className={`flex ${
+                    message.role === 'user' ? 'justify-end' : 'justify-start'
+                  } message-enter`}
                 >
-                  <p className="whitespace-pre-wrap text-large">{message.content}</p>
-                  {message.agent && (
-                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-200">
-                      <span
-                        className={`agent-badge ${
-                          agentColors[message.agent]
-                        }`}
-                      >
-                        {agentIcons[message.agent]}
-                        <span className="capitalize font-semibold">{message.agent}</span>
-                      </span>
-                    </div>
-                  )}
+                  <div
+                    className={`message-bubble ${
+                      message.role === 'user'
+                        ? 'message-user'
+                        : 'message-assistant'
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap text-large">{message.content}</p>
+                    {message.agent && (
+                      <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-200">
+                        <span
+                          className={`agent-badge ${
+                            agentColors[message.agent]
+                          }`}
+                        >
+                          {agentIcons[message.agent]}
+                          <span className="capitalize font-semibold">{message.agent}</span>
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             {isLoading && (
               <div className="flex justify-start">
                 <div className="message-bubble message-assistant">
