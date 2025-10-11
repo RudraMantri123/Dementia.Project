@@ -11,6 +11,7 @@ function App() {
   const [stats, setStats] = useState(null);
   const [analytics, setAnalytics] = useState(null);
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
 
   // Count user messages
   const userMessageCount = messages.filter(msg => msg.role === 'user').length;
@@ -21,6 +22,7 @@ function App() {
     if (!isInitialized || !showAnalytics) return;
 
     const fetchData = async () => {
+      setAnalyticsLoading(true);
       try {
         const [statsData, analyticsData] = await Promise.all([
           chatAPI.getStats(),
@@ -30,6 +32,8 @@ function App() {
         setAnalytics(analyticsData);
       } catch (error) {
         console.error('Error fetching analytics:', error);
+      } finally {
+        setAnalyticsLoading(false);
       }
     };
 
@@ -52,7 +56,7 @@ function App() {
     }
   };
 
-  const handleSendMessage = async (message) => {
+  const handleSendMessage = async (message, isVoiceInput = false) => {
     // Add user message
     setMessages((prev) => [...prev, { role: 'user', content: message }]);
     setIsLoading(true);
@@ -60,7 +64,7 @@ function App() {
     try {
       const response = await chatAPI.sendMessage(message);
 
-      // Add assistant message
+      // Add assistant message (hide from display if voice input)
       setMessages((prev) => [
         ...prev,
         {
@@ -68,6 +72,7 @@ function App() {
           content: response.response,
           agent: response.agent,
           intent: response.intent,
+          isVoiceOnly: isVoiceInput, // Mark as voice-only response
         },
       ]);
     } catch (error) {
@@ -109,50 +114,47 @@ function App() {
         onReset={handleReset}
         isInitialized={isInitialized}
         isLoading={isLoading}
+        canShowAnalytics={canShowAnalytics}
+        onShowAnalytics={handleShowAnalytics}
       />
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <ChatInterface
-          messages={messages}
-          onSendMessage={handleSendMessage}
-          isLoading={isLoading}
-          isInitialized={isInitialized}
-          onReset={handleReset}
-        />
-      </div>
+      {/* Main Chat Area or Full Analytics Page */}
+      {showAnalytics ? (
+        <div className="flex-1 flex flex-col min-w-0 bg-white overflow-y-auto">
+          {/* Analytics Header */}
+          <div className="border-b border-gray-200 bg-white px-6 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
+            <div className="flex items-center gap-3">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <h2 className="text-2xl font-bold text-gray-900">Conversation Analytics</h2>
+            </div>
+            <button
+              onClick={() => setShowAnalytics(false)}
+              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-lg transition-colors duration-200 flex items-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Close Analytics
+            </button>
+          </div>
 
-      {/* Analytics Panel */}
-      {isInitialized && showAnalytics && (
-        <div className="w-80 bg-white border-l-2 border-gray-200 shadow-xl">
-          <AnalyticsDashboard stats={stats} analytics={analytics} />
+          {/* Full Analytics Dashboard */}
+          <div className="p-8">
+            <AnalyticsDashboard stats={stats} analytics={analytics} isLoading={analyticsLoading} />
+          </div>
         </div>
-      )}
-
-      {/* End Conversation & View Analytics Button */}
-      {isInitialized && canShowAnalytics && !showAnalytics && (
-        <button
-          onClick={handleShowAnalytics}
-          className="fixed bottom-8 right-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-2xl shadow-2xl transition-all duration-300 flex items-center gap-3 z-10 font-bold text-lg hover:scale-105 transform"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
-          View Analytics
-        </button>
-      )}
-
-      {/* Hide Analytics Button */}
-      {isInitialized && showAnalytics && (
-        <button
-          onClick={() => setShowAnalytics(false)}
-          className="fixed bottom-8 right-8 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-8 py-4 rounded-2xl shadow-2xl transition-all duration-300 flex items-center gap-3 z-10 font-bold text-lg hover:scale-105 transform"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-          Hide Analytics
-        </button>
+      ) : (
+        <div className="flex-1 flex flex-col min-w-0">
+          <ChatInterface
+            messages={messages}
+            onSendMessage={handleSendMessage}
+            isLoading={isLoading}
+            isInitialized={isInitialized}
+            onReset={handleReset}
+          />
+        </div>
       )}
     </div>
   );
