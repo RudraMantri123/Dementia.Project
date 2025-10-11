@@ -13,6 +13,7 @@
 ## Table of Contents
 
 - [Overview](#overview)
+- [Screenshots](#screenshots)
 - [System Architecture](#system-architecture)
 - [Key Technologies](#key-technologies)
 - [Therapeutic Approach](#therapeutic-approach--ethical-considerations)
@@ -24,6 +25,30 @@
 ## Overview
 
 An innovative multi-agent conversational AI system providing comprehensive support for dementia patients and their caregivers through:
+
+## Screenshots
+
+### Frontend Interface
+
+#### Main Chat Interface
+![Main Chat Interface](docs/screenshots/main-interface.png)
+*The clean, intuitive chat interface with multi-agent support and voice controls*
+
+#### Welcome Screen
+![Welcome Screen](docs/screenshots/welcome-screen.png)
+*Initial welcome screen showing the three specialized agents*
+
+#### Sidebar Configuration
+![Sidebar Configuration](docs/screenshots/sidebar-config.png)
+*Easy model configuration with Ollama (free) or OpenAI (paid) options*
+
+#### Voice Interaction
+![Voice Controls](docs/screenshots/voice-interface.png)
+*Hands-free voice interaction with real-time speech-to-text*
+
+> **Note**: Take screenshots of your running application and save them in the `docs/screenshots/` folder with the names shown above.
+
+## Key Highlights
 
 - **Evidence-based information retrieval** using RAG architecture (87% retrieval accuracy, <3% hallucination rate)
 - **Professional therapeutic support** using CBT, mindfulness, and validation techniques
