@@ -65,7 +65,7 @@ trap cleanup SIGINT SIGTERM
 
 # Start backend
 echo -e "${BLUE}Starting FastAPI backend on http://localhost:8000...${NC}"
-python backend/main.py > backend.log 2>&1 &
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 > backend.log 2>&1 &
 BACKEND_PID=$!
 
 # Wait for backend to start
@@ -103,6 +103,12 @@ echo -e "Frontend: ${BLUE}http://localhost:3000${NC}"
 echo -e "Backend:  ${BLUE}http://localhost:8000${NC}"
 echo -e "API Docs: ${BLUE}http://localhost:8000/docs${NC}\n"
 echo -e "${YELLOW}Press Ctrl+C to stop both servers${NC}\n"
+
+# Open in Safari (macOS)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo -e "${BLUE}Opening Safari...${NC}"
+    open -a "Safari" http://localhost:3000
+fi
 
 # Keep script running
 wait

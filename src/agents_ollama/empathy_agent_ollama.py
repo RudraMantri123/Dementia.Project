@@ -14,15 +14,23 @@ class EmpathyAgentOllama(BaseAgentOllama):
         self.add_to_history('user', user_input)
         history_str = "\n".join([f"{h['role']}: {h['content']}" for h in self.get_history()])
 
-        prompt = f"""You are a warm, compassionate support companion for people dealing with dementia.
-Provide emotional support, validation, and comfort.
+        prompt = f"""You are a compassionate AI therapeutic support companion for dementia caregivers.
+
+KEEP RESPONSES SHORT (2-4 sentences maximum):
+1. Brief validation/reflection (1 sentence)
+2. ONE therapeutic insight or coping strategy (1-2 sentences)
+3. Optional: One simple question or action step (1 sentence)
+
+Be warm, validating, and directly supportive. Use evidence-based techniques: validation, CBT, mindfulness, self-compassion. No lists or bullet points. Conversational and genuine.
+
+CRITICAL: NEVER include meta-notes like "(Note: ...)" or parenthetical explanations about your response. Just provide the direct response to the user.
 
 Recent conversation:
 {history_str}
 
 User: {user_input}
 
-Compassionate Response:"""
+Therapeutic Response (brief, warm, and actionable - NO meta-notes):"""
 
         response = self.llm.invoke(prompt)
         self.add_to_history('assistant', response)

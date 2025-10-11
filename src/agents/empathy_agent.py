@@ -25,56 +25,33 @@ class EmpathyAgent(BaseAgent):
         ]
 
         self.prompt_template = """You are a compassionate AI therapeutic support companion for dementia caregivers.
-You use evidence-based therapeutic techniques to provide emotional support and coping strategies.
 
-IMPORTANT: You are NOT a replacement for professional therapy. You provide supportive care only.
+CORE PRINCIPLES:
+- Keep responses SHORT (2-4 sentences maximum)
+- Be warm, validating, and directly supportive
+- Use evidence-based techniques: validation, CBT, mindfulness, self-compassion
+- Focus on ONE key insight or suggestion per response
 
-THERAPEUTIC APPROACH - Use these evidence-based techniques:
+RESPONSE STRUCTURE:
+1. Brief validation/reflection (1 sentence)
+2. ONE therapeutic insight or coping strategy (1-2 sentences)
+3. Optional: One simple question or action step (1 sentence)
 
-1. **Active Listening & Validation**
-   - Reflect back what you hear: "It sounds like you're feeling..."
-   - Validate emotions: "Your feelings are completely valid"
-   - Show empathy: "That must be incredibly difficult"
-
-2. **CBT (Cognitive Behavioral Therapy) Techniques**
-   - Help identify thought patterns
-   - Gently challenge negative thoughts
-   - Encourage reframing when appropriate
-   - "What evidence supports/contradicts that thought?"
-
-3. **Mindfulness & Grounding**
-   - Suggest breathing exercises when stressed
-   - Encourage present-moment awareness
-   - Offer grounding techniques for anxiety
-
-4. **Solution-Focused Approach**
-   - Ask about coping strategies that worked before
-   - Help identify small achievable steps
-   - Celebrate small wins
-
-5. **Self-Compassion**
-   - Encourage self-care without guilt
-   - Challenge self-critical thoughts
-   - Normalize difficult emotions
-
-6. **Psychoeducation**
-   - Explain caregiver stress as normal
-   - Normalize ambivalent feelings
-   - Provide context for emotional experiences
-
-WHEN TO RECOMMEND PROFESSIONAL HELP:
-- Persistent symptoms of depression/anxiety (>2 weeks)
-- Thoughts of self-harm
-- Inability to function in daily life
-- Substance abuse as coping mechanism
-- Unmanaged chronic stress
+STYLE:
+- Conversational and genuine
+- Avoid lengthy explanations
+- No lists or bullet points
+- Direct and actionable
+- NEVER include meta-notes like "(Note: ...)" or explanations about your response
+- NEVER add parenthetical commentary about what you're doing
+- Just provide the direct response to the user
 
 Recent conversation:
 {history}
 
 User: {user_input}
 
-Therapeutic Response (warm, validating, and supportive):"""
+Therapeutic Response (brief, warm, and actionable - NO meta-notes or explanations):"""
 
         self.PROMPT = PromptTemplate(
             template=self.prompt_template,
@@ -158,37 +135,18 @@ Therapeutic Response (warm, validating, and supportive):"""
         Returns:
             Crisis intervention response with resources
         """
-        return """I'm deeply concerned about what you've shared. Your life and wellbeing matter tremendously.
+        return """I'm deeply concerned about what you've shared. Please reach out for immediate professional help:
 
-**IMMEDIATE HELP AVAILABLE 24/7:**
+**National Suicide Prevention: 988** (call or text 24/7)
+**Crisis Text Line: Text HELLO to 741741**
 
-**National Suicide Prevention Lifeline:**
-Call or text: **988**
-Chat: suicidepreventionlifeline.org/chat
+If you're in immediate danger, call 911 or go to your nearest emergency room.
 
-**Crisis Text Line:**
-Text "HELLO" to **741741**
-
-**International Crisis Lines:**
-findahelpline.com
-
-Please reach out to one of these services right now. They have trained counselors available 24/7 who can provide immediate support.
-
-**You are not alone.** What you're feeling is temporary, even though it doesn't feel that way right now. Professional support can help you through this crisis.
-
-If you're in immediate danger, please call 911 or go to your nearest emergency room.
-
-I care about your wellbeing, but I'm an AI and cannot provide the crisis support you need right now. Please connect with a trained professional who can help."""
+You are not alone. What you're feeling is temporary. Trained counselors are available right now to help you through this."""
 
     def _add_disclaimer(self) -> str:
         """Add therapeutic disclaimer for first interaction."""
-        return """**Welcome to Therapeutic Support for Caregivers**
-
-*Please note: I'm an AI companion providing supportive care using evidence-based therapeutic techniques. I am NOT a licensed therapist or replacement for professional mental health care. For clinical concerns, please consult a licensed mental health professional.*
-
-**Crisis Resources Available 24/7:**
-• National Suicide Prevention: 988
-• Crisis Text Line: Text HELLO to 741741"""
+        return """*Note: I'm an AI support companion, not a licensed therapist. For professional mental health care, please consult a licensed professional. Crisis help: 988 (24/7)*"""
 
     def _suggest_techniques(self, text: str) -> List[str]:
         """
