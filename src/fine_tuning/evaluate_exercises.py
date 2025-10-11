@@ -218,7 +218,7 @@ class ExerciseEvaluator:
             score += 20
 
         # Check for clear formatting indicators
-        if '💡' in text or 'tip:' in text.lower() or 'hint:' in text.lower():
+        if '[tip]' in text.lower() or 'tip:' in text.lower() or 'hint:' in text.lower():
             score += 30
 
         return score
@@ -358,17 +358,17 @@ def main():
     evaluator = ExerciseEvaluator()
 
     # Example exercise
-    sample_exercise = """**Memory Challenge: Household Items** 🏠
+    sample_exercise = """**Memory Challenge: Household Items** [Home]
 
 I'm going to show you 5 common household items:
 
-1. Reading Glasses 👓
-2. House Keys 🔑
-3. TV Remote 📺
-4. Coffee Mug ☕
-5. Telephone 📞
+1. Reading Glasses
+2. House Keys
+3. TV Remote
+4. Coffee Mug
+5. Telephone
 
-💡 **Memory Tip**: Imagine walking through your home and placing each item in a specific room.
+[Tip] **Memory Tip**: Imagine walking through your home and placing each item in a specific room.
 
 Take 30-45 seconds to memorize them. When you're ready, type 'ready'!"""
 

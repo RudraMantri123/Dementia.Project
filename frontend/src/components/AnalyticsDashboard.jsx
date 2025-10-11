@@ -89,13 +89,13 @@ const AnalyticsDashboard = ({ stats, analytics }) => {
           <div className="card">
             <h3 className="font-semibold text-gray-900 mb-3">Emotional Tone</h3>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center text-2xl">
-                {analytics.overall_sentiment === 'positive' && '😊'}
-                {analytics.overall_sentiment === 'neutral' && '😐'}
-                {analytics.overall_sentiment === 'stressed' && '😰'}
-                {analytics.overall_sentiment === 'sad' && '😢'}
-                {analytics.overall_sentiment === 'anxious' && '😟'}
-                {analytics.overall_sentiment === 'frustrated' && '😤'}
+              <div className="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center text-sm font-semibold">
+                {analytics.overall_sentiment === 'positive' && '[+]'}
+                {analytics.overall_sentiment === 'neutral' && '[=]'}
+                {analytics.overall_sentiment === 'stressed' && '[!]'}
+                {analytics.overall_sentiment === 'sad' && '[-]'}
+                {analytics.overall_sentiment === 'anxious' && '[?]'}
+                {analytics.overall_sentiment === 'frustrated' && '[X]'}
               </div>
               <div>
                 <p className="text-sm text-gray-600">Overall Sentiment</p>
@@ -136,17 +136,17 @@ const AnalyticsDashboard = ({ stats, analytics }) => {
               <h3 className="font-semibold text-gray-900 mb-2">Support Level</h3>
               {analytics.needs_support.level === 'high' && (
                 <p className="text-sm text-red-800">
-                  ⚠️ High stress detected - Extra support recommended
+                  [Important] High stress detected - Extra support recommended
                 </p>
               )}
               {analytics.needs_support.level === 'moderate' && (
                 <p className="text-sm text-yellow-800">
-                  💛 Some stress detected - Monitor closely
+                  [Note] Some stress detected - Monitor closely
                 </p>
               )}
               {analytics.needs_support.level === 'low' && (
                 <p className="text-sm text-green-800">
-                  ✓ Conversation appears positive
+                  [Success] Conversation appears positive
                 </p>
               )}
               {analytics.needs_support.recommendation && (
