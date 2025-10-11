@@ -139,7 +139,7 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
 
         <div className="mt-12 p-6 bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl border-2 border-blue-200">
           <p className="text-gray-700 text-large font-medium">
-            💡 <strong>Getting Started:</strong> Configure your API key in the sidebar to begin your journey
+            [Tip] <strong>Getting Started:</strong> Configure your API key in the sidebar to begin your journey
           </p>
         </div>
       </div>
@@ -351,7 +351,7 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">📊</span>
+                  <span className="text-white font-bold text-sm">[Analytics]</span>
                 </div>
                 <div>
                   <p className="text-blue-800 font-medium text-large">

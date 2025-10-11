@@ -1,12 +1,14 @@
-# Intelligent Multi-Agent System for Dementia Care Support
+# Intelligent Multi-Agent Therapeutic System for Dementia Care Support
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![React](https://img.shields.io/badge/React-18.0+-61dafb.svg)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.0.0-success.svg)](FEATURES_IMPLEMENTED.md)
+[![Version](https://img.shields.io/badge/Version-2.1.0-success.svg)](FEATURES_IMPLEMENTED.md)
 
-> A production-ready AI system combining Retrieval Augmented Generation (RAG), Multi-Agent Architecture, Machine Learning, and Clinical Integration for comprehensive dementia care support.
+> **生き甲斐 (Ikigai)** - *"A reason for being"* - Inspired by the Japanese philosophy of finding purpose at the intersection of passion, skill, and what the world needs, this system helps caregivers maintain their own sense of meaning and well-being while caring for their loved ones.
+
+> A production-ready AI therapeutic system combining Retrieval Augmented Generation (RAG), Multi-Agent Architecture, Machine Learning, Evidence-Based Therapeutic Techniques, and Clinical Integration for comprehensive dementia care and caregiver mental health support.
 
 ## Table of Contents
 
@@ -29,9 +31,10 @@
 This project presents an innovative multi-agent conversational AI system designed to provide comprehensive support for dementia patients and their caregivers. By integrating state-of-the-art natural language processing techniques, the system offers:
 
 - **Evidence-based information retrieval** using RAG architecture
-- **Personalized emotional support** through sentiment-aware responses
+- **Professional therapeutic support** using CBT, mindfulness, and validation techniques
+- **Crisis intervention** with 24/7 resource access (988 Lifeline, Crisis Text Line)
 - **Adaptive cognitive training** with AI-generated exercises
-- **Real-time sentiment analysis** for caregiver mental health monitoring
+- **Real-time sentiment analysis** for caregiver mental health monitoring (98.81% accuracy)
 
 ### Frontend Interface
 
@@ -55,12 +58,13 @@ Dementia affects over 55 million people worldwide, with caregivers experiencing 
 
 ### Solution
 
-Our system addresses these gaps through a sophisticated multi-agent architecture that provides:
-1. 24/7 accessible support
-2. Evidence-based information retrieval
-3. Personalized emotional support
-4. Adaptive cognitive exercises
-5. Caregiver mental health analytics
+Our system addresses these gaps through a sophisticated multi-agent therapeutic architecture that provides:
+1. 24/7 accessible therapeutic support with evidence-based techniques
+2. Crisis intervention with immediate access to professional resources
+3. Evidence-based information retrieval
+4. Professional-grade emotional support using CBT, mindfulness, and validation
+5. Adaptive cognitive exercises
+6. Caregiver mental health analytics with 98.81% accuracy
 
 ## Research Contributions & Technical Deep Dive
 
@@ -77,7 +81,7 @@ Our system implements a **hierarchical multi-agent architecture** inspired by co
   ```
   User Input → Intent Analysis → {
     Information Query → Knowledge Agent (RAG)
-    Emotional Distress → Empathy Agent (Emotion AI)
+    Emotional Distress → Therapeutic Support Agent (Evidence-Based Therapy)
     Exercise Request → Cognitive Agent (Exercise Gen)
     Analytics Request → Analyst Agent (ML Pipeline)
   }
@@ -94,11 +98,14 @@ Our system implements a **hierarchical multi-agent architecture** inspired by co
    - **Context Window**: 4,096 tokens
    - **Temperature**: 0.3 (focused, factual responses)
    
-2. **Empathy Agent**
-   - **Emotion Detection**: Keyword-based + sentiment scoring
-   - **Response Strategy**: Template-based with LLM enhancement
-   - **Crisis Detection**: Pattern matching for distress signals
-   - **Tone Calibration**: Warmth, validation, non-judgmental language
+2. **Therapeutic Support Agent** (Evidence-Based Mental Health Support)
+   - **Therapeutic Techniques**: CBT, mindfulness, validation, active listening, solution-focused therapy
+   - **Emotion Detection**: Advanced keyword-based + sentiment scoring (6 emotional states)
+   - **Crisis Intervention**: Automatic detection of self-harm/suicidal ideation
+   - **Crisis Resources**: 988 Suicide Prevention Lifeline, Crisis Text Line (741741)
+   - **Ethical Safeguards**: Clear disclaimers, professional referral guidance
+   - **Response Strategy**: Evidence-based therapeutic responses with LLM enhancement
+   - **Tone Calibration**: Warmth, validation, non-judgmental, professional boundaries
 
 3. **Cognitive Agent**
    - **Exercise Generation**: Dynamic LLM-based (zero-shot prompting)
@@ -529,6 +536,77 @@ risk_score = 0.3 * cognitive_decline_factor
 
 ## System Architecture
 
+### Visual Workflow Diagrams
+
+#### 1. System Overview - How It Works
+
+```mermaid
+graph LR
+    A[User] --> B[Backend API]
+    B --> C{Orchestrator}
+    C -->|Info| D[Knowledge]
+    C -->|Emotion| E[Therapeutic]
+    C -->|Exercise| F[Cognitive]
+    C -->|Analytics| G[Analyst]
+    D --> H[Response]
+    E --> H
+    F --> H
+    G --> H
+
+    style A fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style B fill:#7B68EE,stroke:#5A4DB8,stroke-width:2px,color:#fff
+    style C fill:#FF6B6B,stroke:#CC5555,stroke-width:2px,color:#fff
+    style D fill:#51CF66,stroke:#3DAF52,stroke-width:2px,color:#fff
+    style E fill:#FF8787,stroke:#CC6C6C,stroke-width:2px,color:#fff
+    style F fill:#FFA94D,stroke:#CC873D,stroke-width:2px,color:#fff
+    style G fill:#A78BFA,stroke:#8667E6,stroke-width:2px,color:#fff
+    style H fill:#FFD93D,stroke:#CCA830,stroke-width:2px,color:#000
+```
+
+#### 2. RAG Pipeline Workflow
+
+```mermaid
+flowchart LR
+    A[Query] --> B[Search]
+    B --> C[Documents]
+    C --> D[LLM]
+    D --> E[Answer]
+
+    style A fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style B fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    style C fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style D fill:#FCE4EC,stroke:#C2185B,stroke-width:2px
+    style E fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+```
+
+#### 3. Sentiment Analysis Pipeline
+
+```mermaid
+flowchart LR
+    A[Message] --> B[Features]
+    B --> C[Ensemble]
+    C --> D[Prediction<br/>98.81% F1]
+
+    style A fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style B fill:#F8BBD0,stroke:#C2185B,stroke-width:2px
+    style C fill:#CE93D8,stroke:#7B1FA2,stroke-width:2px
+    style D fill:#81C784,stroke:#388E3C,stroke-width:2px
+```
+
+#### 4. ML Training Flow
+
+```mermaid
+flowchart LR
+    A[214<br/>samples] --> B[840<br/>augmented]
+    B --> C[Train<br/>Ensemble]
+    C --> D[98.81%<br/>F1 Score]
+
+    style A fill:#E1F5FE,stroke:#01579B,stroke-width:2px
+    style B fill:#FCE4EC,stroke:#880E4F,stroke-width:2px
+    style C fill:#FF8A80,stroke:#D32F2F,stroke-width:2px
+    style D fill:#76FF03,stroke:#64DD17,stroke-width:2px
+```
+
 ### High-Level Architecture Diagram
 
 ```
@@ -572,25 +650,25 @@ risk_score = 0.3 * cognitive_decline_factor
 │  │  │ Intent             │ Agent           │ Confidence Threshold │   │ │
 │  │  ├────────────────────┼─────────────────┼──────────────────────┤   │ │
 │  │  │ information_query  │ Knowledge Agent │ > 0.7                │   │ │
-│  │  │ emotional_support  │ Empathy Agent   │ > 0.6                │   │ │
+│  │  │ emotional_support  │ Therapeutic Agent│ > 0.6               │   │ │
 │  │  │ cognitive_exercise │ Cognitive Agent │ > 0.8                │   │ │
 │  │  │ analytics_request  │ Analyst Agent   │ > 0.7                │   │ │
-│  │  │ ambiguous          │ Empathy (safe)  │ < 0.6                │   │ │
+│  │  │ ambiguous          │ Therapeutic (safe)│ < 0.6              │   │ │
 │  │  └────────────────────┴─────────────────┴──────────────────────┘   │ │
 │  └──────────┬────────────┬────────────┬────────────┬─────────────────────┘ │
 │             │            │            │            │                         │
 │             ▼            ▼            ▼            ▼                         │
 │  ┌──────────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐                  │
-│  │  Knowledge   │ │ Empathy  │ │ Cognitive│ │ Analyst  │                  │
-│  │    Agent     │ │  Agent   │ │  Agent   │ │  Agent   │                  │
-│  │   (RAG)      │ │  (Emo.)  │ │  (Exer.) │ │  (ML)    │                  │
+│  │  Knowledge   │ │Therapeutic│ │ Cognitive│ │ Analyst  │                  │
+│  │    Agent     │ │  Support  │ │  Agent   │ │  Agent   │                  │
+│  │   (RAG)      │ │  (Therapy)│ │  (Exer.) │ │  (ML)    │                  │
 │  │              │ │          │ │          │ │          │                  │
 │  │ Components:  │ │ Methods: │ │ Features:│ │ Pipeline:│                  │
-│  │ • Retriever  │ │ • Emotion│ │ • LLM    │ │ • TF-IDF │                  │
-│  │ • Embedder   │ │   Detect │ │   Prompts│ │ • LogReg │                  │
+│  │ • Retriever  │ │ • CBT    │ │ • LLM    │ │ • TF-IDF │                  │
+│  │ • Embedder   │ │ • Mindful│ │   Prompts│ │ • Ensemble│                 │
 │  │ • QA Chain   │ │ • Crisis │ │ • Dynamic│ │ • Predict│                  │
 │  │ • Context    │ │   Handle │ │   Diff.  │ │ • Analyze│                  │
-│  │   Window     │ │ • Empathy│ │ • Scoring│ │ • Insight│                  │
+│  │   Window     │ │ • Validate│ │ • Scoring│ │ • Insight│                  │
 │  └──────┬───────┘ └────┬─────┘ └────┬─────┘ └────┬─────┘                  │
 │         │              │            │            │                         │
 │         └──────────────┴────────────┴────────────┘                         │
@@ -949,11 +1027,25 @@ with open('data/models/analyst_model.pkl', 'wb') as f:
 - Source attribution for transparency
 - Context-aware answer synthesis
 
-#### 2. Empathy Agent
-- Real-time emotion detection (6 emotional states)
-- Personalized empathetic responses
-- Crisis detection and appropriate escalation
-- Supportive conversation continuity
+#### 2. Therapeutic Support Agent
+- **Evidence-Based Therapeutic Techniques**:
+  - **CBT (Cognitive Behavioral Therapy)**: Thought pattern identification, cognitive reframing
+  - **Mindfulness & Grounding**: Breathing exercises, present-moment awareness techniques
+  - **Active Listening & Validation**: Reflective listening, emotion validation
+  - **Solution-Focused Therapy**: Strength-based coping strategies
+  - **Self-Compassion**: Challenging self-critical thoughts, normalizing difficult emotions
+  - **Psychoeducation**: Explaining caregiver stress, normalizing ambivalent feelings
+- Real-time emotion detection (6 emotional states: anxious, stressed, frustrated, sad, positive, neutral)
+- Crisis intervention with automatic detection of:
+  - Suicidal ideation
+  - Self-harm indicators
+  - Severe emotional distress
+- **24/7 Crisis Resources**:
+  - 988 Suicide Prevention Lifeline
+  - Crisis Text Line: Text HELLO to 741741
+  - International crisis lines
+- Professional boundaries with clear therapeutic disclaimers
+- Guidance on when to seek licensed professional help
 
 #### 3. Cognitive Agent
 - AI-generated memory exercises (story recall, pattern recognition)
@@ -980,6 +1072,113 @@ with open('data/models/analyst_model.pkl', 'wb') as f:
 - **Context Management**: Maintains conversation state across exercises
 - **Flexible LLM Support**: Free (Ollama) and paid (OpenAI) models
 - **Responsive Design**: Mobile-friendly interface
+
+## Therapeutic Approach & Ethical Considerations
+
+### Evidence-Based Therapeutic Techniques
+
+Our Therapeutic Support Agent implements clinically-validated therapeutic approaches:
+
+#### 1. **Cognitive Behavioral Therapy (CBT)**
+- Identifies thought patterns contributing to distress
+- Gently challenges cognitive distortions
+- Encourages reframing of negative thoughts
+- Uses Socratic questioning: "What evidence supports this thought?"
+
+#### 2. **Mindfulness & Grounding Techniques**
+- Breathing exercises for stress reduction (4-7-8 technique, box breathing)
+- Present-moment awareness practices
+- Grounding techniques for anxiety (5-4-3-2-1 sensory method)
+- Body scan relaxation
+
+#### 3. **Active Listening & Validation**
+- Reflective listening: "It sounds like you're feeling..."
+- Emotion validation: "Your feelings are completely valid"
+- Empathic responding without judgment
+- Creating safe space for emotional expression
+
+#### 4. **Solution-Focused Therapy**
+- Identifying past coping strategies that worked
+- Breaking problems into manageable steps
+- Celebrating small wins and progress
+- Building on strengths rather than focusing on deficits
+
+#### 5. **Self-Compassion Training**
+- Challenging self-critical inner dialogue
+- Normalizing difficult emotions in caregiving
+- Permission for self-care without guilt
+- Reframing "failure" as learning opportunities
+
+#### 6. **Psychoeducation**
+- Explaining caregiver stress as a normal response
+- Normalizing ambivalent feelings toward care recipients
+- Understanding the grief process in dementia caregiving
+- Context for emotional experiences
+
+### Crisis Intervention Protocol
+
+The system includes robust crisis detection and intervention:
+
+**Automatic Detection of Crisis Indicators**:
+- Suicidal ideation ("I want to die", "ending it all")
+- Self-harm expressions ("hurt myself", "cutting")
+- Hopelessness statements ("no reason to live", "better off dead")
+
+**Immediate Crisis Response**:
+When crisis keywords are detected, the system:
+1. Expresses deep concern and validation
+2. Provides immediate 24/7 crisis resources:
+   - **988 Suicide Prevention Lifeline** (call or text)
+   - **Crisis Text Line**: Text HELLO to 741741
+   - **International Crisis Lines**: findahelpline.com
+3. Encourages immediate professional contact
+4. Reminds user that feelings are temporary
+5. Suggests emergency services (911) if in immediate danger
+
+**Important**: The AI cannot provide crisis counseling and clearly states this limitation.
+
+### Professional Boundaries & Disclaimers
+
+#### Clear Limitations
+Every first interaction includes this disclaimer:
+
+> **Welcome to Therapeutic Support for Caregivers**
+>
+> *Please note: I'm an AI companion providing supportive care using evidence-based therapeutic techniques. I am NOT a licensed therapist or replacement for professional mental health care. For clinical concerns, please consult a licensed mental health professional.*
+>
+> **Crisis Resources Available 24/7:**
+> • National Suicide Prevention: 988
+> • Crisis Text Line: Text HELLO to 741741
+
+#### When Professional Help is Recommended
+
+The system recommends seeking licensed professional help when:
+- Persistent symptoms of depression/anxiety lasting >2 weeks
+- Thoughts of self-harm or suicide
+- Inability to function in daily life
+- Substance abuse as a coping mechanism
+- Unmanaged chronic stress affecting health
+- Need for clinical diagnosis or medication management
+- Trauma requiring specialized treatment
+
+### Ethical Safeguards
+
+1. **No Medical Diagnosis**: System never diagnoses mental health conditions
+2. **Professional Referral**: Always encourages professional consultation for serious concerns
+3. **Transparency**: Clear about AI nature and limitations
+4. **Privacy**: No sharing of crisis situations without explicit consent
+5. **Non-Directive**: Suggests options but respects user autonomy
+6. **Cultural Sensitivity**: Acknowledges diverse approaches to mental health
+7. **Evidence-Based Only**: Uses only scientifically-validated techniques
+
+### Research Foundation
+
+Our therapeutic approach is grounded in:
+- Beck, A. T. (1979). *Cognitive Therapy and the Emotional Disorders*
+- Kabat-Zinn, J. (1990). *Full Catastrophe Living: Using Mindfulness to Face Stress*
+- Linehan, M. M. (1993). *Skills Training Manual for Treating Borderline Personality Disorder*
+- Neff, K. (2011). *Self-Compassion: The Proven Power of Being Kind to Yourself*
+- De Shazer, S. (1985). *Keys to Solution in Brief Therapy*
 
 ## Installation
 
@@ -1206,24 +1405,24 @@ response = agent.process(
 
 ### Latest Updates (December 2024)
 
-#### ✨ Enhanced Cognitive Exercises
+#### Enhanced Cognitive Exercises
 - **Detailed Story Narratives**: Memory exercises now feature rich, 8-12 sentence stories with specific details (names, times, colors, locations)
 - **Pattern Recognition**: Fixed exercise state management for seamless pattern completion
 - **Memory Feedback**: Shows original lists/stories after recall attempts for learning reinforcement
 - **Adaptive Difficulty**: AI-generated exercises with dynamic difficulty scaling
 
-#### 🔧 Production-Ready Improvements
+#### Production-Ready Improvements
 - **Robust Error Handling**: Comprehensive exception handling prevents system crashes
 - **Graceful Degradation**: Intelligent fallbacks when exercise state is lost
 - **Session Persistence**: No-reload deployment mode maintains user sessions
 - **Defensive Programming**: All agents include state validation and error recovery
 
-#### 🎤 Voice Interface Enhancements
+#### Voice Interface Enhancements
 - **Fixed Transcript Clearing**: Voice input works reliably for consecutive messages
 - **Auto-Submit**: Seamless voice-to-text-to-submission workflow
 - **State Management**: Proper cleanup after each voice interaction
 
-#### 🎯 Exercise Flow Improvements
+#### Exercise Flow Improvements
 - **State Tracking**: Robust exercise state machine (waiting_for_ready → evaluating → complete)
 - **Context Preservation**: Exercises maintain state across multiple interactions
 - **Smart Routing**: Orchestrator correctly routes exercise responses to cognitive agent
@@ -1322,6 +1521,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Keywords**: Multi-Agent Systems, Retrieval Augmented Generation (RAG), Natural Language Processing (NLP), Machine Learning, Healthcare AI, Dementia Care, Sentiment Analysis, Cognitive Training, LangChain, FAISS, FastAPI, React
+**Keywords**: Multi-Agent Systems, Retrieval Augmented Generation (RAG), Natural Language Processing (NLP), Machine Learning, Healthcare AI, Dementia Care, Therapeutic Support, CBT (Cognitive Behavioral Therapy), Mindfulness, Mental Health AI, Crisis Intervention, Sentiment Analysis, Cognitive Training, Evidence-Based Therapy, LangChain, FAISS, FastAPI, React
 
-**Built with love for dementia patients and caregivers worldwide**
+**Built with love and therapeutic care for dementia patients and caregivers worldwide**

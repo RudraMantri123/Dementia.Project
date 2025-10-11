@@ -71,13 +71,13 @@ Make it engaging and age-appropriate for elderly adults."""
 
                 items_text = '\n'.join([f"{i+1}. {item.title()}" for i, item in enumerate(data['items'])])
 
-                response_text = f"""🧠 Memory Challenge: {data['category'].title()}
+                response_text = f"""[Brain] Memory Challenge: {data['category'].title()}
 
 I'm going to show you {len(data['items'])} items. Here's a memory tip: {data.get('memory_tip', 'Try to create a story!')}
 
 {items_text}
 
-💡 Take 30-45 seconds to memorize them. When you're ready, type 'ready' and I'll test your memory!"""
+[Tip] Take 30-45 seconds to memorize them. When you're ready, type 'ready' and I'll test your memory!"""
 
                 return {
                     'response': response_text,
@@ -131,7 +131,7 @@ Example themes: a neighborhood gathering, a helpful encounter, a family visit, s
                     'summary_prompt': data.get('summary_prompt', 'Please summarize the story in your own words.')
                 }
 
-                response_text = f"""📖 Detailed Story Recall Exercise: "{data['title']}"
+                response_text = f"""[Story] Detailed Story Recall Exercise: "{data['title']}"
 
 I'm going to share a detailed narrative with you. This story contains specific details about people, places, times, and events. Read it carefully and try to remember as much as you can.
 
@@ -141,7 +141,7 @@ I'm going to share a detailed narrative with you. This story contains specific d
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💡 Memory Tips:
+[Tip] Memory Tips:
 • Visualize the scene like a movie in your mind
 • Pay attention to specific details (names, times, colors, numbers)
 • Notice the sequence of events
@@ -194,13 +194,13 @@ Respond ONLY with JSON:
                     'hint': data['hint']
                 }
 
-                response_text = f"""🧩 Pattern Recognition
+                response_text = f"""[Pattern] Pattern Recognition
 
 What comes next in this sequence?
 
 {sequence_str}
 
-💡 Hint: {data['hint']}
+[Tip] Hint: {data['hint']}
 
 Type your answer!"""
 
@@ -219,7 +219,7 @@ Type your answer!"""
         import datetime
         now = datetime.datetime.now()
 
-        response_text = f"""📅 Orientation Exercise
+        response_text = f"""[Calendar] Orientation Exercise
 
 These questions help you stay connected to the present:
 
@@ -228,7 +228,7 @@ These questions help you stay connected to the present:
 3. What season is it?
 4. What time of day is it (morning/afternoon/evening)?
 
-💡 Take your time and answer thoughtfully!"""
+[Tip] Take your time and answer thoughtfully!"""
 
         return {
             'response': response_text,
@@ -249,7 +249,7 @@ These questions help you stay connected to the present:
         items_text = '\n'.join([f"{i+1}. {item.title()}" for i, item in enumerate(items)])
 
         return {
-            'response': f"""🧠 Memory Exercise: {category.title()}
+            'response': f"""[Brain] Memory Exercise: {category.title()}
 
 {items_text}
 
@@ -275,7 +275,7 @@ Around noon, they shared the sandwiches Maria had brought, enjoying the warm sun
         }
 
         return {
-            'response': f"""📖 Detailed Story Recall Exercise: "A Pleasant Afternoon"
+            'response': f"""[Story] Detailed Story Recall Exercise: "A Pleasant Afternoon"
 
 I'm going to share a detailed narrative with you. Read it carefully and try to remember as much as you can.
 
@@ -285,7 +285,7 @@ I'm going to share a detailed narrative with you. Read it carefully and try to r
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💡 Memory Tips:
+[Tip] Memory Tips:
 • Visualize the scene like a movie in your mind
 • Pay attention to specific details (names, times, colors, numbers)
 • Notice the sequence of events
@@ -300,12 +300,12 @@ Take your time to read and absorb the story. When ready to summarize, type 'read
         """Fallback pattern exercise."""
         self.exercise_data = {
             'type': 'pattern',
-            'answer': '🔴',
+            'answer': 'Red',
             'hint': 'The pattern alternates between colors'
         }
 
         return {
-            'response': """🧩 Pattern: 🔵 🔴 🔵 🔴 🔵 ?
+            'response': """[Pattern] Pattern: Blue Red Blue Red Blue ?
 
 What comes next?""",
             'agent': 'cognitive',
@@ -325,13 +325,13 @@ What comes next?""",
                 num_items = len(items)
 
                 return {
-                    'response': f"""Perfect! Time to test your memory! 🧠
+                    'response': f"""Perfect! Time to test your memory!
 
-⚠️ Important: Don't scroll up to look at the original list - that would be cheating! Try to recall from memory alone.
+[Important] Don't scroll up to look at the original list - that would be cheating! Try to recall from memory alone.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📝 Memory Recall Test
+[Note] Memory Recall Test
 
 You were shown {num_items} {category}. The original list is now hidden.
 
@@ -342,7 +342,7 @@ You were shown {num_items} {category}. The original list is now hidden.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💭 Now, without looking back, type the {category} you remember, separated by commas.
+Now, without looking back, type the {category} you remember, separated by commas.
 
 Example: apple, banana, orange
 
@@ -357,7 +357,7 @@ Don't worry about the exact order - just write what you can recall!""",
                 return {
                     'response': f"""Excellent! You've had time to read the story carefully.
 
-📝 Story: "{title}"
+[Note] Story: "{title}"
 
 Now, without looking back at the story, I'd like you to recall what happened.
 
@@ -374,7 +374,7 @@ Don't worry about getting every detail perfect - just tell me what you remember 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💡 Tip: Start with what you remember most clearly, then add other details as they come to mind.""",
+[Tip] Start with what you remember most clearly, then add other details as they come to mind.""",
                     'agent': 'cognitive',
                     'exercise_state': 'evaluating'
                 }
@@ -415,17 +415,17 @@ Just let me know what you'd like to try!""",
             # Show the original list
             items_list = '\n'.join([f"  {i+1}. {item.title()}" for i, item in enumerate(items)])
 
-            response = f"""Thank you for trying! 🌟
+            response = f"""Thank you for trying!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📋 The Original List ({category.title()}):
+[List] The Original List ({category.title()}):
 
 {items_list}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💭 Reflection:
+[Reflection]
 Great effort working through this exercise! Memory recall can be challenging, and that's completely normal. The important thing is that you engaged with the exercise.
 
 Remember:
@@ -445,17 +445,17 @@ What would you like to do next?"""
             story = self.exercise_data.get('story', '')
             title = self.exercise_data.get('title', 'The Story')
 
-            response = f"""Thank you for trying! 🌟
+            response = f"""Thank you for trying!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📖 Original Story: "{title}"
+[Story] Original Story: "{title}"
 
 {story}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💭 Reflection:
+[Reflection]
 I appreciate you working through this exercise. Story recall can be quite challenging, especially with all the specific details. It's completely normal to find this difficult.
 
 Remember:
@@ -482,13 +482,13 @@ What would you like to do next?"""
                          user_answer in correct_answer)
 
             if is_correct:
-                response = f"""🎉 Excellent work! That's correct!
+                response = f"""Excellent work! That's correct!
 
 The answer was: {correct_answer}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💭 Reflection:
+[Reflection]
 Great job recognizing the pattern! Pattern recognition helps strengthen cognitive skills and mental flexibility.
 
 Would you like to:
@@ -498,7 +498,7 @@ Would you like to:
 
 What would you like to do next?"""
             else:
-                response = f"""Thank you for trying! 🌟
+                response = f"""Thank you for trying!
 
 The correct answer was: {correct_answer}
 
@@ -506,7 +506,7 @@ Hint: {hint}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💭 Reflection:
+[Reflection]
 Pattern recognition can be tricky! The important thing is that you engaged with the exercise.
 
 Remember:
@@ -523,11 +523,11 @@ What would you like to do next?"""
 
         else:
             # Generic response for other exercise types
-            response = f"""Thank you for participating! 🌟
+            response = f"""Thank you for participating!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💭 Reflection:
+[Reflection]
 Great job engaging with this exercise! Every cognitive activity is valuable for brain health.
 
 Would you like to:
