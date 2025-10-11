@@ -50,23 +50,23 @@ class CognitiveFine Tuner:
         Returns:
             Path to prepared training file
         """
-        print(f"📚 Preparing training data from: {input_file}")
+        print(f"[Training] Preparing training data from: {input_file}")
 
         with open(input_file, 'r') as f:
             data = [json.loads(line) for line in f]
 
-        print(f"✓ Loaded {len(data)} training examples")
+        print(f"[Success] Loaded {len(data)} training examples")
 
         if validate:
-            print("🔍 Validating data format...")
+            print("[Validating] Validating data format...")
             self._validate_training_data(data)
-            print("✓ Data validation passed")
+            print("[Success] Data validation passed")
 
         if output_file:
             with open(output_file, 'w') as f:
                 for item in data:
                     f.write(json.dumps(item) + '\n')
-            print(f"✓ Saved validated data to: {output_file}")
+            print(f"[Success] Saved validated data to: {output_file}")
             return output_file
 
         return input_file
@@ -123,7 +123,7 @@ class CognitiveFine Tuner:
         Raises:
             Exception: If upload fails
         """
-        print(f"📤 Uploading training file to OpenAI...")
+        print(f"[Uploading] Uploading training file to OpenAI...")
 
         try:
             with open(file_path, 'rb') as f:
@@ -133,13 +133,13 @@ class CognitiveFine Tuner:
                 )
 
             self.training_file_id = response.id
-            print(f"✓ File uploaded successfully")
+            print(f"[Success] File uploaded successfully")
             print(f"  File ID: {self.training_file_id}")
 
             return self.training_file_id
 
         except Exception as e:
-            print(f"✗ Upload failed: {e}")
+            print(f"[Error] Upload failed: {e}")
             raise
 
     def start_fine_tuning(
@@ -170,7 +170,7 @@ class CognitiveFine Tuner:
         if not file_id:
             raise ValueError("No training file ID provided")
 
-        print(f"🚀 Starting fine-tuning job...")
+        print(f"[Starting] Starting fine-tuning job...")
         print(f"  Base model: {model}")
         print(f"  Training file: {file_id}")
         print(f"  Epochs: {n_epochs}")
@@ -191,14 +191,14 @@ class CognitiveFine Tuner:
             )
 
             job_id = response.id
-            print(f"✓ Fine-tuning job created")
+            print(f"[Success] Fine-tuning job created")
             print(f"  Job ID: {job_id}")
             print(f"  Status: {response.status}")
 
             return job_id
 
         except Exception as e:
-            print(f"✗ Fine-tuning failed to start: {e}")
+            print(f"[Error] Fine-tuning failed to start: {e}")
             raise
 
     def monitor_fine_tuning(self, job_id: str, check_interval: int = 60) -> str:
@@ -212,7 +212,7 @@ class CognitiveFine Tuner:
         Returns:
             Fine-tuned model ID when complete
         """
-        print(f"👀 Monitoring fine-tuning job: {job_id}")
+        print(f"[Monitoring] Monitoring fine-tuning job: {job_id}")
         print(f"  Checking status every {check_interval} seconds...")
         print(f"  (This may take 10-30 minutes depending on data size)")
 
@@ -225,18 +225,18 @@ class CognitiveFine Tuner:
 
                 if status == "succeeded":
                     self.fine_tuned_model = response.fine_tuned_model
-                    print(f"\n✓ Fine-tuning completed successfully!")
+                    print(f"\n[Success] Fine-tuning completed successfully!")
                     print(f"  Fine-tuned model: {self.fine_tuned_model}")
                     return self.fine_tuned_model
 
                 elif status == "failed":
-                    print(f"\n✗ Fine-tuning failed")
+                    print(f"\n[Error] Fine-tuning failed")
                     if hasattr(response, 'error'):
                         print(f"  Error: {response.error}")
                     raise Exception("Fine-tuning job failed")
 
                 elif status == "cancelled":
-                    print(f"\n⚠ Fine-tuning was cancelled")
+                    print(f"\n[Warning] Fine-tuning was cancelled")
                     raise Exception("Fine-tuning job cancelled")
 
                 else:
@@ -248,13 +248,13 @@ class CognitiveFine Tuner:
                 time.sleep(check_interval)
 
             except KeyboardInterrupt:
-                print(f"\n⚠ Monitoring interrupted")
+                print(f"\n[Warning] Monitoring interrupted")
                 print(f"  Job is still running. Check status with job ID: {job_id}")
                 raise
 
             except Exception as e:
                 if "Fine-tuning job" not in str(e):
-                    print(f"\n✗ Error checking status: {e}")
+                    print(f"\n[Error] Error checking status: {e}")
                 raise
 
     def test_fine_tuned_model(
@@ -284,7 +284,7 @@ class CognitiveFine Tuner:
                 "Design a pattern recognition with numbers, medium difficulty",
             ]
 
-        print(f"🧪 Testing fine-tuned model: {model}")
+        print(f"[Testing] Testing fine-tuned model: {model}")
         print()
 
         results = []
@@ -321,7 +321,7 @@ class CognitiveFine Tuner:
                 })
 
             except Exception as e:
-                print(f"✗ Error: {e}")
+                print(f"[Error] Error: {e}")
                 print()
                 results.append({
                     "prompt": prompt,
@@ -339,7 +339,7 @@ class CognitiveFine Tuner:
             output_file: Path to save model info
         """
         if not self.fine_tuned_model:
-            print("⚠ No fine-tuned model to save")
+            print("[Warning] No fine-tuned model to save")
             return
 
         model_info = {
@@ -353,7 +353,7 @@ class CognitiveFine Tuner:
         with open(output_file, 'w') as f:
             json.dump(model_info, f, indent=2)
 
-        print(f"✓ Model info saved to: {output_file}")
+        print(f"[Success] Model info saved to: {output_file}")
 
     def full_pipeline(
         self,
@@ -405,7 +405,7 @@ class CognitiveFine Tuner:
 
         print()
         print("=" * 70)
-        print("✓ FINE-TUNING PIPELINE COMPLETED")
+        print("[Success] FINE-TUNING PIPELINE COMPLETED")
         print("=" * 70)
         print(f"Fine-tuned model: {model_id}")
         print()

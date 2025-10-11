@@ -55,8 +55,8 @@ const Sidebar = ({ onInitialize, onReset, isInitialized, isLoading }) => {
                 disabled={isInitialized}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:bg-gray-100"
               >
-                <option value="ollama">🆓 Free (Ollama - Local)</option>
-                <option value="openai">💳 Paid (OpenAI - Cloud)</option>
+                <option value="ollama">[Free] Ollama - Local</option>
+                <option value="openai">[Paid] OpenAI - Cloud</option>
               </select>
             </div>
 
@@ -88,9 +88,9 @@ const Sidebar = ({ onInitialize, onReset, isInitialized, isLoading }) => {
               >
                 {modelType === 'ollama' ? (
                   <>
-                    <option value="llama3:latest">Llama 3 (Recommended) ✓</option>
-                    <option value="llava:latest">Llava ✓</option>
-                    <option value="gemma3:270m">Gemma 3 (Fast) ✓</option>
+                    <option value="llama3:latest">Llama 3 (Recommended)</option>
+                    <option value="llava:latest">Llava</option>
+                    <option value="gemma3:270m">Gemma 3 (Fast)</option>
                   </>
                 ) : (
                   <>
@@ -130,9 +130,9 @@ const Sidebar = ({ onInitialize, onReset, isInitialized, isLoading }) => {
             ) : (
               <div className="space-y-2">
                 <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <p className="text-sm text-green-800 font-medium">✓ System Initialized</p>
+                  <p className="text-sm text-green-800 font-medium">[Success] System Initialized</p>
                   <p className="text-xs text-green-700 mt-1">
-                    {modelType === 'ollama' ? '🆓 Free' : '💳 Paid'} - {model}
+                    {modelType === 'ollama' ? '[Free]' : '[Paid]'} - {model}
                   </p>
                 </div>
                 <button

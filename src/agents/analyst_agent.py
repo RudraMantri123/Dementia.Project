@@ -542,9 +542,9 @@ class AnalystAgent:
 
         support = conversation_analytics.get('needs_support', {})
         if support.get('level') == 'high':
-            insights.append("⚠️ User may benefit from additional support")
+            insights.append("[Important] User may benefit from additional support")
         elif support.get('level') == 'moderate':
-            insights.append("💛 User showing signs of stress - extra empathy recommended")
+            insights.append("[Note] User showing signs of stress - extra empathy recommended")
 
         return insights
 
