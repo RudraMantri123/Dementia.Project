@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Settings, Trash2, Brain, Loader2, AlertCircle, BarChart3 } from 'lucide-react';
+import { Settings, Trash2, Brain, Loader2, AlertCircle } from 'lucide-react';
 
-const Sidebar = ({ onInitialize, onReset, isInitialized, isLoading, canShowAnalytics, onShowAnalytics }) => {
+const Sidebar = ({ onInitialize, onReset, isInitialized, isLoading }) => {
   const [modelType, setModelType] = useState('ollama');
   const [apiKey, setApiKey] = useState('');
   const [model, setModel] = useState('llama3:latest');  // Use exact model name with tag
@@ -177,18 +177,7 @@ const Sidebar = ({ onInitialize, onReset, isInitialized, isLoading, canShowAnaly
         </div>
       </div>
 
-      <div className="p-4 border-t border-gray-200 space-y-3">
-        {/* Analytics Button */}
-        {isInitialized && canShowAnalytics && (
-          <button
-            onClick={onShowAnalytics}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
-          >
-            <BarChart3 className="w-5 h-5" />
-            View Analytics
-          </button>
-        )}
-
+      <div className="p-4 border-t border-gray-200">
         <p className="text-xs text-gray-500 text-center">Powered by Multi-Agent AI</p>
       </div>
     </div>

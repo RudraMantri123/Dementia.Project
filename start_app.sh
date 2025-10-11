@@ -65,7 +65,7 @@ trap cleanup SIGINT SIGTERM
 
 # Start backend
 echo -e "${BLUE}Starting FastAPI backend on http://localhost:8000...${NC}"
-uvicorn backend.main:app --host 0.0.0.0 --port 8000 > backend.log 2>&1 &
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload > backend.log 2>&1 &
 BACKEND_PID=$!
 
 # Wait for backend to start
