@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Loader2, Brain, Heart, BookOpen, Activity, MessageSquarePlus } from 'lucide-react';
+import { Send, Loader2, Brain, Heart, BookOpen, Activity, MessageSquarePlus, UserRound } from 'lucide-react';
 import { useVoice } from '../hooks/useVoice';
 import VoiceControls from './VoiceControls';
 
@@ -89,7 +89,6 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
         <div className="mb-8">
           <div className="relative">
             <Brain className="w-20 h-20 text-blue-600 mb-6 mx-auto animate-pulse" />
-            <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full animate-bounce"></div>
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4 text-xl-large">
             Welcome to Dementia Support
@@ -208,7 +207,6 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
             <div className="mb-8">
               <div className="relative mb-6">
                 <Brain className="w-16 h-16 text-blue-600 mx-auto animate-pulse" />
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full animate-bounce"></div>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3 text-xl-large">
                 Welcome to Dementia Support
@@ -368,6 +366,28 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
           </div>
         )}
 
+        {/* Therapist Avatar - Shows when voice is enabled */}
+        {voiceEnabled && (
+          <div className="mb-4 flex items-center justify-center">
+            <div className="bg-gradient-to-br from-pink-100 to-purple-100 border-2 border-pink-300 rounded-2xl p-4 shadow-lg">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                    <UserRound className="w-10 h-10 text-white" />
+                  </div>
+                  {(isListening || isSpeaking) && (
+                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white"></div>
+                  )}
+                </div>
+                <div className="text-left">
+                  <h4 className="text-lg font-bold text-gray-900">Therapeutic Support</h4>
+                  <p className="text-sm text-gray-600">Voice mode active</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Voice Status */}
         {isListening && (
           <div className="mb-4 status-indicator bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-200 text-red-800">
@@ -408,11 +428,6 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
               disabled={isLoading || isListening}
               className="input-field"
             />
-            {input && (
-              <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              </div>
-            )}
           </div>
 
           {/* Send Button */}
