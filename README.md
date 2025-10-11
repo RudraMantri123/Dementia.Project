@@ -4,7 +4,8 @@
 [![React](https://img.shields.io/badge/React-18.0+-61dafb.svg)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.1.0-success.svg)](FEATURES_IMPLEMENTED.md)
+[![Version](https://img.shields.io/badge/Version-2.1.0-success.svg)](https://github.com/RudraMantri123/Dementia.Project)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-black.svg)](https://github.com/RudraMantri123/Dementia.Project)
 
 > **生き甲斐 (Ikigai)** - *"A reason for being"* - Inspired by the Japanese philosophy of finding purpose at the intersection of passion, skill, and what the world needs, this system helps caregivers maintain their own sense of meaning and well-being while caring for their loved ones.
 
@@ -837,8 +838,8 @@ Ollama (for local free LLMs)
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/dementia-chatbot.git
-cd dementia-chatbot
+git clone https://github.com/RudraMantri123/Dementia.Project.git
+cd Dementia.Project
 
 # 2. Backend setup
 python3 -m venv venv
@@ -1017,9 +1018,9 @@ LangChain Community, Hugging Face, Ollama, FastAPI, React Community
 ## Contact
 
 **Rudra Subodhm Mantri**
-- Email: rudra.mantri@example.com
-- LinkedIn: [linkedin.com/in/rudramantri](https://linkedin.com/in/rudramantri)
-- GitHub: [@rudramantri](https://github.com/rudramantri)
+- Email: f20220209@pilani.bits-pilani.ac.in
+- LinkedIn: [Rudra Mantri](https://www.linkedin.com/in/rudra-mantri)
+- GitHub: [RudraMantri123/Dementia.Project](https://github.com/RudraMantri123/Dementia.Project)
 
 ---
 
