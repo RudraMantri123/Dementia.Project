@@ -122,13 +122,11 @@ class CognitiveAgent(BaseAgent):
         }
 
         category_name = category.replace('_', ' ')
-        response = f"""{label_map.get(category, '[Note]')} Memory Challenge: {category_name.title()}
-
-Memorize these {num_items} {category_name}. Tip: {category_data['tip']}
+        response = f"""Memory Exercise: {category_name.title()}
 
 {chr(10).join([f"{i+1}. {item.title()}" for i, item in enumerate(items)])}
 
-Take 30-45 seconds. Type 'ready' when you're done!"""
+Memorize these items. Type 'ready' when done."""
 
         return {
             'response': response,
@@ -298,21 +296,11 @@ By 9:30 AM, Linda had spent a total of twenty-eight dollars but felt it was wort
             'difficulty': story_data['difficulty']
         }
 
-        difficulty_text = {'easy': 'Easy (*)', 'medium': 'Medium (**)', 'hard': 'Hard (***)'}
-
-        response = f"""[Story] Story Recall: "{story_data['title']}" - {difficulty_text[story_data['difficulty']]}
-
-Read carefully and remember as much detail as you can:
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        response = f"""Story Recall: "{story_data['title']}"
 
 {story_data['story']}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[Tip] Visualize it like a movie - focus on names, times, and events.
-
-Take 1-2 minutes to read. Type 'ready' when you're done."""
+Read and remember the details. Type 'ready' when done."""
 
         return {
             'response': response,
@@ -365,18 +353,11 @@ Take 1-2 minutes to read. Type 'ready' when you're done."""
             'pattern_type': pattern['type']
         }
 
-        difficulty_text = {'easy': 'Easy (*)', 'medium': 'Medium (**)', 'hard': 'Hard (***)'}
-
-        response = f"""[Pattern] Pattern Recognition Exercise
-Difficulty: {difficulty_text[pattern['difficulty']]}
-
-Look at this sequence and figure out what comes next:
+        response = f"""Pattern Exercise
 
 {' '.join(pattern['sequence'])}
 
-[Tip] Hint: This is a {pattern['type']} pattern!
-
-What comes next in the sequence? Type your answer when ready!"""
+What comes next? (Hint: {pattern['type']})"""
 
         return {
             'response': response,
@@ -429,15 +410,9 @@ What comes next in the sequence? Type your answer when ready!"""
 
         question_set = random.choice(questions_sets)
 
-        response = f"""{question_set['icon']} {question_set['title']} Exercise
+        response = f"""{question_set['title']}:
 
-{question_set['tips']}
-
-Please answer these questions:
-
-{chr(10).join([f"{i+1}. {q}" for i, q in enumerate(question_set['questions'])])}
-
-[Tip] Take your time and answer thoughtfully. These exercises help maintain awareness and connection to the present!"""
+{chr(10).join([f"{i+1}. {q}" for i, q in enumerate(question_set['questions'])])}"""
 
         return {
             'response': response,
@@ -460,14 +435,10 @@ Please answer these questions:
         # DEFENSIVE: Validate exercise_data exists
         if not self.exercise_data:
             return {
-                'response': """I apologize, but I seem to have lost track of the exercise. Let's start fresh!
-
-Would you like to try:
-• A memory exercise
-• A story recall exercise
-• A pattern recognition exercise
-
-Just let me know what you'd like to try!""",
+                'response': """Exercise state lost. Try:
+• Memory exercise
+• Story recall
+• Pattern recognition""",
                 'agent': 'cognitive',
                 'exercise_complete': True
             }
@@ -480,19 +451,17 @@ Just let me know what you'd like to try!""",
             elif exercise_type == 'story_recall':
                 return self._ask_story_questions()
             else:
-                # Unknown exercise type
                 return {
-                    'response': "I'm not sure what exercise we were doing. Let's start a new one! What would you like to try?",
+                    'response': "Exercise type unknown. Start a new one?",
                     'agent': 'cognitive',
                     'exercise_complete': True
                 }
 
-        # Handle "evaluating" state - user has provided their answer
         elif exercise_state == 'evaluating':
             return self._evaluate_response(user_input)
 
         return {
-            'response': "I'm here to help with the exercise. Type 'ready' when you'd like to continue, or ask for a different exercise!",
+            'response': "Type 'ready' to continue.",
             'agent': 'cognitive'
         }
 
@@ -506,86 +475,56 @@ Just let me know what you'd like to try!""",
         Returns:
             Encouraging feedback and next steps
         """
-        # DEFENSIVE: Check if exercise_data exists
         if not self.exercise_data:
             return {
-                'response': """I apologize, but I seem to have lost track of the exercise. This can happen if the connection was interrupted.
-
-Let's start fresh! Would you like to try:
-• A memory exercise
-• A story recall exercise
-• A pattern recognition exercise
-
-Just let me know what you'd like to try!""",
+                'response': """Exercise lost. Try: memory, story, or pattern exercise?""",
                 'agent': 'cognitive',
                 'exercise_complete': True
             }
 
         exercise_type = self.exercise_data.get('type', 'unknown')
 
-        # Build response based on exercise type
         if exercise_type == 'memory_list':
             items = self.exercise_data.get('items', [])
             category = self.exercise_data.get('category', 'items')
-
-            # Show the original list
             items_list = '\n'.join([f"  {i+1}. {item.title()}" for i, item in enumerate(items)])
 
-            response = f"""Thank you for trying!
-
-[List] The Original List ({category.replace('_', ' ').title()}):
+            response = f"""Original {category.replace('_', ' ').title()}:
 {items_list}
 
-Great effort! Memory recall can be challenging - the important thing is engaging with the exercise. Regular mental exercises support brain health and strengthen neural pathways.
-
-Would you like to try another exercise or continue our conversation?"""
+Try another exercise?"""
 
         elif exercise_type == 'story_recall':
             story = self.exercise_data.get('story', '')
             title = self.exercise_data.get('title', 'The Story')
 
-            response = f"""Thank you for trying!
-
-[Story] Original Story: "{title}"
+            response = f"""Original: "{title}"
 
 {story}
 
-I appreciate you working through this exercise! Story recall with specific details can be challenging - don't worry about getting everything perfect. The effort itself matters and helps keep your mind active.
-
-Would you like to try a different exercise or continue our conversation?"""
+Try another exercise?"""
 
         elif exercise_type == 'pattern_recognition':
             correct_answer = self.exercise_data.get('answer', '').lower().strip()
             user_answer = user_response.lower().strip()
             pattern_type = self.exercise_data.get('pattern_type', '')
 
-            # Check if answer is correct (flexible matching)
             is_correct = (user_answer == correct_answer or
                          correct_answer in user_answer or
                          user_answer in correct_answer)
 
             if is_correct:
-                response = f"""Excellent work! That's correct - the answer was: {correct_answer}
+                response = f"""Correct! Answer: {correct_answer}
 
-Great job recognizing the pattern! This helps strengthen cognitive skills and mental flexibility.
-
-Would you like to try another exercise or continue our conversation?"""
+Try another exercise?"""
             else:
-                response = f"""Thank you for trying!
+                response = f"""Correct answer: {correct_answer}
+Pattern: {pattern_type}
 
-The correct answer was: {correct_answer} (Pattern: {pattern_type})
-
-Pattern recognition can be tricky - the important thing is engaging with the exercise. Every attempt helps strengthen your brain!
-
-Would you like to try another exercise or continue our conversation?"""
+Try another exercise?"""
 
         else:
-            # Generic response for other exercise types
-            response = f"""Thank you for participating!
-
-Great job engaging with this exercise! Every cognitive activity is valuable for brain health.
-
-Would you like to try another exercise or continue our conversation?"""
+            response = f"""Exercise complete. Try another?"""
 
         return {
             'response': response,
@@ -601,13 +540,7 @@ Would you like to try another exercise or continue our conversation?"""
 
         category_display = category.replace('_', ' ')
 
-        response = f"""Perfect! Time to test your memory!
-
-[Important] Don't scroll up - recall from memory alone!
-
-You were shown {num_items} {category_display}. Type the items you remember, separated by commas (any order).
-
-Example: apple, banana, orange"""
+        response = f"""Recall the {num_items} {category_display} (separated by commas):"""
 
         return {
             'response': response,
@@ -622,13 +555,7 @@ Example: apple, banana, orange"""
         title = self.exercise_data.get('title', 'The Story')
         key_points = self.exercise_data.get('key_points', [])
 
-        response = f"""Excellent! Now recall "{title}" without looking back.
-
-{summary_prompt}
-
-Try to include: characters, setting, key events, and specific details you remember.
-
-[Tip] Start with what you remember most clearly."""
+        response = f"""Recall "{title}" - {summary_prompt}"""
 
         return {
             'response': response,

@@ -1,18 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { Brain, Heart, BookOpen, Activity, Loader2 } from 'lucide-react';
+import { AGENT_COLORS } from '../../utils/constants';
 
 const agentIcons = {
   knowledge: <BookOpen className="w-4 h-4" />,
   empathy: <Heart className="w-4 h-4" />,
   cognitive: <Brain className="w-4 h-4" />,
   system: <Activity className="w-4 h-4" />,
-};
-
-const agentColors = {
-  knowledge: 'bg-blue-100 text-blue-800',
-  empathy: 'bg-pink-100 text-pink-800',
-  cognitive: 'bg-purple-100 text-purple-800',
-  system: 'bg-gray-100 text-gray-800',
 };
 
 const MessageList = ({ messages, isLoading }) => {
@@ -49,10 +43,10 @@ const MessageList = ({ messages, isLoading }) => {
             >
               <p className="whitespace-pre-wrap text-large">{message.content}</p>
               {message.agent && (
-                <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-200">
+                <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
                   <span
                     className={`agent-badge ${
-                      agentColors[message.agent]
+                      AGENT_COLORS[message.agent]
                     }`}
                   >
                     {agentIcons[message.agent]}
@@ -74,7 +68,7 @@ const MessageList = ({ messages, isLoading }) => {
                 <div></div>
                 <div></div>
               </div>
-              <span className="text-gray-600 font-medium">Thinking...</span>
+              <span className="text-gray-600 dark:text-gray-300 font-medium">Thinking...</span>
             </div>
           </div>
         </div>

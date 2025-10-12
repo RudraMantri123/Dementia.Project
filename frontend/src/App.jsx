@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Sidebar from './components/sidebar/Sidebar';
 import ChatInterface from './components/chat/ChatInterface';
 import { chatService } from './services/chatService';
+import { ThemeProvider } from './context/ThemeContext';
 
 function App() {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -57,8 +58,9 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <Sidebar
+    <ThemeProvider>
+      <div className="flex h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <Sidebar
         onInitialize={handleInitialize}
         onReset={handleReset}
         isInitialized={isInitialized}
@@ -72,8 +74,9 @@ function App() {
           isInitialized={isInitialized}
           onReset={handleReset}
         />
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 

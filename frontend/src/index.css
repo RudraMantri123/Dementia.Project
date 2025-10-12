@@ -4,20 +4,28 @@
 
 @layer base {
   body {
-    @apply bg-gradient-to-br from-blue-50 via-white to-purple-50 text-gray-900 font-sans;
+    @apply bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-gray-900 dark:text-gray-100 font-sans;
     font-size: 16px;
     line-height: 1.6;
   }
 
-  /* Dementia-friendly typography */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-gray-900;
+    @apply font-bold text-gray-900 dark:text-white;
     line-height: 1.4;
   }
 
   p {
-    @apply text-gray-700;
+    @apply text-gray-700 dark:text-gray-200;
     line-height: 1.7;
+  }
+
+  /* Enhanced dark mode text contrast */
+  .text-gray-600 {
+    @apply dark:text-gray-300;
+  }
+
+  .text-gray-500 {
+    @apply dark:text-gray-400;
   }
 
   /* Larger text for better readability */
@@ -34,13 +42,13 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
     font-size: 1rem;
     min-height: 48px;
   }
 
   .btn-secondary {
-    @apply bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md border border-gray-300;
+    @apply bg-white hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-100 font-medium py-3 px-6 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md border border-gray-300 dark:border-gray-600;
     min-height: 48px;
   }
 
@@ -51,11 +59,11 @@
   }
 
   .card {
-    @apply bg-white rounded-2xl shadow-lg border border-gray-100 p-6 transition-all duration-300 hover:shadow-xl;
+    @apply bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 transition-all duration-300 hover:shadow-xl;
   }
 
   .card-interactive {
-    @apply card cursor-pointer hover:scale-105 hover:shadow-2xl transform transition-all duration-300;
+    @apply card cursor-pointer hover:scale-105 hover:shadow-2xl transform transition-all duration-300 hover:ring-2 hover:ring-blue-200 dark:hover:ring-blue-700;
   }
 
   .message-bubble {
@@ -65,17 +73,17 @@
   }
 
   .message-user {
-    @apply bg-gradient-to-r from-blue-500 to-purple-600 text-white;
+    @apply bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-600 dark:to-purple-700 text-white;
     border-radius: 24px 24px 8px 24px;
   }
 
   .message-assistant {
-    @apply bg-white border-2 border-gray-100 text-gray-800;
+    @apply bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-600 text-gray-800 dark:text-gray-100;
     border-radius: 24px 24px 24px 8px;
   }
 
   .input-field {
-    @apply w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all duration-300;
+    @apply w-full px-6 py-4 border-2 border-gray-200 dark:border-gray-600 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900 focus:border-blue-400 dark:focus:border-blue-500 transition-all duration-300 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500;
     font-size: 1.1rem;
     min-height: 56px;
   }
@@ -108,6 +116,28 @@
   .loading-dots > div:nth-child(3) {
     animation-delay: 0.4s;
   }
+
+  /* Enhanced dark mode visibility */
+  .dark .suggested-topic {
+    @apply shadow-lg;
+  }
+
+  .dark .card {
+    @apply shadow-xl border-gray-600;
+  }
+
+  .dark .card-interactive:hover {
+    @apply shadow-2xl;
+  }
+
+  /* Better contrast for dark mode borders */
+  .dark .border-gray-200 {
+    @apply border-gray-600;
+  }
+
+  .dark .border-gray-300 {
+    @apply border-gray-500;
+  }
 }
 
 /* Custom scrollbar */
@@ -117,17 +147,17 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  @apply bg-gray-100 dark:bg-gray-800;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  @apply bg-gray-400 dark:bg-gray-600;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  @apply bg-gray-500 dark:bg-gray-500;
 }
 
 /* Animations */

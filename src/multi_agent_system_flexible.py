@@ -87,6 +87,7 @@ class MultiAgentChatbotFlexible:
             routing = self.orchestrator.process(user_input)
             agent_name = routing['route_to']
             intent = routing['intent']
+            reasoning = routing.get('reasoning', '')
 
             # Get appropriate agent
             agent = self.agents.get(agent_name)
@@ -136,7 +137,6 @@ class MultiAgentChatbotFlexible:
         Returns:
             Exercise continuation or completion
         """
-        # DEFENSIVE: Validate exercise state exists
         if not self.conversation_state.get('exercise_state'):
             return {
                 'response': """I apologize, but it seems the exercise state was lost. This can happen if the connection was interrupted.
@@ -167,12 +167,13 @@ What would you like to try?""",
 
         result = cognitive_agent.process(user_input, context)
 
-        # Update or clear exercise state
+        if result.get('response'):
+            result['response'] = f"*We're continuing your cognitive exercise.*\n\n{result['response']}"
+
         if result.get('exercise_state'):
             self.conversation_state['exercise_state'] = result['exercise_state']
             self.conversation_state['exercise_data'] = result.get('exercise_data')
         else:
-            # Exercise completed
             self.conversation_state['current_agent'] = None
             self.conversation_state['exercise_state'] = None
             self.conversation_state['exercise_data'] = None

@@ -79,16 +79,23 @@ Respond with ONLY ONE WORD: FACTUAL, EMOTIONAL, COGNITIVE, or CASUAL"""
         """
         intent = self.classify_intent(user_input)
 
-        # Map intent to agent
         agent_mapping = {
             'FACTUAL': 'knowledge',
             'EMOTIONAL': 'empathy',
             'COGNITIVE': 'cognitive',
-            'CASUAL': 'empathy'  # Casual conversation handled by empathy agent
+            'CASUAL': 'empathy'
+        }
+
+        reasoning_mapping = {
+            'FACTUAL': "I've identified this as a factual question, so I'll provide information from my knowledge base.",
+            'EMOTIONAL': "I sense you need emotional support, so I'm here to listen and provide comfort.",
+            'COGNITIVE': "I understand you'd like a cognitive exercise, so I'll guide you through a brain training activity.",
+            'CASUAL': "I'm responding to your message with a warm, conversational approach."
         }
 
         return {
             'intent': intent,
             'route_to': agent_mapping.get(intent, 'knowledge'),
-            'confidence': 0.9  # Placeholder for confidence score
+            'reasoning': reasoning_mapping.get(intent, "I'm here to help you with your question."),
+            'confidence': 0.9
         }

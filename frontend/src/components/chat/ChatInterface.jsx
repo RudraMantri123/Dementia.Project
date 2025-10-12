@@ -38,17 +38,17 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
   return (
     <div className="flex flex-col h-full">
       {messages.length > 0 && (
-        <div className="border-b border-gray-200 bg-white px-6 py-3 flex items-center justify-between">
+        <div className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Brain className="w-5 h-5 text-primary-600" />
-            <h2 className="font-semibold text-gray-900">Conversation</h2>
-            <span className="text-xs text-gray-500">
+            <Brain className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+            <h2 className="font-semibold text-gray-900 dark:text-white">Conversation</h2>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
               {messages.filter(msg => msg.role === 'user').length} message{messages.filter(msg => msg.role === 'user').length !== 1 ? 's' : ''}
             </span>
           </div>
           <button
             onClick={() => setShowResetConfirm(true)}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors duration-200"
+            className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
           >
             <MessageSquarePlus className="w-4 h-4" />
             New Conversation
@@ -57,22 +57,22 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
       )}
 
       {showResetConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md mx-4 shadow-xl">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Start New Conversation?</h3>
-            <p className="text-sm text-gray-600 mb-6">
+        <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4 shadow-xl">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Start New Conversation?</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
               This will clear your current conversation history.
             </p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowResetConfirm(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors duration-200"
               >
                 Cancel
               </button>
               <button
                 onClick={handleResetConfirm}
-                className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors duration-200"
+                className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 rounded-lg transition-colors duration-200"
               >
                 Start New
               </button>
