@@ -33,6 +33,9 @@ class CognitiveAgent(BaseAgent):
         """
         # Check if continuing an active exercise
         if context and context.get('exercise_state'):
+            # Restore exercise data from context
+            if context.get('exercise_data'):
+                self.exercise_data = context['exercise_data']
             return self._continue_exercise(user_input, context['exercise_state'])
 
         # Start new exercise
@@ -101,13 +104,13 @@ class CognitiveAgent(BaseAgent):
         num_items = random.choice([4, 5, 6])  # Vary difficulty
         items = random.sample(category_data['items'], num_items)
 
-        # Create a visual representation with emojis
-        emoji_map = {
-            'grocery_items': '🛒',
-            'household_objects': '🏠',
-            'family_activities': '👨‍👩‍👧‍👦',
-            'garden_items': '🌸',
-            'musical_instruments': '🎵'
+        # Create a visual representation with text labels
+        label_map = {
+            'grocery_items': '[Shopping]',
+            'household_objects': '[Home]',
+            'family_activities': '[Family]',
+            'garden_items': '[Garden]',
+            'musical_instruments': '[Music]'
         }
 
         self.exercise_data = {
@@ -119,15 +122,13 @@ class CognitiveAgent(BaseAgent):
         }
 
         category_name = category.replace('_', ' ')
-        response = f"""{emoji_map.get(category, '📝')} Memory Challenge: {category_name.title()}
+        response = f"""{label_map.get(category, '[Note]')} Memory Challenge: {category_name.title()}
 
-I'm going to show you {num_items} {category_name}. Use this memory tip: {category_data['tip']}
+Memorize these {num_items} {category_name}. Tip: {category_data['tip']}
 
-{chr(10).join([f"{i+1}. {item.title()} {self._get_item_emoji(item)}" for i, item in enumerate(items)])}
+{chr(10).join([f"{i+1}. {item.title()}" for i, item in enumerate(items)])}
 
-💡 Memory Strategy: Try creating a mental image or story connecting these items!
-
-Take 30-45 seconds to memorize them. When you're ready, type 'ready' and I'll test your memory!"""
+Take 30-45 seconds. Type 'ready' when you're done!"""
 
         return {
             'response': response,
@@ -137,16 +138,6 @@ Take 30-45 seconds to memorize them. When you're ready, type 'ready' and I'll te
             'exercise_data': self.exercise_data
         }
 
-    def _get_item_emoji(self, item: str) -> str:
-        """Get emoji for common items."""
-        emoji_dict = {
-            'milk': '🥛', 'bread': '🍞', 'eggs': '🥚', 'cheese': '🧀', 'butter': '🧈',
-            'apple': '🍎', 'banana': '🍌', 'chicken': '🍗', 'rose': '🌹', 'tulip': '🌷',
-            'daisy': '🌼', 'sunflower': '🌻', 'piano': '🎹', 'guitar': '🎸', 'drums': '🥁',
-            'phone': '📱', 'keys': '🔑', 'glasses': '👓', 'book': '📖', 'birthday': '🎂',
-            'wedding': '💒', 'vacation': '✈️', 'picnic': '🧺'
-        }
-        return emoji_dict.get(item.lower(), '')
 
     def _word_association_exercise(self) -> Dict[str, Any]:
         """Create a word association exercise."""
@@ -307,12 +298,11 @@ By 9:30 AM, Linda had spent a total of twenty-eight dollars but felt it was wort
             'difficulty': story_data['difficulty']
         }
 
-        difficulty_emoji = {'easy': '⭐', 'medium': '⭐⭐', 'hard': '⭐⭐⭐'}
+        difficulty_text = {'easy': 'Easy (*)', 'medium': 'Medium (**)', 'hard': 'Hard (***)'}
 
-        response = f"""📖 Detailed Story Recall Exercise: "{story_data['title']}"
-Difficulty: {difficulty_emoji[story_data['difficulty']]}
+        response = f"""[Story] Story Recall: "{story_data['title']}" - {difficulty_text[story_data['difficulty']]}
 
-I'm going to share a detailed narrative with you. This story contains specific details about people, places, times, and events. Read it carefully and try to remember as much as you can.
+Read carefully and remember as much detail as you can:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -320,14 +310,9 @@ I'm going to share a detailed narrative with you. This story contains specific d
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💡 Memory Tips:
-• Visualize the scene like a movie in your mind
-• Pay attention to specific details (names, times, colors, numbers)
-• Notice the sequence of events
-• Picture the characters and their actions
-• Connect with the emotions in the story
+[Tip] Visualize it like a movie - focus on names, times, and events.
 
-Take your time to read and absorb the story (1-2 minutes recommended). When you feel ready to summarize what you remember, type 'ready'."""
+Take 1-2 minutes to read. Type 'ready' when you're done."""
 
         return {
             'response': response,
@@ -341,8 +326,8 @@ Take your time to read and absorb the story (1-2 minutes recommended). When you 
         """Create a pattern recognition exercise."""
         patterns = [
             {
-                'sequence': ['🔵', '🔴', '🔵', '🔴', '🔵', '?'],
-                'answer': '🔴',
+                'sequence': ['Blue', 'Red', 'Blue', 'Red', 'Blue', '?'],
+                'answer': 'Red',
                 'type': 'alternating colors',
                 'difficulty': 'easy'
             },
@@ -353,8 +338,8 @@ Take your time to read and absorb the story (1-2 minutes recommended). When you 
                 'difficulty': 'easy'
             },
             {
-                'sequence': ['🌙', '⭐', '⭐', '🌙', '⭐', '⭐', '?'],
-                'answer': '🌙',
+                'sequence': ['Moon', 'Star', 'Star', 'Moon', 'Star', 'Star', '?'],
+                'answer': 'Moon',
                 'type': 'repeating pattern',
                 'difficulty': 'medium'
             },
@@ -380,16 +365,16 @@ Take your time to read and absorb the story (1-2 minutes recommended). When you 
             'pattern_type': pattern['type']
         }
 
-        difficulty_emoji = {'easy': '⭐', 'medium': '⭐⭐', 'hard': '⭐⭐⭐'}
+        difficulty_text = {'easy': 'Easy (*)', 'medium': 'Medium (**)', 'hard': 'Hard (***)'}
 
-        response = f"""🧩 Pattern Recognition Exercise
-Difficulty: {difficulty_emoji[pattern['difficulty']]}
+        response = f"""[Pattern] Pattern Recognition Exercise
+Difficulty: {difficulty_text[pattern['difficulty']]}
 
 Look at this sequence and figure out what comes next:
 
 {' '.join(pattern['sequence'])}
 
-💡 Hint: This is a {pattern['type']} pattern!
+[Tip] Hint: This is a {pattern['type']} pattern!
 
 What comes next in the sequence? Type your answer when ready!"""
 
@@ -416,7 +401,7 @@ What comes next in the sequence? Type your answer when ready!"""
                     "Approximately what time is it now (morning, afternoon, or evening)?"
                 ],
                 'tips': "Take a moment to think about today's date and time.",
-                'icon': '📅'
+                'icon': '[Calendar]'
             },
             {
                 'title': 'Personal Awareness',
@@ -427,7 +412,7 @@ What comes next in the sequence? Type your answer when ready!"""
                     "What did you have for your last meal?"
                 ],
                 'tips': "These questions help you connect with your personal identity and recent memories.",
-                'icon': '👤'
+                'icon': '[Person]'
             },
             {
                 'title': 'Environmental Awareness',
@@ -438,7 +423,7 @@ What comes next in the sequence? Type your answer when ready!"""
                     "What room are you in?"
                 ],
                 'tips': "Look around and use your senses to connect with your environment.",
-                'icon': '🌍'
+                'icon': '[Environment]'
             }
         ]
 
@@ -452,7 +437,7 @@ Please answer these questions:
 
 {chr(10).join([f"{i+1}. {q}" for i, q in enumerate(question_set['questions'])])}
 
-💡 Take your time and answer thoughtfully. These exercises help maintain awareness and connection to the present!"""
+[Tip] Take your time and answer thoughtfully. These exercises help maintain awareness and connection to the present!"""
 
         return {
             'response': response,
@@ -472,12 +457,35 @@ Please answer these questions:
         Returns:
             Next step or evaluation
         """
+        # DEFENSIVE: Validate exercise_data exists
+        if not self.exercise_data:
+            return {
+                'response': """I apologize, but I seem to have lost track of the exercise. Let's start fresh!
+
+Would you like to try:
+• A memory exercise
+• A story recall exercise
+• A pattern recognition exercise
+
+Just let me know what you'd like to try!""",
+                'agent': 'cognitive',
+                'exercise_complete': True
+            }
+
         # Handle "ready" state - user is ready to be tested
         if exercise_state == 'waiting_for_ready' and 'ready' in user_input.lower():
-            if self.exercise_data.get('type') == 'memory_list':
+            exercise_type = self.exercise_data.get('type')
+            if exercise_type == 'memory_list':
                 return self._ask_memory_recall()
-            elif self.exercise_data.get('type') == 'story_recall':
+            elif exercise_type == 'story_recall':
                 return self._ask_story_questions()
+            else:
+                # Unknown exercise type
+                return {
+                    'response': "I'm not sure what exercise we were doing. Let's start a new one! What would you like to try?",
+                    'agent': 'cognitive',
+                    'exercise_complete': True
+                }
 
         # Handle "evaluating" state - user has provided their answer
         elif exercise_state == 'evaluating':
@@ -523,61 +531,28 @@ Just let me know what you'd like to try!""",
             # Show the original list
             items_list = '\n'.join([f"  {i+1}. {item.title()}" for i, item in enumerate(items)])
 
-            response = f"""Thank you for trying! 🌟
+            response = f"""Thank you for trying!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📋 The Original List ({category.replace('_', ' ').title()}):
-
+[List] The Original List ({category.replace('_', ' ').title()}):
 {items_list}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Great effort! Memory recall can be challenging - the important thing is engaging with the exercise. Regular mental exercises support brain health and strengthen neural pathways.
 
-💭 Reflection:
-Great effort working through this exercise! Memory recall can be challenging, and that's completely normal. The important thing is that you engaged with the exercise.
-
-Remember:
-• Regular mental exercises support brain health
-• Memory can vary from day to day - that's expected
-• The practice itself is beneficial, regardless of results
-• Even attempting to recall strengthens neural pathways
-
-Would you like to:
-• Try another memory exercise
-• Ask questions about memory or dementia
-• Continue our conversation about something else
-
-What would you like to do next?"""
+Would you like to try another exercise or continue our conversation?"""
 
         elif exercise_type == 'story_recall':
             story = self.exercise_data.get('story', '')
             title = self.exercise_data.get('title', 'The Story')
 
-            response = f"""Thank you for trying! 🌟
+            response = f"""Thank you for trying!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📖 Original Story: "{title}"
+[Story] Original Story: "{title}"
 
 {story}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+I appreciate you working through this exercise! Story recall with specific details can be challenging - don't worry about getting everything perfect. The effort itself matters and helps keep your mind active.
 
-💭 Reflection:
-I appreciate you working through this exercise. Story recall can be quite challenging, especially with all the specific details. It's completely normal to find this difficult.
-
-Remember:
-• Memory exercises help keep your mind active
-• Don't worry about getting every detail - the effort matters
-• Some days are better than others for memory
-• Consistent practice is what makes a difference
-
-Would you like to:
-• Try a different type of exercise
-• Ask me about memory strategies
-• Continue our conversation
-
-What would you like to do next?"""
+Would you like to try a different exercise or continue our conversation?"""
 
         elif exercise_type == 'pattern_recognition':
             correct_answer = self.exercise_data.get('answer', '').lower().strip()
@@ -590,60 +565,27 @@ What would you like to do next?"""
                          user_answer in correct_answer)
 
             if is_correct:
-                response = f"""🎉 Excellent work! That's correct!
+                response = f"""Excellent work! That's correct - the answer was: {correct_answer}
 
-The answer was: {correct_answer}
+Great job recognizing the pattern! This helps strengthen cognitive skills and mental flexibility.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-💭 Reflection:
-Great job recognizing the pattern! Pattern recognition helps strengthen cognitive skills and mental flexibility.
-
-Would you like to:
-• Try another pattern exercise
-• Try a different type of exercise
-• Continue our conversation
-
-What would you like to do next?"""
+Would you like to try another exercise or continue our conversation?"""
             else:
-                response = f"""Thank you for trying! 🌟
+                response = f"""Thank you for trying!
 
-The correct answer was: {correct_answer}
+The correct answer was: {correct_answer} (Pattern: {pattern_type})
 
-Pattern type: {pattern_type}
+Pattern recognition can be tricky - the important thing is engaging with the exercise. Every attempt helps strengthen your brain!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-💭 Reflection:
-Pattern recognition can be tricky! The important thing is that you engaged with the exercise.
-
-Remember:
-• Every attempt helps strengthen your brain
-• Pattern recognition improves with practice
-• It's okay if some patterns are harder than others
-
-Would you like to:
-• Try another pattern exercise
-• Try a different type of exercise
-• Continue our conversation
-
-What would you like to do next?"""
+Would you like to try another exercise or continue our conversation?"""
 
         else:
             # Generic response for other exercise types
-            response = f"""Thank you for participating! 🌟
+            response = f"""Thank you for participating!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-💭 Reflection:
 Great job engaging with this exercise! Every cognitive activity is valuable for brain health.
 
-Would you like to:
-• Try another exercise
-• Continue our conversation
-• Ask me any questions
-
-What would you like to do next?"""
+Would you like to try another exercise or continue our conversation?"""
 
         return {
             'response': response,
@@ -659,28 +601,13 @@ What would you like to do next?"""
 
         category_display = category.replace('_', ' ')
 
-        response = f"""Perfect! Time to test your memory! 🧠
+        response = f"""Perfect! Time to test your memory!
 
-⚠️ Important: Don't scroll up to look at the original list - that would be cheating! Try to recall from memory alone.
+[Important] Don't scroll up - recall from memory alone!
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+You were shown {num_items} {category_display}. Type the items you remember, separated by commas (any order).
 
-📝 Memory Recall Test
-
-You were shown {num_items} {category_display}. The original list is now hidden.
-
-1. ▓▓▓▓▓▓▓ [HIDDEN]
-2. ▓▓▓▓▓▓▓ [HIDDEN]
-3. ▓▓▓▓▓▓▓ [HIDDEN]
-{chr(10).join([f"{i+4}. ▓▓▓▓▓▓▓ [HIDDEN]" for i in range(num_items - 3)])}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-💭 Now, without looking back, type the {category_display} you remember, separated by commas.
-
-Example: apple, banana, orange
-
-Don't worry about the exact order - just write what you can recall!"""
+Example: apple, banana, orange"""
 
         return {
             'response': response,
@@ -695,26 +622,13 @@ Don't worry about the exact order - just write what you can recall!"""
         title = self.exercise_data.get('title', 'The Story')
         key_points = self.exercise_data.get('key_points', [])
 
-        response = f"""Excellent! You've had time to read the story carefully.
-
-📝 Story: "{title}"
-
-Now, without looking back at the story, I'd like you to recall what happened.
+        response = f"""Excellent! Now recall "{title}" without looking back.
 
 {summary_prompt}
 
-Try to include:
-• The main characters and their names
-• When and where the story took place
-• The key events that happened
-• Specific details you remember (times, colors, numbers, etc.)
-• How the story ended
+Try to include: characters, setting, key events, and specific details you remember.
 
-Don't worry about getting every detail perfect - just tell me what you remember in your own words. Take your time and be as detailed as you can!
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-💡 Tip: Start with what you remember most clearly, then add other details as they come to mind."""
+[Tip] Start with what you remember most clearly."""
 
         return {
             'response': response,
