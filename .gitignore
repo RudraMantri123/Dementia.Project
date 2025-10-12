@@ -1,3 +1,4 @@
+# Python
 venv/
 __pycache__/
 *.pyc
@@ -9,13 +10,65 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+*.whl
+
+# Environment & Config
 .env
+.env.local
+.env.*.local
 .venv
+env/
+ENV/
+
+# Logs
 *.log
+logs/
+*.log.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
+
+# Data & Models
 data/
 models/
 *.pkl
 *.bin
+*.h5
+*.joblib
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# Streamlit
 .streamlit/
+
+# Claude Code
 .claude/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary
+*.tmp
+*.temp
+.cache/
+
+# OS
+Thumbs.db
+.DS_Store

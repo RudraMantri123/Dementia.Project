@@ -2,7 +2,11 @@
 
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional
-from langchain_community.llms import Ollama
+
+try:
+    from langchain_ollama import OllamaLLM
+except ImportError:
+    from langchain_community.llms import Ollama as OllamaLLM
 
 
 class BaseAgentOllama(ABC):
@@ -20,7 +24,7 @@ class BaseAgentOllama(ABC):
             model_name: Name of the Ollama model (e.g., 'llama3.2', 'mistral', 'phi')
             temperature: Temperature for response generation
         """
-        self.llm = Ollama(
+        self.llm = OllamaLLM(
             model=model_name,
             temperature=temperature
         )
