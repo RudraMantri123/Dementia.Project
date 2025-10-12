@@ -10,6 +10,9 @@
 
 > A production-ready AI therapeutic system combining Retrieval Augmented Generation (RAG), Multi-Agent Architecture, Machine Learning, Evidence-Based Therapeutic Techniques, and Clinical Integration for comprehensive dementia care and caregiver mental health support.
 
+<img width="1555" height="2516" alt="image" src="https://github.com/user-attachments/assets/070135ae-7f06-4ed2-9a31-3b0420a7e863" />
+
+
 ## Table of Contents
 
 - [Overview](#overview)
