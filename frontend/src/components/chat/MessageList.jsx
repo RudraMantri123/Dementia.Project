@@ -1,7 +1,3 @@
-/**
- * MessageList - Displays chat messages
- */
-
 import React, { useEffect, useRef } from 'react';
 import { Brain, Heart, BookOpen, Activity, Loader2 } from 'lucide-react';
 
@@ -33,7 +29,6 @@ const MessageList = ({ messages, isLoading }) => {
   return (
     <div className="flex-1 overflow-y-auto p-6 space-y-4">
       {messages.map((message, index) => {
-        // Hide assistant messages if they are voice-only responses
         if (message.role === 'assistant' && message.isVoiceOnly) {
           return null;
         }

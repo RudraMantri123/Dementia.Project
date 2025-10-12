@@ -1,7 +1,3 @@
-/**
- * MessageInput - Chat input form with voice controls
- */
-
 import React, { useState, useEffect } from 'react';
 import { Send, Loader2, UserRound } from 'lucide-react';
 import VoiceControls from './VoiceControls';
@@ -26,14 +22,12 @@ const MessageInput = ({
     clearTranscript,
   } = voiceHook;
 
-  // Update input when voice transcript changes
   useEffect(() => {
     if (transcript) {
       setInput(transcript);
     }
   }, [transcript]);
 
-  // Auto-submit when voice recognition ends
   useEffect(() => {
     if (!isListening && transcript && voiceEnabled) {
       handleSubmit(null);
@@ -51,14 +45,12 @@ const MessageInput = ({
 
   return (
     <div className="border-t border-gray-200 bg-gradient-to-r from-white to-gray-50 p-6">
-      {/* Voice Error Display */}
       {voiceError && (
         <div className="mb-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
           <p className="text-sm text-yellow-800">{voiceError}</p>
         </div>
       )}
 
-      {/* Therapist Avatar - Shows when voice is enabled */}
       {voiceEnabled && (
         <div className="mb-4 flex items-center justify-center">
           <div className="bg-gradient-to-br from-pink-100 to-purple-100 border-2 border-pink-300 rounded-2xl p-4 shadow-lg">
@@ -80,7 +72,6 @@ const MessageInput = ({
         </div>
       )}
 
-      {/* Voice Status */}
       {isListening && (
         <div className="mb-4 status-indicator bg-gradient-to-r from-red-50 to-red-100 border-2 border-red-200 text-red-800">
           <div className="w-6 h-6 bg-red-500 rounded-full animate-pulse"></div>
@@ -99,7 +90,6 @@ const MessageInput = ({
       )}
 
       <form onSubmit={handleSubmit} className="flex gap-4 items-end">
-        {/* Voice Controls */}
         <VoiceControls
           isListening={isListening}
           isSpeaking={isSpeaking}
@@ -110,7 +100,6 @@ const MessageInput = ({
           onStopSpeaking={stopSpeaking}
         />
 
-        {/* Text Input */}
         <div className="flex-1 relative">
           <input
             type="text"
@@ -122,7 +111,6 @@ const MessageInput = ({
           />
         </div>
 
-        {/* Send Button */}
         <button
           type="submit"
           disabled={isLoading || !input.trim() || isListening}

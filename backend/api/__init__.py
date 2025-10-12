@@ -1,1 +1,1 @@
-"""API layer for the Dementia Chatbot."""
+# API layer

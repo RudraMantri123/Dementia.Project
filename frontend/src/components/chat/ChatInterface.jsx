@@ -1,7 +1,3 @@
-/**
- * ChatInterface - Main chat component (simplified and modular)
- */
-
 import React, { useState } from 'react';
 import { Brain, MessageSquarePlus } from 'lucide-react';
 import { useVoice } from '../../hooks/useVoice';
@@ -16,7 +12,6 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
   const voiceHook = useVoice();
   const { speak, voiceEnabled, clearTranscript } = voiceHook;
 
-  // Speak the latest assistant message
   React.useEffect(() => {
     if (messages.length > 0 && voiceEnabled) {
       const lastMessage = messages[messages.length - 1];
@@ -42,7 +37,6 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header with New Conversation Button */}
       {messages.length > 0 && (
         <div className="border-b border-gray-200 bg-white px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -62,7 +56,6 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
         </div>
       )}
 
-      {/* Reset Confirmation Modal */}
       {showResetConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md mx-4 shadow-xl">
@@ -88,14 +81,12 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
         </div>
       )}
 
-      {/* Messages or Welcome Screen */}
       {messages.length === 0 ? (
         <WelcomeScreen onSelectTopic={handleSelectTopic} hasMessages={true} />
       ) : (
         <MessageList messages={messages} isLoading={isLoading} />
       )}
 
-      {/* Input Form */}
       <MessageInput
         onSendMessage={onSendMessage}
         isLoading={isLoading}

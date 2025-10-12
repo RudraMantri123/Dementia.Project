@@ -1,5 +1,3 @@
-"""Configuration management for the Dementia Chatbot backend."""
-
 import os
 from typing import List, Optional
 from pydantic import field_validator
@@ -7,8 +5,6 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    """Application settings with environment variable support."""
-
     # API Configuration
     api_title: str = "Dementia Support Chatbot API"
     api_description: str = "Multi-agent AI system for dementia care and support"

@@ -1,8 +1,5 @@
 import React from 'react';
 
-/**
- * Error Boundary component to catch and handle React errors gracefully
- */
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -15,12 +12,10 @@ class ErrorBoundary extends React.Component {
   }
 
   static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI
     return { hasError: true };
   }
 
   componentDidCatch(error, errorInfo) {
-    // Log error details
     console.error('Error caught by boundary:', error, errorInfo);
 
     this.setState(prevState => ({
@@ -28,12 +23,6 @@ class ErrorBoundary extends React.Component {
       errorInfo,
       errorCount: prevState.errorCount + 1,
     }));
-
-    // In production, you would send this to an error reporting service
-    // e.g., Sentry, LogRocket, etc.
-    if (process.env.NODE_ENV === 'production') {
-      // logErrorToService(error, errorInfo);
-    }
   }
 
   handleReset = () => {
@@ -43,7 +32,6 @@ class ErrorBoundary extends React.Component {
       errorInfo: null,
     });
 
-    // Optionally reload the page if errors persist
     if (this.state.errorCount > 3) {
       window.location.reload();
     }
@@ -51,12 +39,10 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      // Render custom fallback UI
       return (
         <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center p-4">
           <div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl p-8">
             <div className="text-center">
-              {/* Error Icon */}
               <div className="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-6">
                 <svg
                   className="w-10 h-10 text-red-600"
@@ -73,17 +59,14 @@ class ErrorBoundary extends React.Component {
                 </svg>
               </div>
 
-              {/* Error Title */}
               <h1 className="text-3xl font-bold text-gray-900 mb-4">
                 Oops! Something went wrong
               </h1>
 
-              {/* Error Description */}
               <p className="text-lg text-gray-600 mb-8">
                 We encountered an unexpected error. Don't worry, your data is safe.
               </p>
 
-              {/* Error Details (development only) */}
               {process.env.NODE_ENV === 'development' && this.state.error && (
                 <div className="mb-8 text-left">
                   <details className="bg-gray-50 rounded-lg p-4 cursor-pointer">
@@ -99,7 +82,6 @@ class ErrorBoundary extends React.Component {
                 </div>
               )}
 
-              {/* Action Buttons */}
               <div className="flex gap-4 justify-center">
                 <button
                   onClick={this.handleReset}
@@ -116,7 +98,6 @@ class ErrorBoundary extends React.Component {
                 </button>
               </div>
 
-              {/* Support Information */}
               <div className="mt-8 text-sm text-gray-500">
                 {this.state.errorCount > 2 && (
                   <p className="text-orange-600 font-semibold mb-2">

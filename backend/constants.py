@@ -1,5 +1,3 @@
-"""Constants and default values for the Dementia Chatbot backend."""
-
 # API Configuration
 API_TITLE = "Dementia Support Chatbot API"
 API_DESCRIPTION = "Multi-agent AI system for dementia care and support"

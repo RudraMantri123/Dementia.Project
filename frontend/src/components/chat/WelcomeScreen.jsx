@@ -1,7 +1,3 @@
-/**
- * WelcomeScreen - Initial welcome screen with suggested topics
- */
-
 import React from 'react';
 import { Brain, Heart, BookOpen } from 'lucide-react';
 import { SUGGESTED_TOPICS } from '../../utils/constants';
@@ -64,7 +60,6 @@ const WelcomeScreen = ({ onSelectTopic, hasMessages }) => {
     );
   }
 
-  // Not initialized screen
   return (
     <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="mb-8">

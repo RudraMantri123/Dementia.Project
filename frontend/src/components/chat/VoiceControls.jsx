@@ -12,7 +12,6 @@ const VoiceControls = ({
 }) => {
   return (
     <div className="flex items-center gap-3">
-      {/* Voice Mode Toggle */}
       <button
         onClick={onToggleVoice}
         className={`btn-voice transition-all duration-300 ${
@@ -25,7 +24,6 @@ const VoiceControls = ({
         {voiceEnabled ? <Volume2 className="w-6 h-6" /> : <VolumeX className="w-6 h-6" />}
       </button>
 
-      {/* Microphone Button */}
       {voiceEnabled && (
         <button
           onClick={isListening ? onStopListening : onStartListening}
@@ -47,7 +45,6 @@ const VoiceControls = ({
         </button>
       )}
 
-      {/* Stop Speaking Button */}
       {isSpeaking && (
         <button
           onClick={onStopSpeaking}
