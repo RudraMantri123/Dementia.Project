@@ -456,9 +456,9 @@ LangChain Community, Hugging Face, Ollama, FastAPI, React Community
 ## Contact
 
 **Rudra Subodhm Mantri**
-- Email: rudra.mantri@example.com
-- LinkedIn: [linkedin.com/in/rudramantri](https://linkedin.com/in/rudramantri)
-- GitHub: [@rudramantri](https://github.com/rudramantri)
+- Email: f20220209@pilani.bits-pilani.ac.in
+- LinkedIn: Rudra Mantri(https://www.linkedin.com/in/rudra-mantri-17363a25b/)
+- GitHub: https://github.com/RudraMantri123/Dementia.Project
 
 ---
 
