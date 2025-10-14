@@ -41,12 +41,10 @@ Dementia affects 55+ million people worldwide. Caregivers face significant emoti
 ### Solution
 
 A sophisticated multi-agent therapeutic architecture providing:
-1. 24/7 accessible therapeutic support with evidence-based techniques
-2. Crisis intervention with immediate professional resources
-3. Evidence-based information retrieval via RAG
-4. Professional-grade emotional support (CBT, mindfulness, validation)
-5. Adaptive cognitive exercises with performance tracking
-6. Caregiver mental health analytics (98.81% accuracy)
+1. Evidence-based information retrieval via RAG
+2. Professional-grade emotional support (CBT, mindfulness, validation)
+3. Adaptive cognitive exercises with performance tracking
+4. Caregiver mental health analytics (98.81% accuracy)
 
 ## System Architecture
 
@@ -135,31 +133,6 @@ Query → Embedding (all-MiniLM-L6-v2) → Vector Search (FAISS) → Context Ret
 - Inference Time: <100ms
 
 ### Visual Workflow Diagrams
-
-#### System Overview
-
-```mermaid
-graph LR
-    A[User] --> B[Backend API]
-    B --> C{Orchestrator}
-    C -->|Info| D[Knowledge]
-    C -->|Emotion| E[Therapeutic]
-    C -->|Exercise| F[Cognitive]
-    C -->|Analytics| G[Analyst]
-    D --> H[Response]
-    E --> H
-    F --> H
-    G --> H
-
-    style A fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
-    style B fill:#7B68EE,stroke:#5A4DB8,stroke-width:2px,color:#fff
-    style C fill:#FF6B6B,stroke:#CC5555,stroke-width:2px,color:#fff
-    style D fill:#51CF66,stroke:#3DAF52,stroke-width:2px,color:#fff
-    style E fill:#FF8787,stroke:#CC6C6C,stroke-width:2px,color:#fff
-    style F fill:#FFA94D,stroke:#CC873D,stroke-width:2px,color:#fff
-    style G fill:#A78BFA,stroke:#8667E6,stroke-width:2px,color:#fff
-    style H fill:#FFD93D,stroke:#CCA830,stroke-width:2px,color:#000
-```
 
 #### RAG Pipeline
 
