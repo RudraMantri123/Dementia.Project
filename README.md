@@ -26,7 +26,7 @@
 
 ## Overview
 
-Dementia affects 55+ million people worldwide, with caregivers facing overwhelming emotional challenges, burnout, and isolation. Traditional support systems lack personalized, real-time assistance and continuous monitoring capabilities. This system addresses these critical gaps through an innovative multi-agent conversational AI that provides evidence-based information retrieval (87% accuracy), professional therapeutic support using CBT and mindfulness techniques, crisis intervention with 24/7 resources, adaptive cognitive training, real-time ML-powered sentiment analysis (98.81% F1 score), and advanced clinical pattern analysis distinguishing dementia symptoms from normal aging for comprehensive dementia care and caregiver mental health support.
+Dementia affects 55+ million people worldwide, with caregivers facing overwhelming emotional challenges, burnout, and isolation. Traditional support systems lack personalized, real-time assistance and continuous monitoring capabilities. This system addresses these critical gaps through an innovative multi-agent conversational AI that provides evidence-based information retrieval, professional therapeutic support using CBT and mindfulness techniques, crisis intervention with 24/7 resources, adaptive cognitive training, real-time ML-powered sentiment analysis, and advanced clinical pattern analysis distinguishing dementia symptoms from normal aging for comprehensive dementia care and caregiver mental health support.
 
 ## System Architecture
 
@@ -42,16 +42,17 @@ Dementia affects 55+ million people worldwide, with caregivers facing overwhelmi
 **Specialized Agents**:
 
 1. **Knowledge Agent (RAG-Powered)**
-   - LLM: GPT-3.5-turbo/Llama3 (8B parameters), Temperature: 0.3
+   - LLM: GPT-3.5-turbo (default), Temperature: 0.7
    - Retrieval: Dense vector similarity search (FAISS)
-   - Context Window: 4,096 tokens
+   - RetrievalQA Chain: Top-5 chunks, "stuff" chain type
    - Sources: 15+ curated medical documents (Alzheimer's Association, NIH, Mayo Clinic, WHO)
 
 2. **Therapeutic Support Agent** (Evidence-Based Mental Health)
    - **Techniques**: CBT, mindfulness, validation, active listening, solution-focused therapy, self-compassion
    - **Emotion Detection**: 6 emotional states (anxious, stressed, frustrated, sad, positive, neutral)
-   - **Crisis Intervention**: Automatic detection of self-harm/suicidal ideation
-   - **Resources**: 988 Suicide Prevention Lifeline, Crisis Text Line (741741)
+   - **Crisis Intervention**: Automatic detection of self-harm/suicidal ideation, social isolation, emotional distress
+   - **LLM**: GPT-3.5-turbo, Temperature: 0.8
+   - **Resources**: 988 Suicide Prevention Lifeline, Crisis Text Line (741741), Alzheimer's Association (1-800-272-3900)
    - **Safeguards**: Clear disclaimers, professional referral guidance
 
 3. **Cognitive Agent**
@@ -59,12 +60,13 @@ Dementia affects 55+ million people worldwide, with caregivers facing overwhelmi
    - Types: Memory recall, pattern recognition, storytelling, orientation
    - Difficulty: Performance-based scaling (1-5 levels)
    - Validation: Automated answer checking with fuzzy matching
+   - **LLM**: GPT-3.5-turbo, Temperature: 0.7
 
 4. **Analyst Agent (ML-Powered)**
-   - **Model**: Voting Ensemble (LogisticRegression + RandomForest + GradientBoosting)
-   - **Performance**: 98.81% F1 Score (6-class sentiment classification)
-   - **Inference**: <100ms per prediction
-   - **Purpose**: Real-time sentiment analysis and conversation insights
+   - **Model**: LogisticRegression with TF-IDF vectorization (500 features, 1-3 ngrams)
+   - **Training**: Comprehensive sentiment data for dementia caregiving scenarios
+   - **Inference**: Real-time sentiment analysis and conversation insights
+   - **Purpose**: 6-class sentiment classification (positive, neutral, stressed, sad, anxious, frustrated)
    - **Personalized Insights**: Deep pattern analysis, temporal patterns, communication style analysis
    - **Clinical Analysis**: Dementia vs normal aging pattern recognition, crisis detection
    - **Output**: Personalized recommendations, action items, support priorities
@@ -78,45 +80,26 @@ Query → Embedding (all-MiniLM-L6-v2) → Vector Search (FAISS) → Context Ret
 **Technical Specifications**:
 - **Embedding Model**: sentence-transformers/all-MiniLM-L6-v2 (384-dim, 6-layer BERT)
 - **Vector Database**: FAISS Flat Index (L2 distance, exact k-NN search)
-- **Chunking**: 1,000 characters, 200 overlap (~150-200 chunks)
-- **Retrieval**: Top-5 chunks, cosine similarity, threshold >0.6
-- **Generation**: Max 500 tokens, Temperature 0.3, Top-P 0.9
-
-**Performance**:
-- Retrieval Accuracy: 87% top-5 recall
-- Answer Relevance: 92% (human evaluation)
-- Hallucination Rate: <3%
-- Average Latency: 2.3 seconds
+- **Chunking**: 1,000 characters, 200 overlap
+- **Retrieval**: Top-5 chunks via RetrievalQA chain
+- **Generation**: Temperature 0.7 (Knowledge Agent), 0.3 (Orchestrator)
 
 ### Machine Learning Pipeline
 
 #### Sentiment Analysis Model
 
-**Dataset**:
-- 840 balanced samples (214 base + augmentation)
-- 6 classes (positive, neutral, sad, anxious, frustrated, stressed)
-- Augmentation: Synonym replacement, paraphrasing, random insertion (2x multiplier)
-- Annotation: Cohen's Kappa 0.83 (substantial agreement)
+**Implementation**:
+- **Algorithm**: LogisticRegression with balanced class weights
+- **Features**: TF-IDF vectorization (500 features, 1-3 ngrams)
+- **Training**: Comprehensive sentiment data for dementia caregiving scenarios
+- **Classes**: 6 emotional states (positive, neutral, stressed, sad, anxious, frustrated)
+- **Parameters**: C=1.0, max_iter=2000, class_weight='balanced', random_state=42
 
-**Feature Engineering**:
-- TF-IDF with 2000 features, (1,4)-grams
-- Parameters: sublinear_tf=True, smooth_idf=True, norm='l2'
-- Feature Space: 1449-dimensional sparse vectors
-
-**Model Architecture**:
-- **Algorithm**: Voting Ensemble (Soft Voting)
-- **Base Models**:
-  1. Logistic Regression (C=2.0, solver='saga', max_iter=3000)
-  2. Random Forest (200 estimators, max_depth=30)
-  3. Gradient Boosting (150 estimators, learning_rate=0.1)
-- **Hyperparameter Tuning**: GridSearchCV with 5-fold cross-validation
-
-**Performance**:
-- Overall F1 Score: 98.81%
-- Cross-Validation F1: 96.60%
-- Per-Class F1: Anxious (1.00), Frustrated (0.966), Neutral (1.00), Positive (1.00), Sad (1.00), Stressed (0.963)
-- Improvement: +26.7% over baseline
-- Inference Time: <100ms
+**Personalized Insights Engine**:
+- **Pattern Analysis**: Temporal, emotional, linguistic, and topic patterns
+- **Clinical Analysis**: Dementia vs normal aging pattern recognition
+- **Dynamic Recommendations**: Personalized, non-hardcoded insights based on conversation patterns
+- **Support Needs**: Emotional support, practical guidance, crisis intervention, peer connection
 
 ### Visual Workflow Diagrams
 
