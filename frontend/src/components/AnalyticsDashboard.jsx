@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, LineChart, Line, PieChart, Pie, Cell as PieCell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import { TrendingUp, MessageSquare, Brain, Heart, BookOpen, Activity, Loader2, BarChart3, PieChart as PieChartIcon, Zap, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
-import InterventionDashboard from './analytics/InterventionDashboard';
 
 const sentimentColors = {
   positive: '#10b981',
@@ -19,8 +18,7 @@ const agentIcons = {
   system: <Activity className="w-4 h-4" />,
 };
 
-const AnalyticsDashboard = ({ stats, analytics, isLoading, sessionId = 'default' }) => {
-  const [activeTab, setActiveTab] = useState('overview');
+const AnalyticsDashboard = ({ stats, analytics, isLoading }) => {
   const [chartData, setChartData] = useState([]);
   const [intensityData, setIntensityData] = useState([]);
   const [confidenceData, setConfidenceData] = useState([]);
@@ -104,43 +102,12 @@ const AnalyticsDashboard = ({ stats, analytics, isLoading, sessionId = 'default'
   return (
     <div className="h-full overflow-y-auto p-6 space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
           <BarChart3 className="w-6 h-6" />
           Advanced Conversation Analytics
         </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400">Comprehensive ML-powered emotional analysis and insights</p>
+        <p className="text-sm text-gray-600">Comprehensive ML-powered emotional analysis and insights</p>
       </div>
-
-      {/* Tab Navigation */}
-      <div className="flex gap-2 border-b border-gray-300 dark:border-gray-600">
-        <button
-          onClick={() => setActiveTab('overview')}
-          className={`px-4 py-2 font-semibold transition-colors ${
-            activeTab === 'overview'
-              ? 'text-purple-600 dark:text-purple-400 border-b-2 border-purple-600 dark:border-purple-400'
-              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-          }`}
-        >
-          Overview
-        </button>
-        <button
-          onClick={() => setActiveTab('interventions')}
-          className={`px-4 py-2 font-semibold transition-colors flex items-center gap-2 ${
-            activeTab === 'interventions'
-              ? 'text-purple-600 dark:text-purple-400 border-b-2 border-purple-600 dark:border-purple-400'
-              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
-          }`}
-        >
-          <Brain className="w-4 h-4" />
-          ML Interventions
-        </button>
-      </div>
-
-      {/* Tab Content */}
-      {activeTab === 'interventions' ? (
-        <InterventionDashboard sessionId={sessionId} />
-      ) : (
-        <div className="space-y-6">{/* Original analytics content */}
 
       {/* Enhanced Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -401,8 +368,6 @@ const AnalyticsDashboard = ({ stats, analytics, isLoading, sessionId = 'default'
             </div>
           )}
         </>
-      )}
-        </div>
       )}
     </div>
   );

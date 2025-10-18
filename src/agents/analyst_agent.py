@@ -8,11 +8,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 import pickle
 import os
-from datetime import datetime
-import sys
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from ml.intervention_predictor import InterventionPredictor
-from ml.personalization_engine import PersonalizationEngine
 
 
 class AnalystAgent:
@@ -41,10 +36,6 @@ class AnalystAgent:
         self.label_encoder = LabelEncoder()
         self.is_trained = False
         self.model_path = model_path or "data/models/analyst_model.pkl"
-        
-        # Initialize ML intervention layer
-        self.intervention_predictor = InterventionPredictor()
-        self.personalization_engine = PersonalizationEngine()
 
         # Try to load existing model
         if os.path.exists(self.model_path):
@@ -974,106 +965,3 @@ class AnalystAgent:
         except Exception as e:
             print(f"Error loading model: {e}")
             return False
-    
-    def get_ml_intervention_plan(self, conversation_history: List[Dict[str, Any]], 
-                                 session_id: str = "default") -> Dict[str, Any]:
-        """
-        Generate ML-powered intervention plan with personalized recommendations.
-        
-        Args:
-            conversation_history: List of conversation messages
-            session_id: User session identifier
-            
-        Returns:
-            Comprehensive intervention plan with risk assessment and recommendations
-        """
-        # Analyze conversation for sentiment data
-        sentiment_data = self.analyze_conversation(conversation_history)
-        
-        # Generate intervention plan using ML predictor
-        intervention_plan = self.intervention_predictor.generate_intervention_plan(
-            conversation_history, 
-            sentiment_data
-        )
-        
-        # Create or update user profile
-        user_profile = self.personalization_engine.create_user_profile(
-            session_id, 
-            conversation_history
-        )
-        
-        # Get personalized recommendations
-        personalized_recs = self.personalization_engine.get_personalized_recommendations(session_id)
-        
-        # Get optimal timing
-        timing = self.personalization_engine.suggest_optimal_timing(session_id)
-        
-        # Combine all insights
-        ml_insights = {
-            'intervention_plan': intervention_plan,
-            'user_profile': user_profile,
-            'personalized_recommendations': personalized_recs,
-            'optimal_timing': timing,
-            'sentiment_analysis': {
-                'overall_sentiment': sentiment_data.get('overall_sentiment'),
-                'emotional_intensity': sentiment_data.get('emotional_intensity'),
-                'sentiment_stability': sentiment_data.get('sentiment_stability'),
-                'emotional_volatility': sentiment_data.get('emotional_volatility')
-            }
-        }
-        
-        return ml_insights
-    
-    def get_risk_assessment(self, conversation_history: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """
-        Get detailed risk assessment for burnout and crisis.
-        
-        Args:
-            conversation_history: List of conversation messages
-            
-        Returns:
-            Risk assessment with actionable insights
-        """
-        sentiment_data = self.analyze_conversation(conversation_history)
-        features = self.intervention_predictor.extract_features(conversation_history, sentiment_data)
-        
-        burnout_risk = self.intervention_predictor.predict_burnout_risk(features)
-        crisis_risk = self.intervention_predictor.predict_crisis_risk(features)
-        
-        return {
-            'burnout_risk': burnout_risk,
-            'crisis_risk': crisis_risk,
-            'risk_factors': burnout_risk.get('factors', []),
-            'action_required': crisis_risk.get('urgency') == 'immediate',
-            'timestamp': datetime.now().isoformat()
-        }
-    
-    def get_personalized_intervention(self, conversation_history: List[Dict[str, Any]], 
-                                     session_id: str = "default") -> Dict[str, Any]:
-        """
-        Get personalized therapeutic intervention recommendation.
-        
-        Args:
-            conversation_history: List of conversation messages
-            session_id: User session identifier
-            
-        Returns:
-            Personalized intervention details
-        """
-        sentiment_data = self.analyze_conversation(conversation_history)
-        features = self.intervention_predictor.extract_features(conversation_history, sentiment_data)
-        
-        intervention = self.intervention_predictor.recommend_intervention(features)
-        
-        # Personalize based on user profile
-        if session_id in self.personalization_engine.user_profiles:
-            profile = self.personalization_engine.user_profiles[session_id]
-            preferred_techniques = profile.get('preferred_techniques', [])
-            
-            intervention['personalized'] = True
-            intervention['preferred_techniques'] = preferred_techniques
-            intervention['communication_style'] = profile.get('communication_style', {})
-        else:
-            intervention['personalized'] = False
-        
-        return intervention
