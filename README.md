@@ -4,7 +4,7 @@
 [![React](https://img.shields.io/badge/React-18.0+-61dafb.svg)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.1.0-success.svg)](FEATURES_IMPLEMENTED.md)
+[![Version](https://img.shields.io/badge/Version-2.2.0-success.svg)](FEATURES_IMPLEMENTED.md)
 
 > **生き甲斐 (Ikigai)** - *"A reason for being"* - Inspired by the Japanese philosophy of finding purpose at the intersection of passion, skill, and what the world needs, this system helps caregivers maintain their own sense of meaning and well-being while caring for their loved ones.
 
@@ -26,7 +26,7 @@
 
 ## Overview
 
-Dementia affects 55+ million people worldwide, with caregivers facing overwhelming emotional challenges, burnout, and isolation. Traditional support systems lack personalized, real-time assistance and continuous monitoring capabilities. This system addresses these critical gaps through an innovative multi-agent conversational AI that provides evidence-based information retrieval (87% accuracy), professional therapeutic support using CBT and mindfulness techniques, crisis intervention with 24/7 resources, adaptive cognitive training, and real-time ML-powered sentiment analysis (98.81% F1 score) for comprehensive dementia care and caregiver mental health support.
+Dementia affects 55+ million people worldwide, with caregivers facing overwhelming emotional challenges, burnout, and isolation. Traditional support systems lack personalized, real-time assistance and continuous monitoring capabilities. This system addresses these critical gaps through an innovative multi-agent conversational AI that provides evidence-based information retrieval (87% accuracy), professional therapeutic support using CBT and mindfulness techniques, crisis intervention with 24/7 resources, adaptive cognitive training, real-time ML-powered sentiment analysis (98.81% F1 score), and advanced clinical pattern analysis distinguishing dementia symptoms from normal aging for comprehensive dementia care and caregiver mental health support.
 
 ## System Architecture
 
@@ -34,8 +34,9 @@ Dementia affects 55+ million people worldwide, with caregivers facing overwhelmi
 
 **Orchestrator Agent (Meta-Agent)**:
 - **Technology**: LangChain + GPT-3.5-turbo/Llama3
-- **Function**: Intent classification using few-shot prompting
-- **Routing**: Information → Knowledge Agent | Emotion → Therapeutic Agent | Exercise → Cognitive Agent | Analytics → Analyst Agent
+- **Function**: Enhanced intent classification with crisis detection and safety-first routing
+- **Routing**: Information → Knowledge Agent | Emotion/Crisis → Therapeutic Agent | Exercise → Cognitive Agent | Analytics → Analyst Agent
+- **Crisis Detection**: Automatic detection of emotional distress, social isolation, and crisis indicators
 - **Context Preservation**: Maintains conversation history across agent transitions
 
 **Specialized Agents**:
@@ -64,6 +65,9 @@ Dementia affects 55+ million people worldwide, with caregivers facing overwhelmi
    - **Performance**: 98.81% F1 Score (6-class sentiment classification)
    - **Inference**: <100ms per prediction
    - **Purpose**: Real-time sentiment analysis and conversation insights
+   - **Personalized Insights**: Deep pattern analysis, temporal patterns, communication style analysis
+   - **Clinical Analysis**: Dementia vs normal aging pattern recognition, crisis detection
+   - **Output**: Personalized recommendations, action items, support priorities
 
 ### RAG Pipeline
 
@@ -215,6 +219,26 @@ flowchart LR
 5. Suggest emergency services (911) if in danger
 
 **Important**: AI cannot provide crisis counseling and clearly states this limitation.
+
+### Advanced ML-Powered Personalized Insights
+
+**Personalized Insights Engine**:
+- **Deep Pattern Analysis**: Temporal patterns, emotional patterns, linguistic patterns, topic patterns
+- **Communication Style Analysis**: Response patterns, preferences, engagement frequency
+- **Support Needs Identification**: Emotional support, practical guidance, crisis intervention, peer connection
+- **Clinical Pattern Recognition**: Dementia vs normal aging analysis based on clinical criteria
+
+**Clinical Analysis Features**:
+- **Dementia Indicators**: Poor judgment, budget management issues, time disorientation, conversation difficulties, misplacing without retracing
+- **Normal Aging Indicators**: Occasional poor decisions, missed payments, temporary confusion with recovery, word-finding difficulties
+- **Assessment Categories**: Concerning patterns, mixed patterns, normal aging, insufficient data
+- **Clinical Guidance**: Professional evaluation recommendations, monitoring guidelines, reassurance for normal aging
+
+**Personalized Recommendations**:
+- **Dynamic Generation**: Based on individual conversation patterns, not hardcoded responses
+- **Action Items**: Specific, prioritized tasks with timelines
+- **Support Priorities**: Categorized by urgency and type
+- **Resource Mapping**: Specific resources for different support needs
 
 ### Professional Boundaries
 
@@ -378,6 +402,33 @@ response = agent.process(user_input, context={'intent': routing['intent'], 'hist
 3. Fine-tuned medical LLMs on dementia data
 4. Mobile applications (iOS/Android)
 5. Advanced visualization (3D brain imaging)
+
+## Recent Improvements (v2.2.0)
+
+### Enhanced Agent Routing & Crisis Detection
+- **Fixed Agent Routing**: Improved intent classification to properly route emotional distress with cognitive concerns to empathy agent
+- **Crisis Detection**: Enhanced crisis detection for phrases like "very low", "can't adjust", "social isolation"
+- **Safety-First Routing**: When in doubt, system routes to emotional support for user safety
+- **Crisis Resources**: Added Alzheimer's Association helpline (1-800-272-3900) for dementia-specific support
+
+### Advanced Personalized Insights System
+- **ML-Powered Analysis**: Deep pattern analysis including temporal, emotional, linguistic, and topic patterns
+- **Clinical Integration**: Dementia vs normal aging pattern recognition based on clinical criteria
+- **Dynamic Recommendations**: Personalized, non-hardcoded recommendations based on individual conversation patterns
+- **Action Items**: Specific, prioritized tasks with timelines and support priorities
+- **Frontend Integration**: New "Personalized Insights" tab in analytics dashboard
+
+### Clinical Pattern Analysis
+- **Dementia Indicators**: Poor judgment, budget management, time disorientation, conversation difficulties
+- **Normal Aging Indicators**: Occasional issues with recovery patterns
+- **Assessment Categories**: Concerning patterns, mixed patterns, normal aging, insufficient data
+- **Clinical Guidance**: Professional evaluation recommendations, monitoring guidelines, reassurance
+
+### System Reliability Improvements
+- **New Conversation Button**: Fixed functionality with proper debugging and error handling
+- **Error Handling**: Enhanced error handling across all components
+- **Performance**: Optimized ML inference and pattern analysis
+- **User Experience**: Improved frontend responsiveness and dark mode support
 
 ## Research References
 
