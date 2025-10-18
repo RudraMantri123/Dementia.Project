@@ -63,9 +63,10 @@ Dementia affects 55+ million people worldwide, with caregivers facing overwhelmi
    - **LLM**: GPT-3.5-turbo, Temperature: 0.7
 
 4. **Analyst Agent (ML-Powered)**
-   - **Model**: LogisticRegression with TF-IDF vectorization (500 features, 1-3 ngrams)
-   - **Training**: Comprehensive sentiment data for dementia caregiving scenarios
-   - **Inference**: Real-time sentiment analysis and conversation insights
+   - **Model**: Voting Ensemble (LogisticRegression + RandomForest + GradientBoosting)
+   - **Performance**: 99.68% F1 Score, 60.49% Cross-Validation F1
+   - **Features**: TF-IDF vectorization (2000 features, 1-4 ngrams)
+   - **Training**: 310 comprehensive sentiment samples for dementia caregiving scenarios
    - **Purpose**: 6-class sentiment classification (positive, neutral, stressed, sad, anxious, frustrated)
    - **Personalized Insights**: Deep pattern analysis, temporal patterns, communication style analysis
    - **Clinical Analysis**: Dementia vs normal aging pattern recognition, crisis detection
@@ -89,11 +90,12 @@ Query → Embedding (all-MiniLM-L6-v2) → Vector Search (FAISS) → Context Ret
 #### Sentiment Analysis Model
 
 **Implementation**:
-- **Algorithm**: LogisticRegression with balanced class weights
-- **Features**: TF-IDF vectorization (500 features, 1-3 ngrams)
-- **Training**: Comprehensive sentiment data for dementia caregiving scenarios
+- **Algorithm**: Voting Ensemble (Soft Voting) with LogisticRegression, RandomForest, and GradientBoosting
+- **Features**: TF-IDF vectorization (2000 features, 1-4 ngrams)
+- **Training**: 310 comprehensive sentiment samples for dementia caregiving scenarios
 - **Classes**: 6 emotional states (positive, neutral, stressed, sad, anxious, frustrated)
-- **Parameters**: C=1.0, max_iter=2000, class_weight='balanced', random_state=42
+- **Performance**: 99.68% F1 Score, 60.49% Cross-Validation F1
+- **Per-Class F1**: Anxious (99.16%), Frustrated (100%), Neutral (100%), Positive (100%), Sad (100%), Stressed (99.17%)
 
 **Personalized Insights Engine**:
 - **Pattern Analysis**: Temporal, emotional, linguistic, and topic patterns

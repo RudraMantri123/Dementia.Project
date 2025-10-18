@@ -5,9 +5,17 @@ import pandas as pd
 from typing import Dict, Any, List, Optional
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier, GradientBoostingClassifier
+from sklearn.model_selection import GridSearchCV, cross_val_score
+from sklearn.metrics import classification_report, f1_score, accuracy_score
 from sklearn.preprocessing import LabelEncoder
 import pickle
 import os
+import sys
+
+# Add the parent directory to the path to import ML modules
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from ml.personalized_insights import PersonalizedInsightsEngine
 
 
 class AnalystAgent:
@@ -21,21 +29,54 @@ class AnalystAgent:
             model_path: Path to saved model (optional)
         """
         self.vectorizer = TfidfVectorizer(
-            max_features=500,
+            max_features=2000,
             stop_words='english',
-            ngram_range=(1, 3),  # Include bigrams and trigrams
+            ngram_range=(1, 4),  # Include unigrams to 4-grams
             min_df=1,
-            max_df=0.95
+            max_df=0.95,
+            sublinear_tf=True,
+            smooth_idf=True,
+            norm='l2'
         )
-        self.sentiment_model = LogisticRegression(
-            max_iter=2000,
-            C=1.0,
+        
+        # Create individual models for the ensemble
+        self.lr_model = LogisticRegression(
+            C=2.0,
+            solver='saga',
+            max_iter=3000,
             class_weight='balanced',
             random_state=42
+        )
+        
+        self.rf_model = RandomForestClassifier(
+            n_estimators=200,
+            max_depth=30,
+            class_weight='balanced',
+            random_state=42
+        )
+        
+        self.gb_model = GradientBoostingClassifier(
+            n_estimators=150,
+            learning_rate=0.1,
+            max_depth=6,
+            random_state=42
+        )
+        
+        # Create Voting Ensemble with soft voting
+        self.sentiment_model = VotingClassifier(
+            estimators=[
+                ('lr', self.lr_model),
+                ('rf', self.rf_model),
+                ('gb', self.gb_model)
+            ],
+            voting='soft'
         )
         self.label_encoder = LabelEncoder()
         self.is_trained = False
         self.model_path = model_path or "data/models/analyst_model.pkl"
+        
+        # Initialize personalized insights engine
+        self.insights_engine = PersonalizedInsightsEngine()
 
         # Try to load existing model
         if os.path.exists(self.model_path):
@@ -377,11 +418,71 @@ class AnalystAgent:
         X = self.vectorizer.fit_transform(texts)
         y = self.label_encoder.fit_transform(labels)
 
+        print(f"Training ensemble model with {len(texts)} samples...")
+        print(f"Feature space: {X.shape[1]} dimensions")
+        print(f"Classes: {len(np.unique(y))}")
+
+        # Train the ensemble model
         self.sentiment_model.fit(X, y)
         self.is_trained = True
 
+        # Evaluate performance
+        self._evaluate_model(X, y)
+        
         # Save the model
         self.save_model()
+
+    def _evaluate_model(self, X, y):
+        """Evaluate model performance with cross-validation and detailed metrics."""
+        print("\n=== MODEL EVALUATION ===")
+        
+        # Cross-validation F1 score
+        cv_scores = cross_val_score(self.sentiment_model, X, y, cv=5, scoring='f1_weighted')
+        print(f"Cross-Validation F1 Score: {cv_scores.mean():.4f} (+/- {cv_scores.std() * 2:.4f})")
+        
+        # Overall F1 score
+        y_pred = self.sentiment_model.predict(X)
+        overall_f1 = f1_score(y, y_pred, average='weighted')
+        print(f"Overall F1 Score: {overall_f1:.4f}")
+        
+        # Accuracy
+        accuracy = accuracy_score(y, y_pred)
+        print(f"Accuracy: {accuracy:.4f}")
+        
+        # Per-class F1 scores
+        class_names = self.label_encoder.classes_
+        per_class_f1 = f1_score(y, y_pred, average=None)
+        print("\nPer-Class F1 Scores:")
+        for i, class_name in enumerate(class_names):
+            print(f"  {class_name}: {per_class_f1[i]:.4f}")
+        
+        # Classification report
+        print("\nDetailed Classification Report:")
+        print(classification_report(y, y_pred, target_names=class_names))
+        
+        # Store performance metrics
+        self.performance_metrics = {
+            'cv_f1_mean': cv_scores.mean(),
+            'cv_f1_std': cv_scores.std(),
+            'overall_f1': overall_f1,
+            'accuracy': accuracy,
+            'per_class_f1': dict(zip(class_names, per_class_f1))
+        }
+        
+        print("=== EVALUATION COMPLETE ===\n")
+
+    def get_performance_metrics(self) -> Dict[str, Any]:
+        """Get the performance metrics of the trained model."""
+        if hasattr(self, 'performance_metrics'):
+            return self.performance_metrics
+        else:
+            return {
+                'cv_f1_mean': 0.0,
+                'cv_f1_std': 0.0,
+                'overall_f1': 0.0,
+                'accuracy': 0.0,
+                'per_class_f1': {}
+            }
 
     def analyze_sentiment(self, text: str) -> Dict[str, Any]:
         """
@@ -936,6 +1037,198 @@ class AnalystAgent:
 
         return recommendations
 
+    def get_personalized_insights(self, conversation_history: List[Dict[str, Any]], session_id: str = "default") -> Dict[str, Any]:
+        """
+        Generate highly personalized, dynamic insights based on individual user patterns.
+        
+        Args:
+            conversation_history: List of conversation messages
+            session_id: Unique session identifier for personalization
+            
+        Returns:
+            Dictionary with personalized insights and recommendations
+        """
+        try:
+            # Get deep conversation analysis
+            personalized_analysis = self.insights_engine.analyze_conversation_depth(conversation_history)
+            
+            # Combine with traditional sentiment analysis
+            traditional_analysis = self.analyze_conversation(conversation_history)
+            
+            # Generate personalized recommendations
+            personalized_recommendations = personalized_analysis.get('personalized_recommendations', [])
+            
+            # Create comprehensive insights
+            insights = {
+                'session_id': session_id,
+                'analysis_timestamp': pd.Timestamp.now().isoformat(),
+                'personalized_analysis': personalized_analysis,
+                'traditional_analysis': traditional_analysis,
+                'insight_confidence': personalized_analysis.get('insight_confidence', 0.0),
+                'personalized_recommendations': personalized_recommendations,
+                'key_insights': self._extract_key_insights(personalized_analysis, traditional_analysis),
+                'action_items': self._generate_action_items(personalized_analysis, traditional_analysis),
+                'support_priorities': self._identify_support_priorities(personalized_analysis, traditional_analysis)
+            }
+            
+            return insights
+            
+        except Exception as e:
+            print(f"Error generating personalized insights: {e}")
+            # Fallback to traditional analysis
+            return {
+                'session_id': session_id,
+                'analysis_timestamp': pd.Timestamp.now().isoformat(),
+                'error': str(e),
+                'fallback_analysis': self.analyze_conversation(conversation_history),
+                'insight_confidence': 0.0
+            }
+    
+    def _extract_key_insights(self, personalized_analysis: Dict, traditional_analysis: Dict) -> List[str]:
+        """Extract the most important insights from the analysis."""
+        insights = []
+        
+        # Pattern-based insights
+        patterns = personalized_analysis.get('patterns', {})
+        temporal = patterns.get('temporal_patterns', {})
+        emotional = patterns.get('emotional_patterns', {})
+        communication = patterns.get('communication_style', {})
+        
+        # Temporal insights
+        if temporal.get('frequency_pattern') == 'high_engagement':
+            insights.append("You're highly engaged with the support system, showing proactive self-care")
+        elif temporal.get('frequency_pattern') == 'sporadic_engagement':
+            insights.append("Your engagement is sporadic - consider setting regular check-in times")
+        
+        # Emotional insights
+        if emotional.get('emotional_volatility', 0) > 0.7:
+            insights.append("You experience significant emotional changes - this is normal for caregivers")
+        elif emotional.get('emotional_volatility', 0) < 0.3:
+            insights.append("You maintain relatively stable emotions - good emotional regulation")
+        
+        # Communication insights
+        comm_style = communication.get('preferences', {}).get('communication_style', 'unknown')
+        if comm_style == 'concise':
+            insights.append("You prefer direct, concise communication - I'll keep responses brief and focused")
+        elif comm_style == 'detailed':
+            insights.append("You appreciate detailed explanations - I'll provide comprehensive information")
+        
+        # Crisis insights
+        crisis = patterns.get('crisis_indicators', {})
+        if crisis.get('crisis_level') == 'high':
+            insights.append("URGENT: High crisis indicators detected - immediate support needed")
+        elif crisis.get('crisis_level') == 'moderate':
+            insights.append("Moderate stress indicators - proactive support recommended")
+        
+        return insights
+    
+    def _generate_action_items(self, personalized_analysis: Dict, traditional_analysis: Dict) -> List[Dict[str, Any]]:
+        """Generate specific, actionable items based on the analysis."""
+        action_items = []
+        
+        patterns = personalized_analysis.get('patterns', {})
+        support_needs = personalized_analysis.get('support_needs', {})
+        crisis = patterns.get('crisis_indicators', {})
+        
+        # Crisis intervention actions
+        if crisis.get('crisis_level') == 'high':
+            action_items.append({
+                'priority': 'critical',
+                'action': 'Contact mental health professional immediately',
+                'timeline': 'within 24 hours',
+                'description': 'High crisis indicators require immediate professional intervention'
+            })
+            action_items.append({
+                'priority': 'high',
+                'action': 'Arrange emergency respite care',
+                'timeline': 'this week',
+                'description': 'Immediate break from caregiving responsibilities needed'
+            })
+        
+        # Support needs actions
+        primary_need = support_needs.get('primary_support_need', 'general_support')
+        if primary_need == 'emotional_support':
+            action_items.append({
+                'priority': 'high',
+                'action': 'Join caregiver support group',
+                'timeline': 'within 2 weeks',
+                'description': 'Connect with others who understand your experience'
+            })
+        elif primary_need == 'practical_guidance':
+            action_items.append({
+                'priority': 'medium',
+                'action': 'Schedule consultation with care coordinator',
+                'timeline': 'within 1 month',
+                'description': 'Get professional guidance on care management'
+            })
+        
+        # Temporal pattern actions
+        temporal = patterns.get('temporal_patterns', {})
+        if temporal.get('time_preference') == 'morning_person':
+            action_items.append({
+                'priority': 'low',
+                'action': 'Schedule important conversations in the morning',
+                'timeline': 'ongoing',
+                'description': 'You are most engaged and receptive in the morning'
+            })
+        
+        return action_items
+    
+    def _identify_support_priorities(self, personalized_analysis: Dict, traditional_analysis: Dict) -> List[Dict[str, Any]]:
+        """Identify and prioritize support needs."""
+        priorities = []
+        
+        patterns = personalized_analysis.get('patterns', {})
+        support_needs = personalized_analysis.get('support_needs', {})
+        crisis = patterns.get('crisis_indicators', {})
+        
+        # Crisis priority
+        if crisis.get('crisis_level') == 'high':
+            priorities.append({
+                'priority_level': 1,
+                'category': 'crisis_intervention',
+                'description': 'Immediate crisis intervention required',
+                'urgency': 'immediate',
+                'resources': ['Mental health hotline', 'Emergency respite care', 'Crisis counselor']
+            })
+        
+        # Emotional support priority
+        emotional = patterns.get('emotional_patterns', {})
+        if emotional.get('emotional_volatility', 0) > 0.7:
+            priorities.append({
+                'priority_level': 2,
+                'category': 'emotional_stability',
+                'description': 'High emotional volatility needs attention',
+                'urgency': 'high',
+                'resources': ['Therapy', 'Support groups', 'Mindfulness training']
+            })
+        
+        # Support needs priority
+        primary_need = support_needs.get('primary_support_need', 'general_support')
+        if primary_need != 'general_support':
+            priorities.append({
+                'priority_level': 3,
+                'category': primary_need,
+                'description': f'Primary support need: {primary_need.replace("_", " ").title()}',
+                'urgency': 'medium',
+                'resources': self._get_resources_for_need(primary_need)
+            })
+        
+        return priorities
+    
+    def _get_resources_for_need(self, need: str) -> List[str]:
+        """Get specific resources for different support needs."""
+        resource_map = {
+            'emotional_support': ['Support groups', 'Counseling', 'Peer support'],
+            'practical_guidance': ['Care coordinator', 'Social worker', 'Resource guides'],
+            'crisis_intervention': ['Crisis hotline', 'Emergency services', 'Mental health professional'],
+            'peer_connection': ['Support groups', 'Online communities', 'Peer mentors'],
+            'respite_care': ['Adult day programs', 'In-home care', 'Respite services'],
+            'medical_support': ['Primary care doctor', 'Specialist referrals', 'Medical social worker'],
+            'family_support': ['Family therapy', 'Communication workshops', 'Family meetings']
+        }
+        return resource_map.get(need, ['General support resources'])
+
     def save_model(self):
         """Save the trained model to disk."""
         os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
@@ -944,7 +1237,8 @@ class AnalystAgent:
             'vectorizer': self.vectorizer,
             'model': self.sentiment_model,
             'label_encoder': self.label_encoder,
-            'is_trained': self.is_trained
+            'is_trained': self.is_trained,
+            'performance_metrics': getattr(self, 'performance_metrics', {})
         }
 
         with open(self.model_path, 'wb') as f:
@@ -960,6 +1254,10 @@ class AnalystAgent:
             self.sentiment_model = model_data['model']
             self.label_encoder = model_data['label_encoder']
             self.is_trained = model_data['is_trained']
+            
+            # Load performance metrics if available
+            if 'performance_metrics' in model_data:
+                self.performance_metrics = model_data['performance_metrics']
 
             return True
         except Exception as e:
