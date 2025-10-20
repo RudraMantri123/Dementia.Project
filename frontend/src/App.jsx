@@ -92,11 +92,14 @@ function App() {
 
   const handleReset = async () => {
     try {
+      console.log('Starting reset process...');
       await chatAPI.resetConversation();
+      console.log('Reset API call successful');
       setMessages([]);
       setStats(null);
       setAnalytics(null);
       setShowAnalytics(false);
+      console.log('Reset completed successfully');
     } catch (error) {
       console.error('Reset error:', error);
     }

@@ -243,6 +243,42 @@ async def get_analytics(request: ChatRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.get("/personalized-insights/{session_id}")
+async def get_personalized_insights(session_id: str = "default"):
+    """Get highly personalized, dynamic insights based on individual user patterns."""
+    try:
+        chatbot = get_chatbot(session_id)
+        conversation_history = chatbot.conversation_log
+        
+        # Format for personalized analysis
+        formatted_history = [
+            {
+                'role': msg.get('role', 'user'),
+                'content': msg.get('content', ''),
+                'message': msg.get('content', ''),
+                'sentiment': msg.get('sentiment', 'neutral'),
+                'timestamp': msg.get('timestamp', '')
+            }
+            for msg in conversation_history
+        ]
+        
+        # Get personalized insights
+        personalized_insights = analyst_instance.get_personalized_insights(formatted_history, session_id)
+        
+        return {
+            "status": "success",
+            "personalized_insights": personalized_insights
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        print("=== ERROR IN PERSONALIZED INSIGHTS ===")
+        traceback.print_exc()
+        print("=====================================")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.post("/reset")
 async def reset_conversation(session_id: str = "default"):
     """Reset the conversation history."""

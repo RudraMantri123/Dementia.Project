@@ -78,6 +78,7 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
   };
 
   const handleResetConfirm = () => {
+    console.log('Reset confirmed, calling onReset...');
     onReset();
     setShowResetConfirm(false);
     clearTranscript(); // Clear transcript when starting new conversation
@@ -158,7 +159,10 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
             </span>
           </div>
           <button
-            onClick={() => setShowResetConfirm(true)}
+            onClick={() => {
+              console.log('New conversation button clicked');
+              setShowResetConfirm(true);
+            }}
             className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors duration-200"
           >
             <MessageSquarePlus className="w-4 h-4" />

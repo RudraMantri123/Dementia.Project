@@ -21,7 +21,8 @@ class EmpathyAgent(BaseAgent):
         # Crisis keywords for immediate intervention
         self.crisis_keywords = [
             'suicide', 'kill myself', 'end my life', 'want to die', 'hurt myself',
-            'self-harm', 'no reason to live', 'better off dead', 'ending it all'
+            'self-harm', 'no reason to live', 'better off dead', 'ending it all',
+            'very low', 'can\'t adjust', 'social isolation', 'desperate', 'hopeless'
         ]
 
         self.prompt_template = """You are a compassionate AI therapeutic support companion for dementia caregivers.
@@ -135,14 +136,15 @@ Therapeutic Response (brief, warm, and actionable - NO meta-notes or explanation
         Returns:
             Crisis intervention response with resources
         """
-        return """I'm deeply concerned about what you've shared. Please reach out for immediate professional help:
+        return """I'm deeply concerned about what you've shared. Your feelings of being very low and struggling to adjust are valid, and you don't have to face this alone.
 
 **National Suicide Prevention: 988** (call or text 24/7)
 **Crisis Text Line: Text HELLO to 741741**
+**Alzheimer's Association 24/7 Helpline: 1-800-272-3900**
 
 If you're in immediate danger, call 911 or go to your nearest emergency room.
 
-You are not alone. What you're feeling is temporary. Trained counselors are available right now to help you through this."""
+Memory difficulties and social adjustment challenges are real struggles. Professional support can help you navigate these feelings and find coping strategies that work for you."""
 
     def _add_disclaimer(self) -> str:
         """Add therapeutic disclaimer for first interaction."""
