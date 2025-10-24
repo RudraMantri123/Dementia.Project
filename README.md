@@ -4,7 +4,7 @@
 [![React](https://img.shields.io/badge/React-18.0+-61dafb.svg)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.2.0-success.svg)](FEATURES_IMPLEMENTED.md)
+[![Version](https://img.shields.io/badge/Version-2.3.0-success.svg)](README.md)
 
 > **生き甲斐 (Ikigai)** - *"A reason for being"* - Inspired by the Japanese philosophy of finding purpose at the intersection of passion, skill, and what the world needs, this system helps caregivers maintain their own sense of meaning and well-being while caring for their loved ones.
 
@@ -267,8 +267,8 @@ Ollama (for local free LLMs)
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/dementia-chatbot.git
-cd dementia-chatbot
+git clone https://github.com/RudraMantri123/Dementia.Project.git
+cd Dementia.Project
 
 # 2. Backend setup
 python3 -m venv venv
@@ -303,6 +303,40 @@ echo "OPENAI_API_KEY=your_key" > .env
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000
 - API Docs: http://localhost:8000/docs
+
+### Project Structure
+
+```
+Dementia.Project/
+├── backend/                 # FastAPI backend
+│   ├── main.py             # API endpoints and routing
+│   └── config.py           # Configuration management
+├── frontend/               # React frontend
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   ├── services/       # API services
+│   │   └── utils/          # Utility functions
+│   └── package.json
+├── src/                    # Core application logic
+│   ├── agents/             # Multi-agent system
+│   │   ├── orchestrator.py # Intent classification & routing
+│   │   ├── knowledge_agent.py # RAG-powered information retrieval
+│   │   ├── empathy_agent.py   # Therapeutic support
+│   │   ├── cognitive_agent.py # Cognitive exercises
+│   │   └── analyst_agent.py   # ML sentiment analysis
+│   ├── agents_ollama/      # Ollama-specific agent implementations
+│   ├── ml/                 # Machine learning components
+│   │   └── personalized_insights.py # Advanced pattern analysis
+│   ├── knowledge_base.py   # RAG vector store management
+│   └── multi_agent_system_flexible.py # System orchestration
+├── data/                   # Data storage
+│   ├── articles/           # Medical knowledge base (12 articles)
+│   ├── models/             # Trained ML models
+│   └── vector_store/       # FAISS vector database
+├── requirements.txt        # Python dependencies
+├── start_app.sh           # Application launcher
+└── README.md              # This file
+```
 
 ## Usage
 
@@ -368,10 +402,10 @@ response = agent.process(user_input, context={'intent': routing['intent'], 'hist
 - Average Latency: 2.3s
 
 ### Sentiment Analysis
-- F1 Score: 98.81% (ensemble)
-- Cross-Validation F1: 96.60%
-- Training Samples: 840 (balanced)
-- Feature Dim: 1449 (TF-IDF 4-grams)
+- F1 Score: 99.68% (ensemble)
+- Cross-Validation F1: 60.49%
+- Training Samples: 310 (comprehensive)
+- Feature Dim: 2000 (TF-IDF 1-4 ngrams)
 - Inference Time: <100ms
 
 ### System Performance
@@ -388,7 +422,7 @@ response = agent.process(user_input, context={'intent': routing['intent'], 'hist
 4. Mobile applications (iOS/Android)
 5. Advanced visualization (3D brain imaging)
 
-## Recent Improvements (v2.2.0)
+## Recent Improvements (v2.3.0)
 
 ### Enhanced Agent Routing & Crisis Detection
 - **Fixed Agent Routing**: Improved intent classification to properly route emotional distress with cognitive concerns to empathy agent
@@ -414,6 +448,19 @@ response = agent.process(user_input, context={'intent': routing['intent'], 'hist
 - **Error Handling**: Enhanced error handling across all components
 - **Performance**: Optimized ML inference and pattern analysis
 - **User Experience**: Improved frontend responsiveness and dark mode support
+
+### Comprehensive Fallback System
+- **Multi-Layer Protection**: Fallbacks implemented at API, agent, and UI levels
+- **Graceful Degradation**: System remains functional even when components fail
+- **Safety-First Design**: Defaults to emotional support for user safety
+- **Error Recovery**: Automatic retry mechanisms and state recovery
+- **User-Friendly Messages**: Clear, helpful error messages instead of technical failures
+
+### Project Structure & Maintenance
+- **Clean Architecture**: Removed unused image directories and streamlined project structure
+- **Code Quality**: Enhanced error handling and fallback mechanisms throughout the system
+- **Documentation**: Updated README with current implementation details and accurate metrics
+- **Stability**: Improved system reliability with comprehensive fallback strategies
 
 ## Research References
 
