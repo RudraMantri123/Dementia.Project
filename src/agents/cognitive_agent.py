@@ -60,8 +60,8 @@ class CognitiveAgent(BaseAgent):
             return self._word_association_exercise()
         elif 'story' in user_lower or 'recall' in user_lower:
             return self._story_recall_exercise()
-        elif 'pattern' in user_lower or 'sequence' in user_lower:
-            return self._pattern_recognition_exercise()
+        elif 'naming' in user_lower or 'picture' in user_lower or 'object' in user_lower:
+            return self._object_naming_exercise()
         elif 'orientation' in user_lower or 'awareness' in user_lower:
             return self._orientation_exercise()
         else:
@@ -69,7 +69,7 @@ class CognitiveAgent(BaseAgent):
             exercises = [
                 self._memory_list_exercise,
                 self._story_recall_exercise,
-                self._pattern_recognition_exercise,
+                self._object_naming_exercise,
                 self._orientation_exercise
             ]
             return random.choice(exercises)()
@@ -322,66 +322,69 @@ Take 1-2 minutes to read. Type 'ready' when you're done."""
             'exercise_data': self.exercise_data
         }
 
-    def _pattern_recognition_exercise(self) -> Dict[str, Any]:
-        """Create a pattern recognition exercise."""
-        patterns = [
+    def _object_naming_exercise(self) -> Dict[str, Any]:
+        """Create an object naming exercise."""
+        object_sets = [
             {
-                'sequence': ['Blue', 'Red', 'Blue', 'Red', 'Blue', '?'],
-                'answer': 'Red',
-                'type': 'alternating colors',
+                'category': 'Kitchen Items',
+                'items': ['spoon', 'fork', 'knife', 'plate', 'cup', 'bowl', 'pocket knife', 'knife sharpener'],
                 'difficulty': 'easy'
             },
             {
-                'sequence': ['2', '4', '6', '8', '?'],
-                'answer': '10',
-                'type': 'even numbers',
+                'category': 'Fruits',
+                'items': ['apple', 'banana', 'orange', 'grape', 'strawberry', 'blueberry', 'pineapple', 'mango'],
                 'difficulty': 'easy'
             },
             {
-                'sequence': ['Moon', 'Star', 'Star', 'Moon', 'Star', 'Star', '?'],
-                'answer': 'Moon',
-                'type': 'repeating pattern',
-                'difficulty': 'medium'
+                'category': 'Animals',
+                'items': ['dog', 'cat', 'bird', 'fish', 'rabbit', 'horse', 'cow', 'pig'],
+                'difficulty': 'easy'
             },
             {
-                'sequence': ['Monday', 'Wednesday', 'Friday', '?'],
-                'answer': 'Sunday',
-                'type': 'days of week (skipping one)',
-                'difficulty': 'medium'
+                'category': 'Clothing',
+                'items': ['shirt', 'pants', 'dress', 'jacket', 'shoes', 'hat', 'gloves', 'scarf'],
+                'difficulty': 'easy'
             },
             {
-                'sequence': ['1', '4', '9', '16', '?'],
-                'answer': '25',
-                'type': 'square numbers',
-                'difficulty': 'hard'
+                'category': 'Body Parts',
+                'items': ['head', 'arm', 'leg', 'hand', 'foot', 'eye', 'nose', 'mouth'],
+                'difficulty': 'easy'
+            },
+            {
+                'category': 'Colors',
+                'items': ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'pink', 'brown'],
+                'difficulty': 'easy'
             }
         ]
 
-        pattern = random.choice(patterns)
+        obj_set = random.choice(object_sets)
+        num_items = random.choice([5, 6, 7])  # Vary the number of items
+        items = random.sample(obj_set['items'], num_items)
+
         self.exercise_data = {
-            'type': 'pattern_recognition',
-            'sequence': pattern['sequence'],
-            'answer': pattern['answer'],
-            'pattern_type': pattern['type']
+            'type': 'object_naming',
+            'category': obj_set['category'],
+            'items': items,
+            'started': True,
+            'num_items': num_items
         }
 
-        difficulty_text = {'easy': 'Easy (*)', 'medium': 'Medium (**)', 'hard': 'Hard (***)'}
+        items_text = '\n'.join([f"{i+1}. {item.title()}" for i, item in enumerate(items)])
 
-        response = f"""[Pattern] Pattern Recognition Exercise
-Difficulty: {difficulty_text[pattern['difficulty']]}
+        response = f"""[Naming] Object Naming Exercise
+Category: {obj_set['category']}
 
-Look at this sequence and figure out what comes next:
+Name the object or word for each item below. Look at each one and say or think its name.
 
-{' '.join(pattern['sequence'])}
+{items_text}
 
-[Tip] Hint: This is a {pattern['type']} pattern!
-
-What comes next in the sequence? Type your answer when ready!"""
+Take your time with each item. Think about what each one is called.
+Type 'done' when you've named all the items!"""
 
         return {
             'response': response,
             'agent': 'cognitive',
-            'exercise_type': 'pattern_recognition',
+            'exercise_type': 'object_naming',
             'exercise_state': 'evaluating',
             'exercise_data': self.exercise_data
         }
@@ -465,7 +468,7 @@ Please answer these questions:
 Would you like to try:
 • A memory exercise
 • A story recall exercise
-• A pattern recognition exercise
+• An object naming exercise
 
 Just let me know what you'd like to try!""",
                 'agent': 'cognitive',
@@ -514,7 +517,7 @@ Just let me know what you'd like to try!""",
 Let's start fresh! Would you like to try:
 • A memory exercise
 • A story recall exercise
-• A pattern recognition exercise
+• An object naming exercise
 
 Just let me know what you'd like to try!""",
                 'agent': 'cognitive',
@@ -554,28 +557,19 @@ I appreciate you working through this exercise! Story recall with specific detai
 
 Would you like to try a different exercise or continue our conversation?"""
 
-        elif exercise_type == 'pattern_recognition':
-            correct_answer = self.exercise_data.get('answer', '').lower().strip()
-            user_answer = user_response.lower().strip()
-            pattern_type = self.exercise_data.get('pattern_type', '')
+        elif exercise_type == 'object_naming':
+            items = self.exercise_data.get('items', [])
+            category = self.exercise_data.get('category', 'Items')
 
-            # Check if answer is correct (flexible matching)
-            is_correct = (user_answer == correct_answer or
-                         correct_answer in user_answer or
-                         user_answer in correct_answer)
+            # Show the items
+            items_list = '\n'.join([f"  {i+1}. {item.title()}" for i, item in enumerate(items)])
 
-            if is_correct:
-                response = f"""Excellent work! That's correct - the answer was: {correct_answer}
+            response = f"""Thank you for participating!
 
-Great job recognizing the pattern! This helps strengthen cognitive skills and mental flexibility.
+[Naming] Items Shown ({category}):
+{items_list}
 
-Would you like to try another exercise or continue our conversation?"""
-            else:
-                response = f"""Thank you for trying!
-
-The correct answer was: {correct_answer} (Pattern: {pattern_type})
-
-Pattern recognition can be tricky - the important thing is engaging with the exercise. Every attempt helps strengthen your brain!
+Great effort! Object naming exercises help strengthen language skills and mental connections. Whether you named them aloud or silently, every attempt supports cognitive health.
 
 Would you like to try another exercise or continue our conversation?"""
 

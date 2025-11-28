@@ -428,7 +428,7 @@ class AnalystAgent:
 
         # Evaluate performance
         self._evaluate_model(X, y)
-        
+
         # Save the model
         self.save_model()
 
@@ -815,7 +815,7 @@ class AnalystAgent:
                     avg_intensity = data['avg_intensity']
                     
                     # Create visual bar
-                    bar = "█" * int(percentage / 5)
+                bar = "█" * int(percentage / 5)
                     
                     # Intensity indicator
                     intensity_indicator = ""
@@ -826,7 +826,7 @@ class AnalystAgent:
                     elif avg_intensity >= 3:
                         intensity_indicator = " 💫"
                     
-                    insights.append(f"  • {emotion.title()}: {count} messages ({percentage:.1f}%) {bar}")
+                insights.append(f"  • {emotion.title()}: {count} messages ({percentage:.1f}%) {bar}")
                     insights.append(f"    └─ Confidence: {avg_confidence:.1%} | Intensity: {avg_intensity:.1f}/10{intensity_indicator}")
             insights.append("")
 

@@ -15,7 +15,7 @@ function App() {
 
   // Count user messages
   const userMessageCount = messages.filter(msg => msg.role === 'user').length;
-  const canShowAnalytics = userMessageCount >= 5;
+  const canShowAnalytics = userMessageCount >= 3;
 
   // Fetch analytics when explicitly shown
   useEffect(() => {
@@ -149,15 +149,15 @@ function App() {
           </div>
         </div>
       ) : (
-        <div className="flex-1 flex flex-col min-w-0">
-          <ChatInterface
-            messages={messages}
-            onSendMessage={handleSendMessage}
-            isLoading={isLoading}
-            isInitialized={isInitialized}
-            onReset={handleReset}
-          />
-        </div>
+      <div className="flex-1 flex flex-col min-w-0">
+        <ChatInterface
+          messages={messages}
+          onSendMessage={handleSendMessage}
+          isLoading={isLoading}
+          isInitialized={isInitialized}
+          onReset={handleReset}
+        />
+      </div>
       )}
     </div>
   );

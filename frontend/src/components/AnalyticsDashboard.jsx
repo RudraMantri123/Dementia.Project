@@ -322,7 +322,7 @@ const AnalyticsDashboard = ({ stats, analytics, isLoading, sessionId = 'default'
                 </BarChart>
               </ResponsiveContainer>
             </div>
-          )}
+              )}
 
           {/* Confidence Metrics */}
           {confidenceData.length > 0 && (
@@ -343,44 +343,6 @@ const AnalyticsDashboard = ({ stats, analytics, isLoading, sessionId = 'default'
                   <Bar dataKey="value" fill="#10b981" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
-          )}
-
-          {/* Support Level Assessment */}
-          {analytics.needs_support && (
-            <div className={`card ${
-              analytics.needs_support.level === 'high'
-                ? 'border-red-300 bg-red-50'
-                : analytics.needs_support.level === 'moderate'
-                ? 'border-yellow-300 bg-yellow-50'
-                : 'border-green-300 bg-green-50'
-            }`}>
-              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                {analytics.needs_support.level === 'high' ? (
-                  <AlertTriangle className="w-4 h-4 text-red-600" />
-                ) : analytics.needs_support.level === 'moderate' ? (
-                  <AlertTriangle className="w-4 h-4 text-yellow-600" />
-                ) : (
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                )}
-                Support Level Assessment
-              </h3>
-              <div className="space-y-2">
-                <p className={`font-medium ${
-                  analytics.needs_support.level === 'high'
-                    ? 'text-red-800'
-                    : analytics.needs_support.level === 'moderate'
-                    ? 'text-yellow-800'
-                    : 'text-green-800'
-                }`}>
-                  {analytics.needs_support.level === 'high' && '🚨 HIGH - Immediate attention needed'}
-                  {analytics.needs_support.level === 'moderate' && '⚠️ MODERATE - Monitor closely'}
-                  {analytics.needs_support.level === 'low' && '✅ LOW - Managing well'}
-                </p>
-                {analytics.needs_support.recommendation && (
-                  <p className="text-sm text-gray-700">{analytics.needs_support.recommendation}</p>
-                )}
-              </div>
             </div>
           )}
 

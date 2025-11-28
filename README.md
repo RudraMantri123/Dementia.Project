@@ -4,7 +4,7 @@
 [![React](https://img.shields.io/badge/React-18.0+-61dafb.svg)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.3.0-success.svg)](README.md)
+[![Version](https://img.shields.io/badge/Version-2.4.0-success.svg)](README.md)
 
 > **生き甲斐 (Ikigai)** - *"A reason for being"* - Inspired by the Japanese philosophy of finding purpose at the intersection of passion, skill, and what the world needs, this system helps caregivers maintain their own sense of meaning and well-being while caring for their loved ones.
 
@@ -74,16 +74,33 @@ Dementia affects 55+ million people worldwide, with caregivers facing overwhelmi
 
 ### RAG Pipeline
 
+**Standard RAG**:
 ```
 Query → Embedding (all-MiniLM-L6-v2) → Vector Search (FAISS) → Context Retrieval → LLM Generation → Response
 ```
 
+**Enhanced RAG** (Available):
+```
+Query → [Query Encoder + Document Encoder + BM25] → Hybrid Search → Context Retrieval → LLM Generation → Response
+```
+
 **Technical Specifications**:
-- **Embedding Model**: sentence-transformers/all-MiniLM-L6-v2 (384-dim, 6-layer BERT)
+- **Standard Embedding Model**: sentence-transformers/all-MiniLM-L6-v2 (384-dim, 6-layer BERT)
+- **Enhanced Query Encoder**: ms-marco-MiniLM-L-6-v2 (query-optimized)
+- **Enhanced Document Encoder**: all-MiniLM-L6-v2 (document-optimized)
 - **Vector Database**: FAISS Flat Index (L2 distance, exact k-NN search)
+- **Sparse Retrieval**: Manual BM25 with document vector reconstruction
+- **Hybrid Retrieval**: Combines dense (neural) + sparse (BM25) retrieval
 - **Chunking**: 1,000 characters, 200 overlap
-- **Retrieval**: Top-5 chunks via RetrievalQA chain
+- **Retrieval**: Top-5 chunks via RetrievalQA chain (configurable)
 - **Generation**: Temperature 0.7 (Knowledge Agent), 0.3 (Orchestrator)
+
+**Enhanced RAG Features**:
+- **Multiple Encoders**: Separate query and document encoders for optimized retrieval
+- **Manual BM25**: Full transparency with document/query vector reconstruction and dot product computation
+- **Hybrid Search**: Weighted combination of dense and sparse retrieval (α * dense + (1-α) * BM25)
+- **Evaluation Framework**: TREC eval integration for IR metrics (MRR, nDCG, MAP, Recall, Precision)
+- **SPLADE Support**: Optional sparse lexical expansion model for first-stage ranking
 
 ### Machine Learning Pipeline
 
@@ -327,12 +344,18 @@ Dementia.Project/
 │   ├── agents_ollama/      # Ollama-specific agent implementations
 │   ├── ml/                 # Machine learning components
 │   │   └── personalized_insights.py # Advanced pattern analysis
-│   ├── knowledge_base.py   # RAG vector store management
+│   ├── knowledge_base.py   # Standard RAG vector store management
+│   ├── rag_enhanced.py    # Enhanced RAG with multiple encoders & BM25
+│   ├── rag_evaluation.py  # IR evaluation framework (trec_eval)
 │   └── multi_agent_system_flexible.py # System orchestration
 ├── data/                   # Data storage
 │   ├── articles/           # Medical knowledge base (12 articles)
 │   ├── models/             # Trained ML models
-│   └── vector_store/       # FAISS vector database
+│   ├── vector_store/       # Standard FAISS vector database
+│   └── vector_store_enhanced/ # Enhanced RAG vector stores
+├── build_knowledge_base.py # Standard knowledge base builder
+├── build_knowledge_base_enhanced.py # Enhanced RAG builder
+├── evaluate_rag.py         # RAG evaluation script
 ├── requirements.txt        # Python dependencies
 ├── start_app.sh           # Application launcher
 └── README.md              # This file
@@ -344,12 +367,18 @@ Dementia.Project/
 
 **Cognitive Exercises**: Request exercise → Review content → Type 'ready' → Complete → Receive feedback
 
-**Analytics**: Have 5+ exchanges → Click "View Analytics" → Review sentiment/insights → Assess support needs
+**Analytics**: Have 3+ exchanges → Click "View Analytics" → Review sentiment/insights → Assess support needs
+
+**Enhanced RAG** (Optional):
+- Build enhanced knowledge base: `python build_knowledge_base_enhanced.py`
+- Evaluate retrieval methods: `python evaluate_rag.py`
+- Use hybrid search combining dense and BM25 retrieval
 
 ## Technical Implementation
 
 ### RAG Pipeline
 
+**Standard RAG**:
 ```python
 # Document processing
 documents = DirectoryLoader("data/").load()
@@ -362,6 +391,30 @@ vectorstore = FAISS.from_documents(chunks, embeddings)
 # Retrieval
 retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
 qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=retriever, return_source_documents=True)
+```
+
+**Enhanced RAG** (with multiple encoders and BM25):
+```python
+from src.rag_enhanced import EnhancedKnowledgeBase
+
+# Initialize with query and document encoders
+kb = EnhancedKnowledgeBase(
+    query_encoder_model="sentence-transformers/ms-marco-MiniLM-L-6-v2",
+    doc_encoder_model="sentence-transformers/all-MiniLM-L6-v2",
+    use_bm25=True
+)
+
+# Build knowledge base
+kb.add_documents_from_files(article_files)
+kb.save("data/vector_store_enhanced")
+
+# Hybrid retrieval (dense + BM25)
+results = kb.hybrid_search(query, k=5, alpha=0.5)
+
+# Manual BM25 computation
+doc_vector = kb.bm25.get_doc_vector(doc_idx)  # {term: BM25_weight}
+query_vector = kb.bm25.get_query_vector(query)  # {term: IDF}
+score = kb.bm25.compute_dot_product(doc_idx, query)  # Manual dot product
 ```
 
 ### Sentiment Analysis
@@ -396,7 +449,11 @@ response = agent.process(user_input, context={'intent': routing['intent'], 'hist
 ## Performance Metrics
 
 ### RAG System
-- Retrieval Accuracy: 87% (top-5 recall)
+- **Standard RAG**: Retrieval Accuracy: 87% (top-5 recall)
+- **Enhanced RAG**: Supports evaluation with IR metrics (MRR, nDCG, MAP, Recall, Precision)
+  - Use `evaluate_rag.py` to compare dense, BM25, and hybrid retrieval methods
+  - Supports trec_eval integration for standard IR evaluation
+  - Manual metric computation available if trec_eval not installed
 - Answer Relevance: 92% (human eval)
 - Hallucination Rate: <3%
 - Average Latency: 2.3s
@@ -448,6 +505,14 @@ response = agent.process(user_input, context={'intent': routing['intent'], 'hist
 - **Error Handling**: Enhanced error handling across all components
 - **Performance**: Optimized ML inference and pattern analysis
 - **User Experience**: Improved frontend responsiveness and dark mode support
+
+### Enhanced RAG System (v2.4.0)
+- **Multiple Encoders**: Separate query encoder (ms-marco-MiniLM-L-6-v2) and document encoder (all-MiniLM-L6-v2) for optimized retrieval
+- **Manual BM25 Implementation**: Full transparency with document/query vector reconstruction and manual dot product computation
+- **Hybrid Retrieval**: Combines dense (neural) and sparse (BM25) retrieval with configurable weights
+- **Evaluation Framework**: TREC eval integration for standard IR metrics (MRR, nDCG@10/100, MAP, Recall@10/100, Precision@10/100)
+- **SPLADE Support**: Optional sparse lexical expansion model for first-stage ranking
+- **Mathematical Transparency**: Complete BM25 formula implementation with vector reconstruction for educational purposes
 
 ### Comprehensive Fallback System
 - **Multi-Layer Protection**: Fallbacks implemented at API, agent, and UI levels

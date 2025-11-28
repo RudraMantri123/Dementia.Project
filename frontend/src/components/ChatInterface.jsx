@@ -107,8 +107,8 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Knowledge Agent</h3>
               <p className="text-gray-600 text-large">
-                Ask factual questions about dementia, symptoms, and caregiving
-              </p>
+              Ask factual questions about dementia, symptoms, and caregiving
+            </p>
             </div>
           </div>
 
@@ -119,8 +119,8 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Empathy Agent</h3>
               <p className="text-gray-600 text-large">
-                Share your feelings and receive emotional support
-              </p>
+              Share your feelings and receive emotional support
+            </p>
             </div>
           </div>
 
@@ -131,8 +131,8 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3">Cognitive Agent</h3>
               <p className="text-gray-600 text-large">
-                Practice memory exercises and brain training activities
-              </p>
+              Practice memory exercises and brain training activities
+            </p>
             </div>
           </div>
         </div>
@@ -213,11 +213,11 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
                 <Brain className="w-16 h-16 text-blue-600 mx-auto animate-pulse" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3 text-xl-large">
-                Welcome to Dementia Support
-              </h3>
+              Welcome to Dementia Support
+            </h3>
               <p className="text-gray-600 mb-8 text-large">
-                Ask a question or explore suggested topics below
-              </p>
+              Ask a question or explore suggested topics below
+            </p>
             </div>
 
             <div className="space-y-4 text-left max-w-2xl w-full">
@@ -303,34 +303,34 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
               }
 
               return (
+              <div
+                key={index}
+                className={`flex ${
+                  message.role === 'user' ? 'justify-end' : 'justify-start'
+                } message-enter`}
+              >
                 <div
-                  key={index}
-                  className={`flex ${
-                    message.role === 'user' ? 'justify-end' : 'justify-start'
-                  } message-enter`}
-                >
-                  <div
                     className={`message-bubble ${
-                      message.role === 'user'
+                    message.role === 'user'
                         ? 'message-user'
                         : 'message-assistant'
-                    }`}
-                  >
+                  }`}
+                >
                     <p className="whitespace-pre-wrap text-large">{message.content}</p>
-                    {message.agent && (
+                  {message.agent && (
                       <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-200">
-                        <span
+                      <span
                           className={`agent-badge ${
-                            agentColors[message.agent]
-                          }`}
-                        >
-                          {agentIcons[message.agent]}
+                          agentColors[message.agent]
+                        }`}
+                      >
+                        {agentIcons[message.agent]}
                           <span className="capitalize font-semibold">{message.agent}</span>
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                      </span>
+                    </div>
+                  )}
                 </div>
+              </div>
               );
             })}
             {isLoading && (
@@ -370,8 +370,8 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
               </div>
               <div className="bg-blue-200 rounded-full px-3 py-1">
                 <span className="text-blue-800 font-bold text-lg">
-                  {messages.filter(msg => msg.role === 'user').length}/5
-                </span>
+                {messages.filter(msg => msg.role === 'user').length}/5
+              </span>
               </div>
             </div>
           </div>
@@ -431,14 +431,14 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
 
           {/* Text Input */}
           <div className="flex-1 relative">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={isListening ? "Listening..." : "Type or speak your message..."}
-              disabled={isLoading || isListening}
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={isListening ? "Listening..." : "Type or speak your message..."}
+            disabled={isLoading || isListening}
               className="input-field"
-            />
+          />
           </div>
 
           {/* Send Button */}
@@ -449,12 +449,12 @@ const ChatInterface = ({ messages, onSendMessage, isLoading, isInitialized, onRe
           >
             {isLoading ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" />
                 <span>Sending</span>
               </>
             ) : (
               <>
-                <Send className="w-5 h-5" />
+              <Send className="w-5 h-5" />
                 <span>Send</span>
               </>
             )}
